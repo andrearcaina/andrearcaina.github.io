@@ -7,11 +7,12 @@ body {
     padding: 0;
     user-select: none;
     text-align: center;
+    overflow-x: hidden;
 }
 
 main {
-margin: 0;
-padding: 100px;
+    margin: 0;
+    padding: 100px;
 }
 
 #about-info {
@@ -34,10 +35,26 @@ a:active { text-decoration: none; }
 @media only screen and (min-width: 768px) {
     #about-info {
         width: 600px;
+        font-size: 17px;
         margin: 0 auto;
     }
     #contact {
         width: 350px;
+        margin: 0 auto;
+    }
+}
+
+@media only screen and (max-width: 450px) {
+    #about-info {
+        width: 300px;
+        font-size: 15px;
+        right: 50px;
+        margin: 0px auto;
+    }
+    #contact {
+        width: 250px;
+        font-size: 15px;
+        right: 80px;
         margin: 0 auto;
     }
 }
