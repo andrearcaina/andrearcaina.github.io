@@ -5,9 +5,39 @@ body {
     background-color: rgb(146, 168, 209);
     margin: 0;
     padding: 0;
-  }
-  
-  main {
-    margin: 0;
-    padding: 100px;
-  }
+    user-select: none;
+    text-align: center;
+}
+
+main {
+margin: 0;
+padding: 100px;
+}
+
+#about-info {
+    position: relative;
+    text-align: justify;
+    margin: 10px auto;
+    font-size: 17px;
+}
+
+#name {
+    color: #228B22;
+}
+
+a:link { text-decoration: none; }
+a:visited { text-decoration: none; }
+a:hover { text-decoration: none; }
+a:active { text-decoration: none; }
+
+/* responsiveness */
+@media only screen and (min-width: 768px) {
+    #about-info {
+        width: 600px;
+        margin: 0 auto;
+    }
+    #contact {
+        width: 350px;
+        margin: 0 auto;
+    }
+}
