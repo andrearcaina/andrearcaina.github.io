@@ -1,2 +1,2 @@
-# Heya 👋
-My Personal Website using HTML5, CSS, JS, and Tailwind!
+# My Website 🔥👋
+it's a work in progress right now, but will incorporate my projects, contact info, and info about me!

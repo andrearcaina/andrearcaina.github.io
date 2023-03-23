@@ -1,0 +1,22 @@
+{
+  "name": "andrearcaina.github.io",
+  "version": "1.0.0",
+  "description": "it's a work in progress right now, but will incorporate my projects, contact info, and info about me!",
+  "main": "functionality.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andrearcaina/andrearcaina.github.io.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andrearcaina/andrearcaina.github.io/issues"
+  },
+  "homepage": "https://github.com/andrearcaina/andrearcaina.github.io#readme",
+  "devDependencies": {
+    "tailwindcss": "^3.2.7"
+  }
+}
