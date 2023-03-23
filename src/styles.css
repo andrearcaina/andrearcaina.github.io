@@ -1,4 +1,13 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 @import url("https://fonts.googleapis.com/css?family=Roboto+Mono&subset=cyrillic");
+
+body {
+    font-family: 'Roboto Mono', sans-serif;
+    background-color: rgb(146, 168, 209);
+    margin: 0;
+    padding: 0;
+  }
+  
+  main {
+    margin: 0;
+    padding: 100px;
+  }
