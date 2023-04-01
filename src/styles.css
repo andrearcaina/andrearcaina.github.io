@@ -26,12 +26,35 @@ main {
     color: #228B22;
 }
 
+#links {
+    margin-top: 20px;
+    font-size: 50px; 
+}
+
+#resume-tag {
+    font-size: 13px;
+    font-weight: bold;
+    position: relative;
+    
+    margin-top: -5px;
+    left: 120px;
+}
+
+.slow-bounce {
+    -webkit-animation: fa-bounce 1.2s infinite linear;
+    animation: fa-bounce 1.2s infinite linear;
+}
+
+.slow-bounce:not(:hover) {
+    animation: none;
+}
+
 a:link { text-decoration: none; }
 a:visited { text-decoration: none; }
 a:hover { text-decoration: none; }
 a:active { text-decoration: none; }
 
-/* responsiveness */
+/* responsiveness part 1 */
 @media only screen and (min-width: 768px) {
     #about-info {
         width: 600px;
@@ -44,6 +67,7 @@ a:active { text-decoration: none; }
     }
 }
 
+/* responsiveness part 2 */
 @media only screen and (max-width: 450px) {
     #about-info {
         width: 300px;
