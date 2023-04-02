@@ -1,5 +1,10 @@
 @import url("https://fonts.googleapis.com/css?family=Roboto+Mono&subset=cyrillic");
 
+:root {
+    --before: rgb(74, 74, 167);
+    --after: rgb(43, 43, 102);
+}
+
 body {
     font-family: 'Roboto Mono', sans-serif;
     background-color: rgb(146, 168, 209);
@@ -23,7 +28,7 @@ main {
 }
 
 #name {
-    color: #228B22;
+    color: rgb(40, 139, 40);
 }
 
 #links {
@@ -41,11 +46,13 @@ main {
 }
 
 .slow-bounce {
+    color: rgb(40, 139, 40);
     -webkit-animation: fa-bounce 1.2s infinite linear;
     animation: fa-bounce 1.2s infinite linear;
 }
 
 .slow-bounce:not(:hover) {
+    color: rgb(74, 74, 167);
     animation: none;
 }
 
