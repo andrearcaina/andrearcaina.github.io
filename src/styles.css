@@ -73,6 +73,8 @@ main {
     font-weight: bolder;
     font-size: 16px;
     
+    cursor: pointer;
+
     border-radius: 5px;
     box-shadow: 0 5px 0 #3e8e41;
     transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
