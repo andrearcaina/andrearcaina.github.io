@@ -1,2 +1,2 @@
 # My Website 🔥👋
-it's a work in progress right now, but will incorporate my projects, contact info, and info about me!
+Currently a work in progress article that will display a little bit about me, some of my recent/beloved projects, and contacts!
