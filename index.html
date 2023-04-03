@@ -28,11 +28,12 @@
   </head>
   <body>
     <main>
-      
       <!-- About Me -->
       <div id="about-info">
         <h1>Heyo 👋</h1>
-        <h2>I'm <span id="name"> Andre Arcaina </span> 🔥</h2>
+        <h2>I'm <span id="name"> Andre Arcaina </span> and I 
+          <button class="scroll-button" onclick="scrollToRight()">code</button>
+        </h2>
         <p>
           I am currently studying at
           <b>Toronto Metropolitan University</b> for Computer Science and aiming
@@ -46,7 +47,7 @@
       </div>
 
       <!-- Contacts -->
-      <div id="contact">
+      <div id="contact-info">
         <em>find me elsewhere on the internet 👇</em>
         <div id="links">
           <!-- GitHub -->
@@ -68,9 +69,21 @@
         </div>
         <p id="resume-tag">Resume!</p>
       </div>
+
+      <!-- Projects -->
+      <div class="screen" id="projects">
+        <h1>Projects</h1>
+        <div class="projects">
+          <div class="project-card">Project 1</div>
+          <div class="project-card">Project 2</div>
+          <div class="project-card">Project 3</div>
+          <div class="project-card">Project 4</div>
+        </div>
+        <button class="scroll-button" onclick="scrollToLeft()">Go Back!</button>
+      </div>
     </main>
 
-    <!-- Lololol -->
+    <!-- Yes -->
     <script>
       console.log(
         `%cArcanine useeeeeee...\n

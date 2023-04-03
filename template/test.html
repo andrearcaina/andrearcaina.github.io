@@ -4,26 +4,59 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>test sliders</title>
+    <title>Andre Arcaina test sliders</title>
 
+    <!-- Implementing CSS and Animations -->
     <link rel="stylesheet" href="test.css">
+
+    <!-- Implementing Favicon -->
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2282%22>🫠</text></svg>"
+    />
+
   </head>
   <body>
     <main>
       <div class="img-slider">
-        <div class="slide active"> </div>
-        <div class="slide"> </div>
-        <div class="slide"> </div>
+        <div class="slide active">
+          <img src="imgs/1.jpg" alt="">
+          <div class="info">
+            <h2>Heyo! 👋 I'm <span id="name"> Andre Arcaina </span> </h2>
+            <p>
+              I am currently studying at
+              <b>Toronto Metropolitan University</b> for Computer Science! My
+              favorite languages are <b>Python</b> and <b>Javascript</b>, although I
+              do enjoy anything and everything else (except Assembly, plz no). I
+              enjoy working on side projects, watching Netflix, playing video games
+              and sleeping.
+            </p>  
+          </div>
+        </div>
+        
+        <div class="slide">
+          <img src="imgs/2.jpg" alt="">
+          <div class="info">
+            <h2>Projects</h2>
+            <p>projects projects test</p>
+          </div>
+        </div>
+        
+        <div class="slide">
+          <img src="imgs/3.jpg" alt="">
+          <div class="info">
+            <h2>Contacts</h2>
+            <p>Contact info</p>
+          </div>
+        </div>
         
         <div class="navigation">
           <div class="btn active"></div>
           <div class="btn"></div>
           <div class="btn"></div>
-          <div class="btn"></div>
-          <div class="btn"></div>
         </div>
-
       </div>
     </main>
   </body>
+  <script src="test.js"></script>
 </html>
