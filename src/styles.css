@@ -59,7 +59,7 @@ main {
 .scroll-button {
     /* other styles... */
     background-color: #4CAF50;
-    color: #ffffff;
+    color: white;
 
     margin-top: 20px;
     border: none;
