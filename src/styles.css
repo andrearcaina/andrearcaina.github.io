@@ -5,6 +5,10 @@
     --after: rgb(43, 43, 102);
 }
 
+html, body {
+    overflow: hidden;
+}
+
 body {
     font-family: 'Roboto Mono', sans-serif;
     background-color: rgb(146, 168, 209);
@@ -12,7 +16,8 @@ body {
     padding: 0;
     user-select: none;
     text-align: center;
-    overflow: hidden;
+
+    position: relative;
 }
 
 main {
@@ -93,13 +98,16 @@ main {
 .screen {
     width: 100%;
     height: 100%;
+    
     position: absolute;
     top: 0;
     left: 0;
+    
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    
     transition: transform 0.3s ease-in-out;
 }
 
@@ -113,12 +121,12 @@ main {
 }
 
 .project-card {
-width: 300px;
-height: 300px;
-margin-right: 20px;
-background-color: #ccc;
-display: inline-block;
-vertical-align: top;
+    width: 300px;
+    height: 300px;
+    margin-right: 20px;
+    background-color: #ccc;
+    display: inline-block;
+    vertical-align: top;
 }
 
 a:link { text-decoration: none; }
@@ -140,17 +148,57 @@ a:active { text-decoration: none; }
 }
 
 /* responsiveness part 2 */
-@media only screen and (max-width: 450px) {
+@media only screen and (max-width: 475px) {
     #about-info {
         width: 300px;
         font-size: 15px;
         right: 50px;
         margin: 0px auto;
+        margin-left: -8px;
     }
     #contact-info {
         width: 250px;
-        font-size: 15px;
-        right: 80px;
+        font-size: 12px;
+        right: 60px;
         margin: 0 auto;
+        margin-left: -38px;
+    }
+    #links {
+        margin-top: 20px;
+        font-size: 30px; 
+    }
+    #resume-tag {
+        font-size: 10px;
+        font-weight: bold;
+        position: relative;
+        
+        margin-top: -5px;
+        left: 70px;
+    }
+    .projects {
+        display: inline-block;
+        white-space: nowrap;
+    }
+    .project-card {
+        width: 200%;
+        height: 100%;
+
+        margin-left: -50px;
+        margin-bottom: 300px;
+    }
+}
+
+/* make it so that the projects screen is responsive on smaller devices */
+@media only screen and (max-width: 1280px) {
+    .projects {
+        display: inline-block;
+        white-space: nowrap;
+    }
+    .project-card {
+        width: 100%;
+        height: 100%;
+        
+        margin-right: 0;
+        margin-bottom: 300px;
     }
 }
