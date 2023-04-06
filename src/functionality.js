@@ -13,5 +13,5 @@ function scrollToLeft() {
     let projects = document.getElementById('projects');
     aboutMe.style.transform = 'translateX(0%)';
     contact.style.transform = 'translateX(0%)';
-    projects.style.transform = 'translateX(100%)';
+    projects.style.transform = 'translateX(500%)';
 }

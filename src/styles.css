@@ -1,20 +1,15 @@
 @import url("https://fonts.googleapis.com/css?family=Roboto+Mono&subset=cyrillic");
 
-:root {
-    --before: rgb(74, 74, 167);
-    --after: rgb(43, 43, 102);
-}
-
 html, body {
     overflow: hidden;
 }
 
 body {
-    font-family: 'Roboto Mono', sans-serif;
+    font-family: 'Roboto Mono', monospace;
     background-color: rgb(146, 168, 209);
     margin: 0;
     padding: 0;
-    user-select: none;
+    user-select: none; 
     text-align: center;
 
     position: relative;
@@ -30,6 +25,31 @@ main {
     text-align: justify;
     margin: 10px auto;
     font-size: 17px;
+}
+
+#intro {
+    width: max-content;
+    overflow: hidden; /* Ensures the content is not revealed until the animation */
+    
+    border-right: .15em solid black;
+    white-space: nowrap; 
+    letter-spacing: .15em;
+    
+    animation: 
+        typing 1.7s steps(12),
+        cursor .7s step-end infinite;
+}
+
+/* The typing effect */
+@keyframes typing {
+    from { width: 0 }
+    to { width: 50% }
+}
+
+  /* The typewriter cursor effect */
+@keyframes cursor {
+    from, to { border-color: transparent }
+    50% { border-color: black; }
 }
 
 #name {
@@ -74,7 +94,7 @@ main {
     text-decoration: none;
     display: inline-block;
 
-    font-family: 'Roboto Mono', sans-serif;
+    font-family: 'Roboto Mono', monospace;
     font-weight: bolder;
     font-size: 16px;
     
@@ -112,10 +132,10 @@ main {
 }
 
 #projects { 
-    transform: translateX(100%);
+    transform: translateX(500%);
 }
 
-.projects {
+.container {
     display: inline-block;
     white-space: nowrap;
 }
