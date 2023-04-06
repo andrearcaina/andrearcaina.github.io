@@ -52,6 +52,24 @@ main {
     50% { border-color: black; }
 }
 
+h2 { animation: fade-top 3s forwards; }
+#text { animation: fade-top 3s forwards; }
+#links { animation: fade-top 2s forwards; }
+#resume-tag { animation: fade-top 2s forwards; }
+#internet { 
+    font-style: italic;
+    animation: fade-top 2s forwards; 
+}
+
+/* fade in animation onload */
+@keyframes fade-top {
+    from { opacity: 0; }
+    to { 
+        opacity: 1;
+        transform: translateY(-10px);
+    }
+}
+
 #name {
     color: rgb(40, 139, 40);
 }
@@ -70,19 +88,20 @@ main {
     left: 120px;
 }
 
+/* the bounce animation when hovered */
 .slow-bounce {
     color: rgb(40, 139, 40);
     -webkit-animation: fa-bounce 1.2s infinite linear;
     animation: fa-bounce 1.2s infinite linear;
 }
 
+/* no animation when not hovered */
 .slow-bounce:not(:hover) {
     color: rgb(74, 74, 167);
     animation: none;
 }
 
 .scroll-button {
-    /* other styles... */
     background-color: #4CAF50;
     color: white;
 
@@ -105,6 +124,7 @@ main {
     transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
+/* The 3D button animation */
 .scroll-button:hover {
     box-shadow: 0 9px 0 #3e8e41;
     transform: translateY(-4px);
