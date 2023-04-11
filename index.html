@@ -14,6 +14,9 @@
     <!-- Implementing CSS and Animations -->
     <link rel="stylesheet" href="src/styles.css" />
   
+    <!-- implementing imagehover css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/imagehover.css/2.0.0/css/imagehover.min.css" />
+
     <!-- Implementing Favicon -->
     <link
       rel="icon"
@@ -71,14 +74,69 @@
 
       <!-- Projects -->
       <div class="screen" id="projects">
-        <h1>Projects</h1>
+        <h1>Some of my Projects!</h1>
+        <span id="projects-info">Click to go to their githubs 👇</span>
         <div class="container">
-          <div class="project-card">Project 1</div>
-          <div class="project-card">Project 2</div>
-          <div class="project-card">Project 3</div>
-          <div class="project-card">Project 4</div>
+          <div class="project-card">
+              <figure class="imghvr-zoom-out-right">  
+                <img src="imgs/TwitterCow.png" alt="project-1"/>
+                <figcaption>
+                  <h4>A Travel Content Website!</h4>
+                  <p>Languages: JavaScript, </p>
+                  <p>HTML5/CSS, Python </p>
+                  <p>Tools: Snscrape, Flask, </p>
+                  <p>Bootstrap5, Pandas, NumPy </p>
+                  <p>Info: UoftHacks 2023! </p>
+                </figcaption>
+                <a href="https://github.com/kevin-klau/Twitter-Cow" target="_blank"></a>
+              </figure>
+          </div>
+          <div class="project-card">
+            <figure class="imghvr-shutter-in-horiz">  
+              <img src="imgs/ChampionsArena.png" alt="project-2"/>
+              <figcaption>
+                <h4>Champion's Arena Game!</h4>
+                <p>Languages: Pure Java </p>
+                <p>Tools: Java Swing, </p>
+                <p> Java Awt, Java Socket </p>
+                <p> Info: Has JavaDoc </p>
+              </figcaption>
+              <a href="https://github.com/andrearcaina/Champions-Arena-Game" target="_blank"></a>
+            </figure>
+          </div>
+          <div class="project-card">
+            <figure class="imghvr-shutter-out-horiz">  
+              <img src="imgs/TTT.png" alt="project-3"/>
+              <figcaption>
+                <h4>Tic Tac Toe on a Website!</h4>
+                <p>Languages: HTML5/CSS, </p>
+                <p>Pure JavaScript!</p>
+                <p>Info: Two player game </p>
+                <p> (on same computer :P) </p>
+              </figcaption>
+              <a href="https://github.com/andrearcaina/Re-Tic-Tac-Toe" target="_blank"></a>
+            </figure>
+          </div>
+          <div class="project-card">
+            <figure class="imghvr-zoom-out-left">
+              <img src="imgs/Bot.png" alt="project-4"/>
+              <figcaption>
+                <h4>A Discord Gambling Bot!</h4>
+                <p>Languages: Python </p>
+                <p>Tools: Discord.py </p>
+                <p> Info: cogs folder for cmds </p>
+                <p> Can play blackjack! </p>
+              </figcaption>
+              <a href="https://github.com/andrearcaina/Discord-Bot" target="_blank"></a>
+            </figure>
+          </div>
         </div>
-        <button class="scroll-button" onclick="scrollToLeft()">Go Back!</button>
+        <div>
+          <button class="scroll-button" onclick="scrollToLeft()">Go Back!</button>
+          <a href="https://github.com/andrearcaina?tab=repositories" target="_blank">
+            <button class="scroll-button" onclick="">More!</button>
+          </a>
+        </div>
       </div>
     </main>
 

@@ -20,6 +20,25 @@ main {
     padding: 100px;
 }
 
+img {
+    height: 300px;
+    width: 300px;
+    border-radius: 5px;
+}
+
+figure {
+    border-radius: 5px;
+}
+
+
+figcaption {
+    position: relative;
+    border: 5px solid rgb(195, 195, 211);
+    border-radius: 5px;
+    text-shadow: none;
+    color: white;
+}
+
 #about-info {
     position: relative;
     text-align: justify;
@@ -160,13 +179,21 @@ h2 { animation: fade-top 3s forwards; }
     white-space: nowrap;
 }
 
+#projects-info {
+    margin-bottom: 40px;
+}
+
 .project-card {
     width: 300px;
     height: 300px;
     margin-right: 20px;
+
     background-color: #ccc;
+    border-radius: 5px;
+
     display: inline-block;
     vertical-align: top;
+    cursor: pointer;
 }
 
 a:link { text-decoration: none; }
