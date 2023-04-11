@@ -89,7 +89,7 @@ h2 { animation: fade-top 3s forwards; }
     }
 }
 
-#name {
+.green {
     color: rgb(40, 139, 40);
 }
 
