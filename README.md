@@ -1,2 +1,4 @@
 # My Website 🔥👋
-Currently a work in progress article that will display a little bit about me, some of my recent/beloved projects, and contacts!
+Welcome to my small space on the networking web :D
+
+Currently displays a little bit about me, my contacts, and some of my recent/beloved projects!
