@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css?family=Roboto+Mono&subset=cyrillic");
 
 html, body {
-    overflow: hidden;
+    overflow-x: hidden;
 }
 
 body {
@@ -255,17 +255,15 @@ a:active { text-decoration: none; }
     }
 }
 
-/* make it so that the projects screen is responsive on smaller devices */
-@media only screen and (max-width: 1280px) {
+/* make it so that the projects screen is smaller on smaller screens */
+@media only screen and (max-width: 1000px) {
     .projects {
-        display: inline-block;
-        white-space: nowrap;
+        display: flex;
+        flex-wrap: wrap;
     }
     .project-card {
-        width: 100%;
-        height: 100%;
-        
-        margin-right: 0;
-        margin-bottom: 300px;
+        width: 100px;
+        height: 30px;
+        margin-right: 10px;
     }
 }
