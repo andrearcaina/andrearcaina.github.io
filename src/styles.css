@@ -59,12 +59,12 @@ figcaption {
     cursor: pointer;
 
     border-radius: 5px;
-    box-shadow: 0 0 5px #65a6d2;
+    box-shadow: 0 0 8px #65a6d2;
     transition: box-shadow 0.3s ease-in-out;
 } 
 
 #color-button:hover {
-    box-shadow: 0 0 20px #65a6d2;
+    box-shadow: 0 0 35px #65a6d2;
 }
 
 #about-info {

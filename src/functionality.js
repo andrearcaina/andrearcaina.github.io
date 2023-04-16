@@ -23,6 +23,9 @@ function changeColor() {
             icon.onmouseout = () => {
                 icon.style.color = 'rgb(127, 127, 214)';
             }
+            icon.onmouseover = () => {
+                icon.style.color = 'rgb(76,175,80)';
+            }
         });
     }
     else {
@@ -40,6 +43,9 @@ function changeColor() {
             icon.style.color = 'rgb(74, 74, 167)';
             icon.onmouseout = () => {
                 icon.style.color = 'rgb(74, 74, 167)';
+            }
+            icon.onmouseover = () => {
+                icon.style.color = 'rgb(40, 167, 69)';
             }
         });
     }
