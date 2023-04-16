@@ -1,8 +1,9 @@
 function changeColor() {
     const button = document.getElementById('color-button');
-    const body = document.getElementsByTagName('body')[0];
     const spans = document.querySelectorAll('.green');
     const icons = document.querySelectorAll('.slow-bounce');
+    
+    const body = document.getElementsByTagName('body')[0];
     const bodyStyle = getComputedStyle(body);
     const backgroundColor = bodyStyle.backgroundColor;
 
