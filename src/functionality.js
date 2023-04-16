@@ -20,6 +20,9 @@ function changeColor() {
 
         icons.forEach(icon => {
             icon.style.color = 'rgb(127, 127, 214)';
+            icon.onmouseout = () => {
+                icon.style.color = 'rgb(127, 127, 214)';
+            }
         });
     }
     else {
@@ -35,6 +38,9 @@ function changeColor() {
     
         icons.forEach(icon => {
             icon.style.color = 'rgb(74, 74, 167)';
+            icon.onmouseout = () => {
+                icon.style.color = 'rgb(74, 74, 167)';
+            }
         });
     }
 }

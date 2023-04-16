@@ -13,9 +13,12 @@
 
     <!-- Implementing CSS and Animations -->
     <link rel="stylesheet" href="src/styles.css" />
-  
+
     <!-- implementing imagehover css -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/imagehover.css/2.0.0/css/imagehover.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/imagehover.css/2.0.0/css/imagehover.min.css"
+    />
 
     <!-- Implementing Favicon -->
     <link
@@ -24,8 +27,11 @@
     />
 
     <!-- Implementing Icons -->
-    <script src="https://kit.fontawesome.com/ac4072234b.js" crossorigin="anonymous"> </script>
-    
+    <script
+      src="https://kit.fontawesome.com/ac4072234b.js"
+      crossorigin="anonymous"
+    ></script>
+
     <!-- Implementing Functionality -->
     <script src="src/functionality.js"></script>
   </head>
@@ -35,7 +41,8 @@
       <div id="about-info">
         <button id="color-button" onclick="changeColor()">dark</button>
         <h1 id="intro">Hello World!</h1>
-        <h2>I'm <span class="green"> Andre Arcaina </span> and i 
+        <h2>
+          I'm <span class="green"> Andre Arcaina </span> and i
           <button class="scroll-button" onclick="scrollToRight()">code</button>
         </h2>
         <p id="text">
@@ -44,8 +51,8 @@
           to get a <i>summer internship</i> in 2023. I am very interested in the
           field and love to dive deep into the rabbit hole of programming! My
           favorite languages are <b>Python</b> and <b>JavaScript</b>, although I
-          do enjoy anything and everything else. I enjoy working on side projects, 
-          watching Netflix, playing video games and reading!
+          do enjoy anything and everything else. I enjoy working on side
+          projects, watching Netflix, playing video games and reading!
         </p>
       </div>
 
@@ -55,19 +62,39 @@
         <div id="links">
           <!-- GitHub -->
           <a href="https://github.com/andrearcaina/" target="_blank">
-            <i class="fa-brands fa-github slow-bounce" aria-hidden="true"></i>
+            <i
+              onmouseover="this.style.color='rgb(40, 139, 40)'"
+              onmouseout="this.style.color='rgb(74, 74, 167)'"
+              class="fa-brands fa-github slow-bounce"
+              aria-hidden="true"
+            ></i>
           </a>
           <!-- LinkedIn -->
           <a href="https://www.linkedin.com/in/andre-arcaina/" target="_blank">
-            <i class="fa-brands fa-linkedin slow-bounce" aria-hidden="true"></i>
+            <i
+              onmouseover="this.style.color='rgb(40, 139, 40)'"
+              onmouseout="this.style.color='rgb(74, 74, 167)'"
+              class="fa-brands fa-linkedin slow-bounce"
+              aria-hidden="true"
+            ></i>
           </a>
           <!-- Email -->
           <a href="mailto:dtandre331@gmail.com" target="_blank">
-            <i class="fa-solid fa-envelope slow-bounce" aria-hidden="true"></i>
+            <i
+              onmouseover="this.style.color='rgb(40, 139, 40)'"
+              onmouseout="this.style.color='rgb(74, 74, 167)'"
+              class="fa-solid fa-envelope slow-bounce"
+              aria-hidden="true"
+            ></i>
           </a>
           <!-- Resume -->
           <a href="resumes/Resume_4.pdf" target="_blank">
-            <i class="fa-solid fa-file-pdf slow-bounce" aria-hidden="true"></i>
+            <i
+              onmouseover="this.style.color='rgb(40, 139, 40)'"
+              onmouseout="this.style.color='rgb(74, 74, 167)'"
+              class="fa-solid fa-file-pdf slow-bounce"
+              aria-hidden="true"
+            ></i>
           </a>
         </div>
         <p id="resume-tag">Resume!</p>
@@ -80,65 +107,82 @@
         <div class="container">
           <div class="project-card">
             <!-- Twitter Cow -->
-            <figure class="imghvr-zoom-out-right">  
-              <img src="imgs/TwitterCow.png" alt="project-1"/>
+            <figure class="imghvr-zoom-out-right">
+              <img src="imgs/TwitterCow.png" alt="project-1" />
               <figcaption>
                 <h4>A Travel Content Website!</h4>
-                <p>Languages: JavaScript, </p>
-                <p>HTML5/CSS, Python </p>
-                <p>Tools: Snscrape, Flask, </p>
-                <p>Bootstrap5, Pandas, NumPy </p>
-                <p>Info: UoftHacks 2023! </p>
+                <p>Languages: JavaScript,</p>
+                <p>HTML5/CSS, Python</p>
+                <p>Tools: Snscrape, Flask,</p>
+                <p>Bootstrap5, Pandas, NumPy</p>
+                <p>Info: UoftHacks 2023!</p>
               </figcaption>
-              <a href="https://github.com/kevin-klau/Twitter-Cow" target="_blank"></a>
+              <a
+                href="https://github.com/kevin-klau/Twitter-Cow"
+                target="_blank"
+              ></a>
             </figure>
           </div>
           <div class="project-card">
             <!-- Champion's Arena -->
-            <figure class="imghvr-shutter-in-horiz">  
-              <img src="imgs/ChampionsArena.png" alt="project-2"/>
+            <figure class="imghvr-shutter-in-horiz">
+              <img src="imgs/ChampionsArena.png" alt="project-2" />
               <figcaption>
                 <h4>Champion's Arena Game!</h4>
-                <p>Languages: Pure Java </p>
-                <p>Tools: Java Swing, </p>
-                <p> Java Awt, Java Socket </p>
-                <p> Info: Has JavaDoc </p>
+                <p>Languages: Pure Java</p>
+                <p>Tools: Java Swing,</p>
+                <p>Java Awt, Java Socket</p>
+                <p>Info: Has JavaDoc</p>
               </figcaption>
-              <a href="https://github.com/andrearcaina/Champions-Arena-Game" target="_blank"></a>
+              <a
+                href="https://github.com/andrearcaina/Champions-Arena-Game"
+                target="_blank"
+              ></a>
             </figure>
           </div>
           <div class="project-card">
             <!-- Tic Tac Toe -->
-            <figure class="imghvr-shutter-out-horiz">  
-              <img src="imgs/TTT.png" alt="project-3"/>
+            <figure class="imghvr-shutter-out-horiz">
+              <img src="imgs/TTT.png" alt="project-3" />
               <figcaption>
                 <h4>Tic Tac Toe on a Website!</h4>
-                <p>Languages: HTML5/CSS, </p>
+                <p>Languages: HTML5/CSS,</p>
                 <p>Pure JavaScript!</p>
-                <p>Info: Two player game </p>
-                <p> (on same computer :P) </p>
+                <p>Info: Two player game</p>
+                <p>(on same computer :P)</p>
               </figcaption>
-              <a href="https://github.com/andrearcaina/Re-Tic-Tac-Toe" target="_blank"></a>
+              <a
+                href="https://github.com/andrearcaina/Re-Tic-Tac-Toe"
+                target="_blank"
+              ></a>
             </figure>
           </div>
           <div class="project-card">
             <!-- Discord Economy Bot -->
             <figure class="imghvr-zoom-out-left">
-              <img src="imgs/Bot.png" alt="project-4"/>
+              <img src="imgs/Bot.png" alt="project-4" />
               <figcaption>
                 <h4>A Discord Gambling Bot!</h4>
-                <p>Languages: Python </p>
-                <p>Tools: Discord.py </p>
-                <p> Info: cogs folder for cmds </p>
-                <p> Can play blackjack! </p>
+                <p>Languages: Python</p>
+                <p>Tools: Discord.py</p>
+                <p>Info: cogs folder for cmds</p>
+                <p>Can play blackjack!</p>
               </figcaption>
-              <a href="https://github.com/andrearcaina/Discord-Bot" target="_blank"></a>
+              <a
+                href="https://github.com/andrearcaina/Discord-Bot"
+                target="_blank"
+              ></a>
             </figure>
           </div>
         </div>
         <div>
-          <button class="scroll-button" onclick="scrollToLeft()">Go Back!</button>
-          <a href="https://github.com/andrearcaina?tab=repositories" target="_blank">
+          <button class="scroll-button" onclick="scrollToLeft()">
+            Go Back!
+          </button>
+          <a
+            href="https://github.com/andrearcaina?tab=repositories"
+            target="_blank"
+          >
             <button class="scroll-button" onclick="">More!</button>
           </a>
         </div>

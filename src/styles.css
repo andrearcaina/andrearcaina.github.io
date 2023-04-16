@@ -137,15 +137,13 @@ h2 { animation: fade-top 3s forwards; }
 
 /* the bounce animation when hovered */
 .slow-bounce {
-    color: rgb(40, 139, 40);
-    -webkit-animation: fa-bounce 1.2s infinite linear;
-    animation: fa-bounce 1.2s infinite linear;
+    color: rgb(74, 74, 167);
 }
 
 /* no animation when not hovered */
-.slow-bounce:not(:hover) {
-    color: rgb(74, 74, 167);
-    animation: none;
+.slow-bounce:hover {
+    -webkit-animation: fa-bounce 1.2s infinite linear;
+    animation: fa-bounce 1.2s infinite linear;
 }
 
 .scroll-button {
