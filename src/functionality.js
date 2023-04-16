@@ -1,7 +1,8 @@
 function changeColor() {
     const button = document.getElementById('color-button');
     const body = document.getElementsByTagName('body')[0];
-    const span = document.querySelector('.green');
+    const spans = document.querySelectorAll('.green');
+    const icons = document.querySelectorAll('.slow-bounce');
     const bodyStyle = getComputedStyle(body);
     const backgroundColor = bodyStyle.backgroundColor;
 
@@ -11,7 +12,14 @@ function changeColor() {
         button.style.backgroundColor = 'rgb(146, 168, 209)';
         button.style.color = 'rgb(44, 88, 168)';
         button.innerHTML = 'light';
-        span.style.color = 'rgb(76,175,80)';
+        
+        spans.forEach(span => {
+            span.style.color = 'rgb(76,175,80)';
+        });
+
+        icons.forEach(icon => {
+            icon.style.color = 'rgb(127, 127, 214)';
+        });
     }
     else {
         body.style.backgroundColor = 'rgb(146, 168, 209)';
@@ -19,7 +27,14 @@ function changeColor() {
         button.style.backgroundColor = 'rgb(44, 88, 168)';
         button.style.color = 'rgb(146, 168, 209)';
         button.innerHTML = 'dark';
-        span.style.color = 'rgb(40, 139, 40)';
+        
+        spans.forEach(span => {
+            span.style.color = 'rgb(40, 167, 69)';
+        });
+    
+        icons.forEach(icon => {
+            icon.style.color = 'rgb(74, 74, 167)';
+        });
     }
 }
 
