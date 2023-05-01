@@ -81,6 +81,10 @@ figcaption {
     font-size: 17px;
 }
 
+#here {
+    color: black;
+}
+
 #intro {
     width: max-content;
     overflow: hidden; /* Ensures the content is not revealed until the animation */
@@ -234,10 +238,10 @@ h2 { animation: fade-top 3s forwards; }
     cursor: pointer;
 }
 
-a:link { text-decoration: none; }
-a:visited { text-decoration: none; }
-a:hover { text-decoration: none; }
-a:active { text-decoration: none; }
+.contact:link { text-decoration: none; }
+.contact:visited { text-decoration: none; }
+.contact:hover { text-decoration: none; }
+.contact:active { text-decoration: none; }
 
 /* responsiveness part 1 */
 @media only screen and (min-width: 768px) {
