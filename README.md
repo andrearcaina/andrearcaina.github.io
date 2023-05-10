@@ -1,5 +1,5 @@
-# My Personal Website 🔥👋
-Welcome to my small space on the networking web :D
+# My Personal Site 
+Welcome to my small space on the networking web 👋
 
 Currently displays a little bit about me, my contacts, and some of my recent/beloved projects!
 
