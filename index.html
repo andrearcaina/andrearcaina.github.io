@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -34,180 +34,162 @@
 
     <!-- Implementing Button Functionality -->
     <script src="src/buttons.js"></script>
-  </head>
-  <body>
-    <main>
-      <!-- About Me -->
-      <div id="about-info">
-        <button id="color-button" onclick="changeColor()">dark</button>
-        <h1 id="intro">Hello World!</h1>
-        <h2>
-          I'm <span class="green"> Andre Arcaina </span> and I
-          <button class="scroll-button" onclick="scrollToRight()">code</button>
-        </h2>
-        <p id="text">
-          I am currently studying at
-          <b>Toronto Metropolitan University</b> for Computer Science and I am
-          very interested in the field. I love diving deep into the rabbit hole
-          of programming, as you can see in my GitHub and through my latest
-          <a id="here" href="https://github.com/andrearcaina/Hells-Gate" target="_blank">
-            project</a>(s)! My favorite languages are <b>Python</b> and <b>JavaScript</b>,
-          although I do enjoy anything and everything else. <i>On my spare time</i> you can see me: 
-          working on side projects, binge watching shows, playing video games or biking!
-        </p>
-      </div>
+</head>
+<body>
+  <main>
+    <!-- About Me -->
+    <div id="about-info">
+      <button id="color-button" onclick="changeColor()">dark</button>
+      <h1 id="intro">Hello World!</h1>
+      <h2>
+        I'm <span class="green"> Andre Arcaina </span> and I
+        <button class="scroll-button" onclick="scrollToRight()">code</button>
+      </h2>
+      <p id="text">
+        I am currently studying at
+        <b>Toronto Metropolitan University</b> for Computer Science and I am
+        very interested in the field. I love diving deep into the rabbit hole
+        of programming, as you can see in my GitHub and through my latest
+        <a id="here" href="https://github.com/andrearcaina/Hells-Gate" target="_blank">
+          project</a>(s)! My favorite languages are <b>Python</b> and <b>JavaScript</b>,
+        although I do enjoy anything and everything else. <i>On my spare time</i> you can see me: 
+        working on side projects, binge watching shows, playing video games or biking!
+      </p>
+    </div>
 
-      <!-- Contacts -->
-      <div id="contact-info">
-        <p id="internet">find me elsewhere on the net 👇</p>
-        <div id="links">
-          <!-- GitHub -->
-          <a class="contact" href="https://github.com/andrearcaina/" target="_blank">
-            <i
-              onmouseover="this.style.color='rgb(40, 139, 40)'"
-              onmouseout="this.style.color='rgb(74, 74, 167)'"
-              class="fa-brands fa-github slow-bounce"
-              aria-hidden="true"
-            ></i>
-          </a>
-          <!-- LinkedIn -->
-          <a class="contact" href="https://www.linkedin.com/in/andre-arcaina/" target="_blank">
-            <i
-              onmouseover="this.style.color='rgb(40, 139, 40)'"
-              onmouseout="this.style.color='rgb(74, 74, 167)'"
-              class="fa-brands fa-linkedin slow-bounce"
-              aria-hidden="true"
-            ></i>
-          </a>
-          <!-- Email -->
-          <a class="contact" href="mailto:dtandre331@gmail.com" target="_blank">
-            <i
-              onmouseover="this.style.color='rgb(40, 139, 40)'"
-              onmouseout="this.style.color='rgb(74, 74, 167)'"
-              class="fa-solid fa-envelope slow-bounce"
-              aria-hidden="true"
-            ></i>
-          </a>
-          <!-- Resume -->
-          <a class="contact" href="resumes/Andre_Arcaina_Resume.pdf" target="_blank">
-            <i
-              onmouseover="this.style.color='rgb(40, 139, 40)'"
-              onmouseout="this.style.color='rgb(74, 74, 167)'"
-              class="fa-solid fa-file-pdf slow-bounce"
-              aria-hidden="true"
-            ></i>
-          </a>
-        </div>
-        <p id="resume-tag">Resume!</p>
+    <!-- Contacts -->
+    <div id="contact-info">
+      <p id="internet">find me elsewhere on the net 👇</p>
+      <div id="links">
+        <!-- GitHub -->
+        <a class="contact" href="https://github.com/andrearcaina/" target="_blank">
+          <i
+            onmouseover="this.style.color='rgb(40, 139, 40)'"
+            onmouseout="this.style.color='rgb(74, 74, 167)'"
+            class="fa-brands fa-github slow-bounce"
+            aria-hidden="true"
+          ></i>
+        </a>
+        <!-- LinkedIn -->
+        <a class="contact" href="https://www.linkedin.com/in/andre-arcaina/" target="_blank">
+          <i
+            onmouseover="this.style.color='rgb(40, 139, 40)'"
+            onmouseout="this.style.color='rgb(74, 74, 167)'"
+            class="fa-brands fa-linkedin slow-bounce"
+            aria-hidden="true"
+          ></i>
+        </a>
+        <!-- Email -->
+        <a class="contact" href="mailto:dtandre331@gmail.com" target="_blank">
+          <i
+            onmouseover="this.style.color='rgb(40, 139, 40)'"
+            onmouseout="this.style.color='rgb(74, 74, 167)'"
+            class="fa-solid fa-envelope slow-bounce"
+            aria-hidden="true"
+          ></i>
+        </a>
+        <!-- Resume -->
+        <a class="contact" href="resumes/Andre_Arcaina_Resume.pdf" target="_blank">
+          <i
+            onmouseover="this.style.color='rgb(40, 139, 40)'"
+            onmouseout="this.style.color='rgb(74, 74, 167)'"
+            class="fa-solid fa-file-pdf slow-bounce"
+            aria-hidden="true"
+          ></i>
+        </a>
       </div>
+      <p id="resume-tag">Resume!</p>
+    </div>
 
-      <!-- Projects -->
-      <div class="screen" id="projects">
-        <h1>Some of my <span class="green"> Projects </span> :D</h1>
-        <span id="projects-info">Click to go to their githubs 👇</span>
-        <div class="container">
-          <div class="project-card">
-            <!-- Twitter Cow -->
-            <figure class="imghvr-zoom-out-right">
-              <img src="imgs/TwitterCow.png" alt="project-1" />
-              <figcaption>
-                <h4>A Travel Content Website!</h4>
-                <p align="left">Languages: JavaScript,</p>
-                <p align="left">HTML5/CSS, Python</p>
-                <p align="left">Tools: Snscrape, Flask,</p>
-                <p align="left">Bootstrap5, Pandas, NumPy</p>
-                <p align="left">Info: UoftHacks 2023!</p>
-              </figcaption>
-              <a
-                href="https://github.com/kevin-klau/Twitter-Cow"
-                target="_blank"
-              ></a>
-            </figure>
-          </div>
-          <div class="project-card">
-            <!-- Champion's Arena -->
-            <figure class="imghvr-shutter-in-horiz">
-              <img src="imgs/SelfTranslate.png" alt="project-2" />
-              <figcaption>
-                <h4>self.translate!</h4>
-                <p align="left">Languages: Python, CSS</p>
-                <p align="left">Tools: OpenCV, Cvzone</p>
-                <p align="left">MediaPipe, Streamlit</p>
-                <p align="left">Info: Has a translation,</p>
-                <p align="left">sign, and lesson plan</p>
-              </figcaption>
-              <a
-                href="https://github.com/andrearcaina/Self-Translate"
-                target="_blank"
-              ></a>
-            </figure>
-          </div>
-          <div class="project-card">
-            <!-- Tic Tac Toe -->
-            <figure class="imghvr-shutter-out-horiz">
-              <img src="imgs/2048.png" alt="project-3" />
-              <figcaption>
-                <h4>2048. The Game!</h4>
-                <p align="left">Languages: HTML5/CSS,</p>
-                <p align="left">Pure JavaScript!</p>
-                <p align="left">Info: Swipe and merge</p>
-                <p align="left">tiles to try to get 2048!</p>
-              </figcaption>
-              <a
-                href="https://github.com/andrearcaina/Re-2048"
-                target="_blank"
-              ></a>
-            </figure>
-          </div>
-          <div class="project-card">
-            <!-- Discord Economy Bot -->
-            <figure class="imghvr-zoom-out-left">
-              <img src="imgs/Bot.png" alt="project-4" />
-              <figcaption>
-                <h4>A Stock Price Predictor!</h4>
-                <p align="left">Languages: JavaScript,</p>
-                <p align="left">Python, HTML5/CSS</p>
-                <p align="left">Tools: Flask, NumPy, Pandas</p>
-                <p align="left">Seaborn, Matplotlib,</p>
-                <p align="left">Keras, scikit-learn</p>
-              </figcaption>
-              <a
-                href="https://github.com/andrearcaina/ETH-Predictor"
-                target="_blank"
-              ></a>
-            </figure>
-          </div>
+    <!-- Projects -->
+    <div class="screen" id="projects">
+      <h1>Some of my <span class="green"> Projects </span> :D</h1>
+      <span id="projects-info">Click to go to their githubs 👇</span>
+      <div class="container">
+        <div class="project-card">
+          <!-- Twitter Cow -->
+          <figure class="imghvr-zoom-out-right">
+            <img src="imgs/TwitterCow.png" alt="project-1" />
+            <figcaption>
+              <h4>A Travel Content Website!</h4>
+              <p align="left">Languages: JavaScript,</p>
+              <p align="left">HTML5/CSS, Python</p>
+              <p align="left">Tools: Snscrape, Flask,</p>
+              <p align="left">Bootstrap5, Pandas, NumPy</p>
+              <p align="left">Info: UoftHacks 2023!</p>
+            </figcaption>
+            <a
+              href="https://github.com/kevin-klau/Twitter-Cow"
+              target="_blank"
+            ></a>
+          </figure>
         </div>
-        <div>
-          <button class="scroll-button" onclick="scrollToLeft()">
-            Go Back!
-          </button>
-          <a
-            href="https://github.com/andrearcaina?tab=repositories"
-            target="_blank"
-          >
-            <button class="scroll-button" onclick="">More!</button>
-          </a>
+        <div class="project-card">
+          <!-- Champion's Arena -->
+          <figure class="imghvr-shutter-in-horiz">
+            <img src="imgs/SelfTranslate.png" alt="project-2" />
+            <figcaption>
+              <h4>self.translate!</h4>
+              <p align="left">Languages: Python, CSS</p>
+              <p align="left">Tools: OpenCV, Cvzone</p>
+              <p align="left">MediaPipe, Streamlit</p>
+              <p align="left">Info: Has a translation,</p>
+              <p align="left">sign, and lesson plan</p>
+            </figcaption>
+            <a
+              href="https://github.com/andrearcaina/Self-Translate"
+              target="_blank"
+            ></a>
+          </figure>
+        </div>
+        <div class="project-card">
+          <!-- Tic Tac Toe -->
+          <figure class="imghvr-shutter-out-horiz">
+            <img src="imgs/2048.png" alt="project-3" />
+            <figcaption>
+              <h4>2048. The Game!</h4>
+              <p align="left">Languages: HTML5/CSS,</p>
+              <p align="left">Pure JavaScript!</p>
+              <p align="left">Info: Swipe and merge</p>
+              <p align="left">tiles to try to get 2048!</p>
+            </figcaption>
+            <a
+              href="https://github.com/andrearcaina/Re-2048"
+              target="_blank"
+            ></a>
+          </figure>
+        </div>
+        <div class="project-card">
+          <!-- Discord Economy Bot -->
+          <figure class="imghvr-zoom-out-left">
+            <img src="imgs/Bot.png" alt="project-4" />
+            <figcaption>
+              <h4>A Stock Price Predictor!</h4>
+              <p align="left">Languages: JavaScript,</p>
+              <p align="left">Python, HTML5/CSS</p>
+              <p align="left">Tools: Flask, NumPy, Pandas</p>
+              <p align="left">Seaborn, Matplotlib,</p>
+              <p align="left">Keras, scikit-learn</p>
+            </figcaption>
+            <a
+              href="https://github.com/andrearcaina/ETH-Predictor"
+              target="_blank"
+            ></a>
+          </figure>
         </div>
       </div>
-    </main>
-
-    <!-- Yes -->
-    <script>
-      console.log(
-        `%cArcanine useeeeeee...\n
-    .------..------..------..------..------.     .------..------..------..------..------.
-    |F.--. ||L.--. ||A.--. ||R.--. ||E.--. |.-.  |B.--. ||L.--. ||I.--. ||T.--. ||Z.--. |
-    | :(): || :/\\: || (\\/) || :(): || (\\/) ((5)) | :(): || :/\\: || (\\/) || :/\\: || :(): |
-    | ()() || (__) || :\\/: || ()() || :\\/: |'-.-.| ()() || (__) || :\\/: || (__) || ()() |
-    | '--'F|| '--'L|| '--'A|| '--'R|| '--'E| ((1)) '--'B|| '--'L|| '--'I|| '--'T|| '--'Z|
-    '------''------''------''------''------'  '-''------''------''------''------''------'`,
-        "color: #BE5243; font-size: 1.2rem; font-weight: bold; font-family: monospace;"
-      );
-      console.log(
-        `%cshameless discord plug: psykthe#9455 Lol`,
-        "color: #228B22; font-size: 1rem; font-weight: bold; font-family: georgia;"
-      );
-    </script>
-  </body>
+      <div>
+        <button class="scroll-button" onclick="scrollToLeft()">
+          Go Back!
+        </button>
+        <a
+          href="https://github.com/andrearcaina?tab=repositories"
+          target="_blank"
+        >
+          <button class="scroll-button" onclick="">More!</button>
+        </a>
+      </div>
+    </div>
+  </main>
+</body>
 </html>
