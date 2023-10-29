@@ -1,0 +1,311 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto+Mono&subset=cyrillic");
+
+html, body {
+    overflow-x: hidden;
+}
+
+body {
+    font-family: 'Roboto Mono', monospace;
+    background-color: rgb(146, 168, 209);
+    color: black;
+    
+    margin: 0;
+    padding: 0;
+    
+    user-select: none; 
+    
+    text-align: center;
+    position: relative;
+}
+
+main {
+    margin: 0;
+    padding: 100px;
+}
+
+img {
+    height: 300px;
+    width: 300px;
+    
+    border-radius: 5px;
+}
+
+figure {
+    border-radius: 5px;
+}
+
+
+figcaption {
+    position: relative;
+    
+    border: 5px solid rgb(195, 195, 211);
+    border-radius: 5px;
+    
+    text-shadow: none;
+    color: white;
+}
+
+#color-button {
+    background-color: rgb(44, 88, 168);
+    color: rgb(146, 168, 209);
+
+    margin-top: 20px;
+    border: none;
+    padding: 10px 20px;
+    
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+
+    font-family: 'Roboto Mono', monospace;
+    font-weight: bolder;
+    font-size: 12px;
+    
+    cursor: pointer;
+
+    border-radius: 5px;
+    box-shadow: 0 0 8px #65a6d2;
+    
+    transition: box-shadow 0.3s ease-in-out;
+    animation: fade-in 3s forwards;
+} 
+
+#color-button:hover {
+    box-shadow: 0 0 35px #65a6d2;
+}
+
+#about-info {
+    position: relative;
+    text-align: justify;
+    margin: 10px auto;
+    font-size: 17px;
+}
+
+#here {
+    color: black;
+}
+
+#intro {
+    width: max-content;
+    overflow: hidden; /* Ensures the content is not revealed until the animation */
+    
+    border-right: .15em solid black;
+    white-space: nowrap; 
+    letter-spacing: .15em;
+    
+    animation: 
+        typing 1.7s steps(12),
+        cursor .7s step-end infinite;
+}
+
+/* The typing effect */
+@keyframes typing {
+    from { width: 0 }
+    to { width: 50% }
+}
+
+/* The typewriter cursor effect */
+@keyframes cursor {
+    from, to { border-color: transparent }
+    50% { border-color: black; }
+}
+
+h2 { animation: fade-top 3s forwards; }
+#text { animation: fade-top 3s forwards; }
+#links { animation: fade-top 2s forwards; }
+#resume-tag { animation: fade-top 2s forwards; }
+#internet { 
+    font-style: italic;
+    animation: fade-top 2s forwards; 
+}
+
+/* fade in animation onload */
+@keyframes fade-top {
+    from { opacity: 0; }
+    to { 
+        opacity: 1;
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.green {
+    color: rgb(40, 139, 40);
+}
+
+#links {
+    margin-top: 20px;
+    font-size: 50px; 
+}
+
+#resume-tag {
+    font-size: 13px;
+    font-weight: bold;
+    position: relative;
+    
+    margin-top: -5px;
+    left: 120px;
+}
+
+/* the bounce animation when hovered */
+.slow-bounce {
+    color: rgb(74, 74, 167);
+}
+
+/* no animation when not hovered */
+.slow-bounce:hover {
+    -webkit-animation: fa-bounce 1.2s infinite linear;
+    animation: fa-bounce 1.2s infinite linear;
+}
+
+.scroll-button {
+    background-color: #4CAF50;
+    color: white;
+
+    margin-top: 20px;
+    border: none;
+    padding: 10px 20px;
+    
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+
+    font-family: 'Roboto Mono', monospace;
+    font-weight: bolder;
+    font-size: 16px;
+    
+    cursor: pointer;
+
+    border-radius: 5px;
+    box-shadow: 0 5px 0 #3e8e41;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+/* The 3D button animation */
+.scroll-button:hover {
+    box-shadow: 0 9px 0 #3e8e41;
+    transform: translateY(-4px);
+}
+
+.scroll-button:active {
+    box-shadow: 0 4px 0 #3e8e41;
+    transform: translateY(2px);
+}
+
+.screen {
+    width: 100%;
+    height: 100%;
+    
+    position: absolute;
+    top: 0;
+    left: 0;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+    transition: transform 0.3s ease-in-out;
+}
+
+#projects { 
+    transform: translateX(500%);
+}
+
+.container {
+    display: inline-block;
+    white-space: nowrap;
+}
+
+#projects-info {
+    margin-bottom: 40px;
+}
+
+.project-card {
+    width: 300px;
+    height: 300px;
+    margin-right: 20px;
+
+    background-color: #ccc;
+    border-radius: 5px;
+
+    display: inline-block;
+    vertical-align: top;
+    cursor: pointer;
+}
+
+.contact:link { text-decoration: none; }
+.contact:visited { text-decoration: none; }
+.contact:hover { text-decoration: none; }
+.contact:active { text-decoration: none; }
+
+/* responsiveness part 1 */
+@media only screen and (min-width: 768px) {
+    #about-info {
+        width: 600px;
+        font-size: 17px;
+        margin: 0 auto;
+    }
+    #contact-info {
+        width: 350px;
+        margin: 0 auto;
+    }
+}
+
+/* responsiveness part 2 */
+@media only screen and (max-width: 475px) {
+    #about-info {
+        width: 300px;
+        font-size: 15px;
+        right: 50px;
+        margin: 0px auto;
+        margin-left: -8px;
+    }
+    #contact-info {
+        width: 250px;
+        font-size: 12px;
+        right: 60px;
+        margin: 0 auto;
+        margin-left: -38px;
+    }
+    #links {
+        margin-top: 20px;
+        font-size: 30px; 
+    }
+    #resume-tag {
+        font-size: 10px;
+        font-weight: bold;
+        position: relative;
+        
+        margin-top: -5px;
+        left: 70px;
+    }
+    .projects {
+        display: inline-block;
+        white-space: nowrap;
+    }
+    .project-card {
+        width: 200%;
+        height: 100%;
+
+        margin-left: -50px;
+        margin-bottom: 300px;
+    }
+}
+
+/* make it so that the projects screen is smaller on smaller screens */
+@media only screen and (max-width: 1000px) {
+    .projects {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .project-card {
+        width: 100px;
+        height: 30px;
+        margin-right: 10px;
+    }
+}
