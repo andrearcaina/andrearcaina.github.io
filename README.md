@@ -5,7 +5,3 @@ Currently displays a little bit about me, my contacts, and some of my recent/bel
 
 Here ya goooo [:DDD](https://andrearcaina.github.io/)
 
-Might change everything later on depending how much I want to expand my knowledge
-- i will indeed do the above mentioned...
-- make it responive using bootstrap
-- apply knowledge of jquery within the website
