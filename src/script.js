@@ -7,6 +7,7 @@ $(document).ready(function () {
 
     // Function to change the content of #content
     function changeContent(content) {
+        
         $("#content").empty(); // Remove existing content
         $("#content").append(content); // Add new content
 
@@ -22,22 +23,23 @@ $(document).ready(function () {
             title: "if andre is afk, he is not coding :O"
         });
 
-        $("#submit-button").click(function (e) {
-            e.preventDefault();
-            
-            console.log("clicked");
+        $("#submit-button").click(function () {
     
             let params = {
                 name: $("#name").val(),
                 email: $("#email").val(),
                 message: $("#message").val()
             }
-    
+            
             console.log(params);
-    
-            emailjs.send("service_e5x1bvy", "template_5lgmdyl", params, "CpWSL1rk6KmFcj2gi").then(function () {
-                alert("Email sent successfully.");
-            });
+
+            if(params.name !== "" && params.email !== "" && params.message !== "") {
+                emailjs.send("service_e5x1bvy", "template_5lgmdyl", params, "CpWSL1rk6KmFcj2gi").then(function () {
+                    alert("Email sent successfully.");
+                });
+            } else {
+                alert("Please fill out all fields.");
+            }
         }); 
     }
 
@@ -80,6 +82,10 @@ $(document).ready(function () {
     changeContent(homeContent); // initial content is homeContent
 
     let current = 0; // initial page is home, and arrays always start at 0
+
+    let href = window.location.href; // Get current URL
+    href = href.split("#")[0]; // Remove # from URL
+    history.pushState({}, null, href + "#home"); // Change URL to current URL + #home
 
     // Event handler for home-link
     $("#home-link").click(function () {
@@ -160,7 +166,7 @@ $(document).ready(function () {
                         onfocus="this.placeholder=''"
                     />
 
-                    <button id="submit-button" name="send" type="submit"> Send </button>
+                    <button id="submit-button" name="send" type="button"> Send </button>
                 </form>
             
             `;
