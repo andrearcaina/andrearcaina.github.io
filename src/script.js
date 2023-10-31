@@ -125,7 +125,50 @@ $(document).ready(function () {
     $("#projects-link").click(function () {
         if (current !== 2) {
             current = 2;
-            const projectsContent = `W.I.P`; 
+            const projectsContent = `
+                <div class="row">
+                    <div class="col-sm-6 p-2">
+                        <div class="card bg-dark">
+                            <img class="img-size card-img-top" src="imgs/cryptocurrency.png" alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title">crypto web app</h5>
+                                <p class="card-text">displays prices and news on the crypto market</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-6 p-2">
+                        <div class="card bg-dark">
+                            <img class="img-size card-img-top" src="imgs/SelfTranslate.png" alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title">translation web app</h5>
+                                <p class="card-text">all your translation needs, including ASL</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-6 p-2">
+                        <div class="card bg-dark">
+                            <img class="img-size card-img-top" src="imgs/TwitterCow.png" alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title">twitter web app</h5>
+                                <p class="card-text">displays content from twitter based on vacations</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-6 p-2">
+                        <div class="card bg-dark">
+                            <img class="img-size card-img-top" src="imgs/Bot.png" alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title">stock price predictor</h5>
+                                <p class="card-text">predicts stocks based on user input</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
             changeContent(projectsContent);
         }
     });
