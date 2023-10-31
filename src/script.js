@@ -131,8 +131,8 @@ $(document).ready(function () {
                         <div class="card bg-dark">
                             <img class="img-size card-img-top" src="imgs/cryptocurrency.png" alt="Card image cap">
                             <div class="card-body">
-                                <h5 class="card-title">crypto web app</h5>
-                                <p class="card-text">displays prices and news on the crypto market</p>
+                                <a class="link-text" href="https://github.com/andrearcaina/CoinWatch" target="_blank">crypto web app</a>
+                                <p class="card-text">prices and news on the crypto market</p>
                             </div>
                         </div>
                     </div>
@@ -141,7 +141,7 @@ $(document).ready(function () {
                         <div class="card bg-dark">
                             <img class="img-size card-img-top" src="imgs/SelfTranslate.png" alt="Card image cap">
                             <div class="card-body">
-                                <h5 class="card-title">translation web app</h5>
+                                <a class="link-text" href="https://github.com/andrearcaina/Self-Translate" target="_blank">translation web app</a>
                                 <p class="card-text">all your translation needs, including ASL</p>
                             </div>
                         </div>
@@ -151,8 +151,8 @@ $(document).ready(function () {
                         <div class="card bg-dark">
                             <img class="img-size card-img-top" src="imgs/TwitterCow.png" alt="Card image cap">
                             <div class="card-body">
-                                <h5 class="card-title">twitter web app</h5>
-                                <p class="card-text">displays content from twitter based on vacations</p>
+                                <a class="link-text" href="https://github.com/kevin-klau/Twitter-Cow" target="_blank">twitter web app</a>
+                                <p class="card-text">content from twitter based on vacations</p>
                             </div>
                         </div>
                     </div>
@@ -161,7 +161,7 @@ $(document).ready(function () {
                         <div class="card bg-dark">
                             <img class="img-size card-img-top" src="imgs/Bot.png" alt="Card image cap">
                             <div class="card-body">
-                                <h5 class="card-title">stock price predictor</h5>
+                                <a class="link-text" href="https://github.com/andrearcaina/Stock-Predictor" target="_blank">stock price predictor</a>
                                 <p class="card-text">predicts stocks based on user input</p>
                             </div>
                         </div>

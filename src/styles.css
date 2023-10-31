@@ -7,6 +7,9 @@ html, body {
     overflow-x: hidden;
 }
 
+body .navbar-dark .navbar-toggler {
+    margin-top: 0.5rem;
+}
 
 .green {
     color: rgb(50, 168, 50);
@@ -57,7 +60,7 @@ html, body {
 
 .img-size {
     width: 100%;
-    height: 210px;
+    height: 180px;
 }
 
 .input {
