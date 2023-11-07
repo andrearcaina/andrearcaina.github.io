@@ -128,6 +128,16 @@ $(document).ready(function () {
             const projectsContent = `
                 <div class="row">
                     <div class="col-sm-6 p-2">
+                            <div class="card bg-dark">
+                                <img class="img-size card-img-top" src="imgs/nectar.png" alt="Card image cap">
+                                <div class="card-body">
+                                    <a class="link-text" href="https://github.com/andrearcaina/Nectar" target="_blank">winner of newhacks2023</a>
+                                    <p class="card-text">empowering shoppers with modelled insights</p>
+                                </div>
+                            </div>
+                    </div>
+
+                    <div class="col-sm-6 p-2">
                         <div class="card bg-dark">
                             <img class="img-size card-img-top" src="imgs/cryptocurrency.png" alt="Card image cap">
                             <div class="card-body">
@@ -143,16 +153,6 @@ $(document).ready(function () {
                             <div class="card-body">
                                 <a class="link-text" href="https://github.com/andrearcaina/Self-Translate" target="_blank">translation web app</a>
                                 <p class="card-text">all your translation needs, including ASL</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-sm-6 p-2">
-                        <div class="card bg-dark">
-                            <img class="img-size card-img-top" src="imgs/TwitterCow.png" alt="Card image cap">
-                            <div class="card-body">
-                                <a class="link-text" href="https://github.com/kevin-klau/Twitter-Cow" target="_blank">twitter web app</a>
-                                <p class="card-text">content from twitter based on vacations</p>
                             </div>
                         </div>
                     </div>
