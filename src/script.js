@@ -1,13 +1,12 @@
-$(document).ready(function () {    
-    // Function to change the #change-text
+$(document).ready(function () {
+    // function to change the #change-text
     function changeText() {
         const RNG = Math.floor(Math.random() * optionsArr.length);
         $("#change-text").text(optionsArr[RNG]);
     }
 
-    // Function to change the content of #content
+    // function to change the content of #content
     function changeContent(content) {
-        
         $("#content").empty(); // Remove existing content
         $("#content").append(content); // Add new content
 
@@ -19,30 +18,30 @@ $(document).ready(function () {
         $("#change-text").click(changeText);
 
         // Add tooltip to #afk
-        $("#afk").tooltip({ 
+        $("#afk").tooltip({
             title: "if andre is afk, he is not coding :O"
         });
 
         $("#submit-button").click(function () {
-    
             let params = {
                 name: $("#name").val(),
                 email: $("#email").val(),
                 message: $("#message").val()
-            }
-            
+            };
+
             console.log(params);
 
-            if(params.name !== "" && params.email !== "" && params.message !== "") {
+            if (params.name !== "" && params.email !== "" && params.message !== "") {
                 emailjs.send("service_e5x1bvy", "template_5lgmdyl", params, "CpWSL1rk6KmFcj2gi").then(function () {
                     alert("Email sent successfully.");
                 });
             } else {
                 alert("Please fill out all fields.");
             }
-        }); 
+        });
     }
 
+    // maybe add more options later and make it so that it doesn't repeat the same option twice in a row
     const optionsArr = [
         "biking", 
         "swimming", 
@@ -61,159 +60,69 @@ $(document).ready(function () {
         "working"
     ];
 
-    const homeContent = `<h2> i'm <span class="green">andre</span>! </h2>
-            <p class="lead">
-                welcome to my humble abode :D
-            </p>
+    // array of content files
+    const content = [
+        '../pages/homeContent.html', 
+        '../pages/aboutContent.html', 
+        '../pages/projectsContent.html', 
+        '../pages/contactContent.html'
+    ];
 
-            <p>
-                what is this? well, i'm glad you asked! the gist is ~
-                a simple website to showcase my projects and to learn more about me
-            </p>
-            
-            <p>
-                the main thing about me ... i love to explore and go on an adventure! if you see me 
-                <b id="afk">afk</b> i'm usually:
-            </p>
+    // function to load content from contentFile
+    async function loadContent(contentFile) {
+        return fetch(contentFile)
+            .then(response => response.text())
+            .then(data => changeContent(data))
+            .catch(error => console.error('Error fetching content:', error));
+    }
 
-            <p>
-                binge watching shows, playing video games or <span id="change-text"></span>.
-            </p>`; 
-    changeContent(homeContent); // initial content is homeContent
+    // Initial page load
+    loadContent(content[0]);
 
-    let current = 0; // initial page is home, and arrays always start at 0
+    // handle popstate event
+    // essentially, this is called when the user navigates to a new page or when the user refreshes the page
+    // this is necessary because the browser does not reload the page when the user navigates to a new page
+    // or when the user refreshes the page
+    window.addEventListener("popstate", function (event) {
+        const currentFragment = window.location.hash;
 
-    let href = window.location.href; // Get current URL
-    href = href.split("#")[0]; // Remove # from URL
-    history.pushState({}, null, href + "#home"); // Change URL to current URL + #home
+        switch (currentFragment) {
+            case "#home":
+                loadContent(content[0]);
+                break;
+            case "#about":
+                loadContent(content[1]);
+                break;
+            case "#projects":
+                loadContent(content[2]);
+                break;
+            case "#contacts":
+                loadContent(content[3]);
+                break;
+            default:
+                console.error('Invalid fragment:', currentFragment);
+        }
+    });
 
-    // Event handler for home-link
+    // event handlers for navigation links
+    // pushState is used to change the URL without reloading the page
     $("#home-link").click(function () {
-        if (current !== 0) {
-            current = 0;
-            changeContent(homeContent);
-        }
+        history.pushState({}, null, '#home');
+        loadContent(content[0]);
     });
 
-    // Event handler for about-link
     $("#about-link").click(function () {
-        if (current !== 1) {
-            current = 1;
-            const aboutContent = `<p class="lead">
-                    in a nutshell, i am
-                </p>
-
-                <p>
-                    a curious cat with a love for tech and a passion for learning. i am mostly into full stack development,
-                    cloud computing, and practically anything that has to do with the web
-                </p>
-                
-                <b>currently, i am</b>
-
-                <p>
-                    > a 2nd year co-op student studying computer science at <a class="link-text" href="https://www.torontomu.ca/">toronto metropolitan university</a>.
-                </p>
-
-                <p>
-                    > developing a crypto app called <a class="link-text" href="https://github.com/andrearcaina/CoinWatch" target="_blank">CoinWatch</a>!
-                </p>`; 
-            changeContent(aboutContent);
-        }
+        history.pushState({}, null, '#about');
+        loadContent(content[1]);
     });
 
-    // Event handler for projects-link
     $("#projects-link").click(function () {
-        if (current !== 2) {
-            current = 2;
-            const projectsContent = `
-                <div class="row">
-                    <div class="col-sm-6 p-2">
-                            <div class="card bg-dark">
-                                <img class="img-size card-img-top" src="imgs/nectar.png" alt="Card image cap">
-                                <div class="card-body">
-                                    <a class="link-text" href="https://github.com/andrearcaina/Nectar" target="_blank">winner of newhacks2023</a>
-                                    <p class="card-text">empowering shoppers with modelled insights</p>
-                                </div>
-                            </div>
-                    </div>
-
-                    <div class="col-sm-6 p-2">
-                        <div class="card bg-dark">
-                            <img class="img-size card-img-top" src="imgs/cryptocurrency.png" alt="Card image cap">
-                            <div class="card-body">
-                                <a class="link-text" href="https://github.com/andrearcaina/CoinWatch" target="_blank">crypto web app</a>
-                                <p class="card-text">prices and news on the crypto market</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-sm-6 p-2">
-                        <div class="card bg-dark">
-                            <img class="img-size card-img-top" src="imgs/SelfTranslate.png" alt="Card image cap">
-                            <div class="card-body">
-                                <a class="link-text" href="https://github.com/andrearcaina/Self-Translate" target="_blank">translation web app</a>
-                                <p class="card-text">all your translation needs, including ASL</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-sm-6 p-2">
-                        <div class="card bg-dark">
-                            <img class="img-size card-img-top" src="imgs/Bot.png" alt="Card image cap">
-                            <div class="card-body">
-                                <a class="link-text" href="https://github.com/andrearcaina/Stock-Predictor" target="_blank">stock price predictor</a>
-                                <p class="card-text">predicts stocks based on user input</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            changeContent(projectsContent);
-        }
+        history.pushState({}, null, '#projects');
+        loadContent(content[2]);
     });
 
-    // Event handler for contact-link
     $("#contact-link").click(function () {
-        if (current !== 3) {
-            current = 3;
-            const contactContent = `
-                <form class="" action="" method="post">
-                    <label for="name">name:</label>
-                    <input 
-                        class="input" 
-                        type="text" 
-                        id="name" 
-                        name="name"
-                        placeholder="your name"
-                        onfocus="this.placeholder=''"
-                    /><br/><br/>
-
-                    <label for="email">email:</label>
-                    <input
-                        class="input"
-                        type="text"
-                        id="email"
-                        name="email"
-                        placeholder="your_email@example.com"
-                        onfocus="this.placeholder=''"
-                    /><br/><br/>
-
-                    <label for="message">message:</label>
-                    <input
-                        class="input"
-                        type="text"
-                        id="message"
-                        name="message"
-                        placeholder="I like your website!"
-                        onfocus="this.placeholder=''"
-                    />
-
-                    <button id="submit-button" name="send" type="button"> Send </button>
-                </form>
-            
-            `;
-            changeContent(contactContent);
-        }
+        history.pushState({}, null, '#contacts');
+        loadContent(content[3]);
     });
 });
