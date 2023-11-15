@@ -41,6 +41,22 @@ $(document).ready(function () {
         });
     }
 
+    function handleNavigation(fragment, index) {
+        if (current !== index) {
+            current = index;
+            history.pushState({}, null, fragment);
+            loadContent(content[index]);
+        }
+    }
+
+    // function to load content from contentFile
+    async function loadContent(contentFile) {
+        return fetch(contentFile)
+            .then(response => response.text())
+            .then(data => changeContent(data))
+            .catch(error => console.error('Error fetching content:', error));
+    }
+
     // maybe add more options later and make it so that it doesn't repeat the same option twice in a row
     const optionsArr = [
         "biking", 
@@ -68,61 +84,52 @@ $(document).ready(function () {
         '../pages/contactContent.html'
     ];
 
-    // function to load content from contentFile
-    async function loadContent(contentFile) {
-        return fetch(contentFile)
-            .then(response => response.text())
-            .then(data => changeContent(data))
-            .catch(error => console.error('Error fetching content:', error));
-    }
+    const fragments = ["#home", "#about", "#projects", "#contacts"];
 
-    // Initial page load
+    let current = 0;
+
+    // initial load of content when page is loaded/refreshed
+    history.replaceState({}, null, '#home');
     loadContent(content[0]);
 
     // handle popstate event
     // essentially, this is called when the user navigates to a new page or when the user refreshes the page
     // this is necessary because the browser does not reload the page when the user navigates to a new page
     // or when the user refreshes the page
-    window.addEventListener("popstate", function (event) {
+    $(window).on("popstate", function (event) {
         const currentFragment = window.location.hash;
 
         switch (currentFragment) {
-            case "#home":
-                loadContent(content[0]);
+            case fragments[0]:
+                handleNavigation(fragments[0], 0);
                 break;
-            case "#about":
-                loadContent(content[1]);
+            case fragments[1]:
+                handleNavigation(fragments[1], 1);
                 break;
-            case "#projects":
-                loadContent(content[2]);
+            case fragments[2]:
+                handleNavigation(fragments[2], 2);
                 break;
-            case "#contacts":
-                loadContent(content[3]);
+            case fragments[3]:
+                handleNavigation(fragments[3], 3);
                 break;
             default:
-                console.error('Invalid fragment:', currentFragment);
+                console.log("Error: Invalid fragment identifier.");
         }
     });
 
-    // event handlers for navigation links
-    // pushState is used to change the URL without reloading the page
     $("#home-link").click(function () {
-        history.pushState({}, null, '#home');
-        loadContent(content[0]);
+        handleNavigation(fragments[0], 0);
     });
 
     $("#about-link").click(function () {
-        history.pushState({}, null, '#about');
-        loadContent(content[1]);
+        handleNavigation(fragments[1], 1);
     });
 
     $("#projects-link").click(function () {
-        history.pushState({}, null, '#projects');
-        loadContent(content[2]);
+        handleNavigation(fragments[2], 2);
     });
 
     $("#contact-link").click(function () {
-        history.pushState({}, null, '#contacts');
-        loadContent(content[3]);
+        handleNavigation(fragments[3], 3);
     });
 });
