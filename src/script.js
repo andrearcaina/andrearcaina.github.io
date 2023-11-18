@@ -78,10 +78,10 @@ $(document).ready(function () {
 
     // array of content files
     const content = [
-        '../pages/homeContent.html', 
-        '../pages/aboutContent.html', 
-        '../pages/projectsContent.html', 
-        '../pages/contactContent.html'
+        '../public/pages/homeContent.html', 
+        '../public/pages/aboutContent.html', 
+        '../public/pages/projectsContent.html', 
+        '../public/pages/contactContent.html'
     ];
 
     const fragments = ["#home", "#about", "#projects", "#contacts"];
