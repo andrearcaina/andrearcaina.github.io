@@ -73,7 +73,8 @@ $(document).ready(function () {
         "exploring new technologies",
         "volunteering",
         "learning new languages",
-        "working"
+        "working",
+        "trying to survive university (•ᴖ•)"
     ];
 
     // array of content files
