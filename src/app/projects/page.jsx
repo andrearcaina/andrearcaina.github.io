@@ -1,9 +1,9 @@
 'use client';
 
-export default function NotFound() {
+export default function Projects() {
     return (
         <main>
-            hello world
+            Projects
         </main>
     );
 }

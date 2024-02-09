@@ -1,9 +1,9 @@
 'use client';
 
-export default function NotFound() {
+export default function Contact() {
     return (
         <main>
-            hello world
+            Contact
         </main>
     );
 }

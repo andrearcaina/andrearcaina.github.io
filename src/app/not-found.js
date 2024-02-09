@@ -1,9 +1,7 @@
-'use client';
-
 export default function NotFound() {
     return (
         <main>
-            hello world
+            404 error
         </main>
     );
 }

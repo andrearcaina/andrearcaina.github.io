@@ -1,9 +1,9 @@
 'use client';
 
-export default function NotFound() {
+export default function About() {
     return (
         <main>
-            hello world
+            About
         </main>
     );
 }
