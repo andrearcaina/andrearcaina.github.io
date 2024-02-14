@@ -71,16 +71,13 @@ export default function Title() {
                     
                     <br />
                     
-                    <video className="rounded-md" controls autoPlay width="640" height="360">
-                        <source src="/videos/yeee.mp4" type="video/mp4" />
-                        your browser doesn&apos;t support the rick roll :(
-                    </video>
-            
-                    <div className="text-[0.85rem]/[1.75rem]">Youtube Source:
-                        <Link className="underline hover:text-green-500 duration-300 transition-all" href="https://youtu.be/dQw4w9WgXcQ?si=syB3alqrZUGCG270" target="_blank">
-                            <p> Rick Astley - Never Gonna Give You Up (Official Music Video) </p>                     
-                        </Link>
-                    </div>
+                    <iframe
+                        className="rounded-md w-[300px] h-[250px] sm:w-[500px] sm:h-[360px]"
+                        loading="lazy"
+                        src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                    />
                 </div>
             ) : (
                 <motion.h1
