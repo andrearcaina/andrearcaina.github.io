@@ -10,7 +10,11 @@ export default function Title() {
     };
 
     return (
-        <div className="mb-[2rem]">
+        <div className="mb-[2rem] flex items-center">
+            {(clickCount > 0 && clickCount != 60) && (
+                <p className="mr-[1.5rem] text-[0.95rem]/[1.75rem] text-gray-400">{clickCount}</p>
+            )}
+
             {clickCount >= 10 && clickCount < 20 ? (
                 <motion.h1
                     className="text-[1.7rem]/[1.75rem] sm:text-[2.1rem]/[2rem] cursor-pointer select-none"
@@ -39,7 +43,7 @@ export default function Title() {
                     onClick={handleClick}
                     style={{ display: 'inline-block' }}
                 >
-                    stop clicking 😭
+                    do you just want to see the number rise?
                 </motion.h1>
             ) : clickCount >= 40 && clickCount < 50 ? (
                 <motion.h1
@@ -49,7 +53,7 @@ export default function Title() {
                     onClick={handleClick}
                     style={{ display: 'inline-block' }}
                 >
-                    here&apos;s a present 🎁
+                    here&apos;s a present! 🎁
                 </motion.h1>
             ) : clickCount >= 50 && clickCount < 60 ? (
                 <motion.h1
@@ -59,7 +63,7 @@ export default function Title() {
                     onClick={handleClick}
                     style={{ display: 'inline-block' }}
                 >
-                    you&apos;re still not done?
+                    wait, you&apos;re still not done?
                 </motion.h1>
             ) : clickCount == 60 ? (
                 <div>
