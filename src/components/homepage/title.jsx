@@ -10,7 +10,7 @@ export default function Title() {
     };
 
     return (
-        <div>
+        <div className="mb-[2rem]">
             {clickCount >= 10 && clickCount < 20 ? (
                 <motion.h1
                     className="text-[1.7rem]/[1.75rem] sm:text-[2.1rem]/[2rem] cursor-pointer select-none"
@@ -72,11 +72,11 @@ export default function Title() {
                         your browser doesn&apos;t support the rick roll :(
                     </video>
             
-                    <p className="text-[0.85rem]/[1.75rem]">Youtube Source:
+                    <div className="text-[0.85rem]/[1.75rem]">Youtube Source:
                         <Link className="underline hover:text-green-500 duration-300 transition-all" href="https://youtu.be/dQw4w9WgXcQ?si=syB3alqrZUGCG270" target="_blank">
                             <p> Rick Astley - Never Gonna Give You Up (Official Music Video) </p>                     
                         </Link>
-                    </p>
+                    </div>
                 </div>
             ) : (
                 <motion.h1
