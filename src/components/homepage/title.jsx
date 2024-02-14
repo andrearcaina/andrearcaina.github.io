@@ -69,7 +69,7 @@ export default function Title() {
                     
                     <video className="rounded-md" controls autoPlay width="640" height="360">
                         <source src="/videos/yeee.mp4" type="video/mp4" />
-                        Your browser does not support the video tag.
+                        your browser doesn&apos;t support the rick roll :(
                     </video>
             
                     <p className="text-[0.85rem]/[1.75rem]">Youtube Source:
