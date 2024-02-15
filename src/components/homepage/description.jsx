@@ -13,7 +13,7 @@ export default function Description() {
             <div className="text-[1.1rem]/[1.75rem] sm:text-lg">
                 what is this? well, i&apos;m glad you asked! the <Link target="_blank" href="https://gist.github.com/andrearcaina" className="hover:text-green-500 hover:text-[1.25rem]/[1.75rem] cursor-pointer duration-200 transition-all">gist</Link> is ~
                 a simple website to showcase my <Link href="/projects" className="select-none underline hover:animate-pulse hover:text-green-500 duration-300 transition-all">projects</Link> and
-                to learn more about me 
+                to learn more of <Link href="/about" className="select-none text-green-500 hover:text-[1.25rem]/[1.75rem] duration-300 transition-all">me</Link>
             </div>
             
             <br />

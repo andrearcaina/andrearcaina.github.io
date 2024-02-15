@@ -1,8 +1,8 @@
 'use client';
 import { motion } from 'framer-motion';
-import { Interests, Code } from '@/components';
+import { Vim } from '@/components';
 
-export default function About() {
+export default function AboutMe() {
     return (
         <motion.main
             className="max-w-[30rem] mt-[0.8rem] mb-[2rem] md:mt-[3.5rem] md:mb-[2.5rem] text-white"
@@ -10,8 +10,7 @@ export default function About() {
             animate={{ opacity: 1, y: 0 }} 
             transition={{ duration: 0.5, delay: 0.2 }}
         >
-            <Interests />
-            <Code />
+            <Vim />
         </motion.main>
     );
 }
