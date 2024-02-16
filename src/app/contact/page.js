@@ -1,4 +1,5 @@
 'use client';
+import Link from 'next/link';
 
 export default function Contact() {
     return (
@@ -6,6 +7,7 @@ export default function Contact() {
             <h1>Welcome to my portfolio</h1>
             <p>this is the contact page</p>
             <p>currently under construction</p>
+            <div>for more information, check my <Link href="https://www.linkedin.com/in/andre-arcaina/" className="underline hover:text-green-500 duration-300 transition-all">LinkedIn</Link></div>
         </main>
     );
 }
