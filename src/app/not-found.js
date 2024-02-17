@@ -22,6 +22,7 @@ export default function NotFound() {
                 src='/images/pfp.jpg'
                 width={300} height={300}
                 alt="me"
+                priority={true}
                 className="rounded-md hover:animate-spin cursor-pointer duration-300 transition-all"
             />
         </main>
