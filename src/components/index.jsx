@@ -8,3 +8,4 @@ export { default as Activities } from './homepage/activities';
 export { default as Interests } from './aboutpage/interests';
 export { default as Code } from './aboutpage/code';
 export { default as Vim } from './aboutpage/vim';
+export { default as Display } from './projectpage/display';
