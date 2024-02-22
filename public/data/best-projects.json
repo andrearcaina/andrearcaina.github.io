@@ -13,7 +13,7 @@
         "href": "https://github.com/andrearcaina/Nectar",
         "name": "nectar",
         "info": "a full-stack web app that compares prices between user inputted products from several e-commerce websites.",
-        "description": "has a form that allows users to input a given product, and scrapes Amazon to retrieve similar products around that price range and provides statistical models.",
+        "description": "has a form that allows users to input a given product, and scrapes Amazon to retrieve similar products around that price range and provides statistical models. Won best E-Commerce Theme and Best Use of GitHub for NewHacks2023.",
         "technologies": "built using Flask, BeautifulSoup4, Next.js, and TailwindCSS",
         "languages": "Python, JavaScript"
     },
@@ -22,7 +22,7 @@
         "href": "https://github.com/andrearcaina/Quizzard",
         "name": "quizzard",
         "info": "a quiz app that tests users on Web Systems Development. Made for CPS530",
-        "description": "it touches the basics of web development and tests the users knowledge through a flashcard based quiz",
+        "description": "it touches the basics of web development and tests the users knowledge through a flashcard based quiz!",
         "technologies": "built using Vue.js and deployed on github pages",
         "deployment": "https://andrearcaina.github.io/Quizzard/",
         "languages": "Vue, JavaScript, HTML/CSS"
