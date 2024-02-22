@@ -1,6 +1,6 @@
 'use client';
 import { useState, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { Main } from '@/components';
 import emailjs from '@emailjs/browser';
 
 export default function Contact() {
@@ -99,12 +99,7 @@ export default function Contact() {
     };
 
     return (
-        <motion.main
-            className="max-w-[30rem] mt-[0.8rem] mb-[2rem] md:mt-[3.5rem] md:mb-[2.5rem] text-white"
-            initial={{ opacity: 0, y: 30 }} 
-            animate={{ opacity: 1, y: 0 }} 
-            transition={{ duration: 0.5, delay: 0.2 }}
-        >
+        <Main>
             <h1 className="text-[1.05rem]/[1.75rem] sm:text-lg mb-4">shoot me an email below!</h1>
 
             <form ref={form} onSubmit={sendEmail} className="space-y-4 text-black">
@@ -155,6 +150,6 @@ export default function Contact() {
                     />
                 </div>
                 ) : null}
-        </motion.main>
+        </Main>
     );
 }

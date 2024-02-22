@@ -24,7 +24,7 @@ export default function Display() {
     }
 
     return (
-        <div>
+        <div className="text-black">
             {projects.length > 0 && (
                 <div className="bg-gray-400 p-4 rounded-md">
                     <nav className="flex flex-wrap items-center">
