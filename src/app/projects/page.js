@@ -55,17 +55,17 @@ export default function Projects() {
 
                     <blockquote className="p-4 mb-4 border-l-2 border-gray-600 bg-gray-800 text-sm md:text-md">
                         <span className="leading-relaxed text-gray-300 font-bold">
-                            <p>&gt; {projects[nav].technologies}</p>
-                            <p>&gt; {projects[nav].languages}</p>
+                            <p>&gt; built using {projects[nav].technologies}</p>
+                            <p>&gt; coded in {projects[nav].languages}</p>
                         </span>
                     </blockquote>
                     
                     <div className="flex gap-5">
-                        <Link target="_blank" href={projects[nav].href} className="text-sm md:text-md font-bold mb-4 hover:underline hover:text-green-200 duration-300 transition-all">view source code</Link>
+                        <span className="text-sm md:text-md font-bold mb-4">view <Link target="_blank" href={projects[nav].href} className="underline hover:text-green-200 duration-300 transition-all">source</Link> code</span>
 
                         {projects[nav].deployment && (
                             <p className="text-sm md:text-md mb-2">
-                                <Link target="_blank" href={projects[nav].deployment} className="hover:underline hover:text-green-200 duration-300 transition-all">deployed website</Link>
+                                <span className="text-sm md:text-md font-bold mb-4">view <Link target="_blank" href={projects[nav].deployment} className="underline hover:text-green-200 duration-300 transition-all">website</Link></span>
                             </p>
                         )}
                     </div>

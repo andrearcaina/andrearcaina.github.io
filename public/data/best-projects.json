@@ -5,7 +5,7 @@
         "name": "wizgallery",
         "info": "a full-stack web gallery app that displays images from a local database.",
         "description": "has a simple search feature that allows you to search for images through a form. the app also has a feature that allows you to view all images from the database.",
-        "technologies": "built using Flask, Next.js, MySQL, TailwindCSS, Docker",
+        "technologies": "Flask, Next.js + React.js, MySQL, TailwindCSS, Docker",
         "languages": "Python, JavaScript, SQL"
     },
     {
@@ -14,7 +14,7 @@
         "name": "nectar",
         "info": "a full-stack web app that compares prices between user inputted products from several e-commerce websites.",
         "description": "has a form that allows users to input a given product, and scrapes Amazon to retrieve similar products around that price range and provides statistical models. Won best E-Commerce Theme and Best Use of GitHub for NewHacks2023.",
-        "technologies": "built using Flask, BeautifulSoup4, Next.js, and TailwindCSS",
+        "technologies": "Flask, BeautifulSoup4, Next.js + React.js, TailwindCSS",
         "languages": "Python, JavaScript"
     },
     {
@@ -23,7 +23,7 @@
         "name": "quizzard",
         "info": "a quiz app that tests users on Web Systems Development. Made for CPS530",
         "description": "it touches the basics of web development and tests the users knowledge through a flashcard based quiz!",
-        "technologies": "built using Vue.js and deployed on github pages",
+        "technologies": "Vue.js, GitHub Pages",
         "deployment": "https://andrearcaina.github.io/Quizzard/",
         "languages": "Vue, JavaScript, HTML/CSS"
     },
@@ -33,7 +33,7 @@
         "name": "coinwatch",
         "info": "a W.I.P web application that provides current data on the crypto market, prices, exchanges, and daily news.",
         "description": "it uses the CryptoCompare API to retrieve data and display it on the web app. it also has a feature that allows users to search for a specific cryptocurrency and view its data.",
-        "technologies": "built using Next.js",
+        "technologies": "Next.js + React.js, TailwindCSS, Docker",
         "languages": "TypeScript"
     }
 ]
