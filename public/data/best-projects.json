@@ -3,13 +3,22 @@
         "id": 0,
         "href": "https://github.com/andrearcaina/WizGallery",
         "name": "wizgallery",
-        "info": "a full-stack web gallery app that displays images from a local database.",
+        "info": "a full-stack web gallery app that displays photo taken images from Supabase.",
         "description": "has a simple search feature that allows you to search for images through a form. the app also has a feature that allows you to view all images from the database.",
-        "technologies": "Flask, Next.js + React.js, MySQL, TailwindCSS, Docker",
+        "technologies": "Flask, Next.js + React.js, PostgreSQL, TailwindCSS, Docker",
         "languages": "Python, JavaScript, SQL"
     },
     {
         "id": 1,
+        "href": "https://github.com/andrearcaina/pyggle",
+        "name": "pyggle",
+        "info": "a boggle solver library written in python, and compiled onto the web.",
+        "description": "find all possible words on a given a boggle board (either through interaction, text, or image) and a list of words (or no input), with a visual representation on how the algorithm works! the user can also see the score of each word found on the boggle board.",
+        "technologies": "Flask, Pyggle, OpenCV, EasyOCR, Next.js + React.js, TailwindCSS",
+        "languages": "Python, TypeScript"
+    },
+    {
+        "id": 2,
         "href": "https://github.com/andrearcaina/Nectar",
         "name": "nectar",
         "info": "a full-stack web app that compares prices between user inputted products from several e-commerce websites.",
@@ -18,22 +27,12 @@
         "languages": "Python, JavaScript"
     },
     {
-        "id": 2,
-        "href": "https://github.com/andrearcaina/Quizzard",
-        "name": "quizzard",
-        "info": "a quiz app that tests users on Web Systems Development. Made for CPS530",
-        "description": "it touches the basics of web development and tests the users knowledge through a flashcard based quiz!",
-        "technologies": "Vue.js, GitHub Pages",
-        "deployment": "https://andrearcaina.github.io/Quizzard/",
-        "languages": "Vue, JavaScript, HTML/CSS"
-    },
-    {
         "id": 3,
         "href": "https://github.com/andrearcaina/CoinWatch",
         "name": "coinwatch",
-        "info": "a W.I.P web application that provides current data on the crypto market, prices, exchanges, and daily news.",
-        "description": "it uses the CryptoCompare API to retrieve data and display it on the web app. it also has a feature that allows users to search for a specific cryptocurrency and view its data.",
-        "technologies": "Next.js + React.js, TailwindCSS, Docker",
+        "info": "a TypeScript wrapper & CLI Tool to display cryptocurrency data, with a web demo. ",
+        "description": "simplifies data retrieval from CryptoCompare API. it also has a CLI interface to display information (graphs) through the terminal. compiled onto the web as a demo.",
+        "technologies": "Next.js + React.js, TailwindCSS, Docker, CryptoCompare",
         "languages": "TypeScript"
     }
 ]
