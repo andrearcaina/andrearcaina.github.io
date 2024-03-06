@@ -3,7 +3,7 @@ import { Main, Interests, Code } from '@/components';
 
 export default function About() {
     return (
-        <Main className="text-white">
+        <Main>
             <Interests />
             <Code />
         </Main>
