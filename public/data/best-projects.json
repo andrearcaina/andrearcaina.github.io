@@ -30,9 +30,9 @@
         "id": 3,
         "href": "https://github.com/andrearcaina/CoinWatch",
         "name": "coinwatch",
-        "info": "a TypeScript wrapper & CLI Tool to display cryptocurrency data, with a web demo. ",
-        "description": "simplifies data retrieval from CryptoCompare API. it also has a CLI interface to display information (graphs) through the terminal. compiled onto the web as a demo.",
-        "technologies": "Next.js + React.js, TailwindCSS, Docker, CryptoCompare",
+        "info": "a TypeScript wrapper & CLI Tool to display cryptocurrency data, with graphs. ",
+        "description": "simplifies data retrieval from CryptoCompare API. it also has a CLI interface to display information (graphs) through the terminal.",
+        "technologies": "Docker, CryptoCompare, Commanderjs, Figletjs, Blessed-Contrib",
         "languages": "TypeScript"
     }
 ]
