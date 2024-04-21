@@ -4,7 +4,6 @@ export { default as Navbar } from './general/navbar';
 export { default as Main } from './general/main';
 export { default as Body } from './general/body';
 export { default as Display } from './general/display';
-export { default as ThemeButton } from './general/themeButton';
 export { default as Title } from './homepage/title';
 export { default as Blockquote } from './homepage/blockquote';
 export { default as Description } from './homepage/description';
