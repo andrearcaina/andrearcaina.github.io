@@ -1,4 +1,4 @@
-import { Footer, Navbar } from '@/components';
+import { Body } from "@/components";
 import "./globals.css";
 
 export const metadata = {
@@ -9,15 +9,10 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className="md:flex font-mono bg-slate-700">
-        <Navbar />
-        
-        <main className="flex-grow px-[1.25rem] md:px-9 py-6 md:py-8">
+      <html lang="en">
+        <Body>
           {children}
-          <Footer />
-        </main>
-      </body>
-    </html>
+        </Body>
+      </html>
   );
 }
