@@ -37,7 +37,7 @@ export default function Footer() {
                     <FontAwesomeIcon icon={faEnvelope} className="text-white p-2 text-2xl sm:text-3xl hover:text-green-500 hover:scale-[1.3] transition-all duration-400 cursor-pointer" />
                 </Link>
 
-                <Link href="/resumes/Resume - Andre Arcaina.pdf" target="_blank">
+                <Link href="https://drive.google.com/file/d/1UB49TjfiDvw8c1rFQWSK1j1XeEZQMcOq/view?usp=sharing" target="_blank">
                     <FontAwesomeIcon icon={faFileInvoice} className="text-white p-2 text-2xl sm:text-3xl hover:text-green-500 hover:scale-[1.3] transition-all duration-400 cursor-pointer" />
                 </Link>
             </div>
