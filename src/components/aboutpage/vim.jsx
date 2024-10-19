@@ -14,11 +14,11 @@ export default function Code() {
             <div className="bg-black p-4 rounded-lg text-[0.95rem]/[1.75rem]">
                 <div>
                     <p class="text-gray-500">1</p>
-                    <p><span class="text-gray-500">2</span> a 2nd year co-op student studying computer science at Toronto Metropolitan University</p>
+                    <p><span class="text-gray-500">2</span> a 3rd year co-op student studying computer science at Toronto Metropolitan University </p>
                     <p class="text-gray-500">3</p>
-                    <p><span class="text-gray-500">4</span> an IBM z ambassador :D</p>
+                    <p><span class="text-gray-500">4</span> previously interned at DataKinetics as an R&D Engineer :D </p>
                     <p class="text-gray-500">5</p>
-                    <p><span class="text-gray-500">6</span> developing a full stack web application called WizGallery</p>
+                    <p><span class="text-gray-500">6</span> developing a full stack messaging app using Go and Next.js </p>
                     <p class="text-gray-500">7</p>
                 </div>
                 

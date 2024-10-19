@@ -10,15 +10,6 @@
     },
     {
         "id": 1,
-        "href": "https://github.com/andrearcaina/WizGallery",
-        "name": "wizgallery",
-        "info": "a full-stack web gallery app that displays photo taken images from Supabase.",
-        "description": "has a simple search feature that allows you to search for images through a form. the app also has a feature that allows you to view all images from the database.",
-        "technologies": "Flask, Next.js + React.js, PostgreSQL, TailwindCSS, Docker",
-        "languages": "Python, JavaScript, SQL"
-    },
-    {
-        "id": 2,
         "href": "https://github.com/andrearcaina/pyggle",
         "name": "pyggle",
         "info": "a boggle solver library written in python, and compiled onto the web.",
@@ -27,12 +18,21 @@
         "languages": "Python, TypeScript"
     },
     {
-        "id": 3,
+        "id": 2,
         "href": "https://github.com/andrearcaina/Nectar",
         "name": "nectar",
         "info": "a full-stack web app that compares prices between user inputted products from several e-commerce websites.",
         "description": "has a form that allows users to input a given product, and scrapes Amazon to retrieve similar products around that price range and provides statistical models. Won best E-Commerce Theme and Best Use of GitHub for NewHacks2023.",
         "technologies": "Flask, BeautifulSoup4, Next.js + React.js, TailwindCSS",
         "languages": "Python, JavaScript"
+    },
+    {
+        "id": 3,
+        "href": "https://github.com/andrearcaina/WizGallery",
+        "name": "wizgallery",
+        "info": "a full-stack web gallery app that displays photo taken images from Supabase.",
+        "description": "has a simple search feature that allows you to search for images through a form. the app also has a feature that allows you to view all images from the database.",
+        "technologies": "Flask, Next.js + React.js, PostgreSQL, TailwindCSS, Docker",
+        "languages": "Python, JavaScript, SQL"
     }
 ]

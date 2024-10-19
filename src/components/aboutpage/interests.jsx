@@ -14,7 +14,7 @@ export default function Interests() {
             
             <br />
 
-            <p className="text-[0.95rem]/[1.75rem] sm:text-[1.05rem]/[1.75rem] font-bold">i&apos;m well versed in python and javascript, but currently exploring golang, typescript, and elixir</p>
+            <p className="text-[0.95rem]/[1.75rem] sm:text-[1.05rem]/[1.75rem] font-bold">i&apos;m well versed in python, java and javascript, but currently exploring golang and typescript</p>
 
             <br />
         </div>
