@@ -23,7 +23,7 @@ export default function Navbar() {
 
     return (
         <motion.nav
-            className="flex flex-row md:flex-col md:mt-[12rem] lg:w-[15rem] xl:w-[35rem] 2xl:w-[55rem] items-end"
+            className="flex flex-row md:flex-col md:mt-[12rem] lg:w-1/4 xl:w-1/3 items-end"
             initial={{ opacity: 0, y: 30 }} 
             animate={{ opacity: 1, y: 0 }} 
             transition={{ duration: 0.5, delay: 0.4 }}
