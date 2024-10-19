@@ -23,7 +23,7 @@ export default function Code() {
             <br />
             
             <p><span className="text-green-800">aarcaina@portfolio</span>:~$ echo &quot; <br />
-                &gt; developing a full stack messaging app <Link className="underline italic hover:text-green-500 duration-300 transition-all" target="_blank"
+                &gt; developing a full stack <Link className="underline italic hover:text-green-500 duration-300 transition-all" target="_blank"
                     href="https://github.com/andrearcaina/echo-web" passHref>
                     messaging app
                 </Link> using Go and Next.js &quot; &gt;&gt; aboutme.txt
