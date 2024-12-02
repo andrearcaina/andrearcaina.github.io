@@ -37,7 +37,7 @@ export default function Footer() {
                     <FontAwesomeIcon icon={faEnvelope} className="text-white p-2 text-2xl sm:text-3xl hover:text-green-500 hover:scale-[1.3] transition-all duration-400 cursor-pointer" />
                 </Link>
 
-                <Link href="https://drive.google.com/file/d/1pjEyh-OlczMVHqc2OUScd_fVZvhuP3kl/view?usp=sharing" target="_blank">
+                <Link href="https://drive.google.com/file/d/1KCkPLYWiAkQDMx7P4wc3WerYglnBTL_x/view?usp=sharing" target="_blank">
                     <FontAwesomeIcon icon={faFileInvoice} className="text-white p-2 text-2xl sm:text-3xl hover:text-green-500 hover:scale-[1.3] transition-all duration-400 cursor-pointer" />
                 </Link>
             </div>
