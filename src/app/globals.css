@@ -1,9 +1,0 @@
-@import url('https://fonts.googleapis.com/css2?family=Reddit+Mono:wght@200..900&display=swap');
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-.reddit-mono {
-    font-family: "Reddit Mono", monospace;
-}
