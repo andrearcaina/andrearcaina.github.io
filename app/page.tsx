@@ -8,6 +8,7 @@ import { fetchRecentRepos } from "@/lib/github"
 import { GitHubRepoCards } from "@/components/github-repo-cards"
 import { PostList } from "@/components/post-list"
 import { TechStackScroll } from "@/components/tech-stack-scroll"
+import { SpotifyNowPlaying } from "@/components/spotify-now-playing"
 import { Button } from "@/components/ui/button"
 import { FaLinkedin, FaGithub } from 'react-icons/fa'
 import { MdMail, MdDescription } from 'react-icons/md'
@@ -86,6 +87,10 @@ export default async function HomePage() {
                   </StaggerItem>
                 </div>
               </StaggerContainer>
+
+              <FadeInUp delay={0.6}>
+                <SpotifyNowPlaying />
+              </FadeInUp>
             </div>
 
             <FadeInUp delay={0.4}>
