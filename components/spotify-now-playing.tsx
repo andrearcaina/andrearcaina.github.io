@@ -78,7 +78,7 @@ export function SpotifyNowPlaying() {
         <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex items-center gap-3 p-4 bg-card rounded-lg border"
+            className="hover:shadow-md hover:scale-[1.02] transition-all duration-300 flex items-center gap-3 p-4 bg-card rounded-lg border"
         >
             <div className="w-16 h-16 bg-muted rounded-md animate-pulse" />
             <div className="flex-1 space-y-2">
@@ -95,7 +95,7 @@ export function SpotifyNowPlaying() {
         <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex items-center gap-3 p-4 bg-card rounded-lg border opacity-60"
+            className="hover:shadow-md hover:scale-[1.02] transition-all duration-300 flex items-center gap-3 p-4 bg-card rounded-lg border opacity-60"
         >
             <div className="w-16 h-16 bg-muted rounded-md flex items-center justify-center">
                 <FaSpotify className="text-muted-foreground text-2xl" />
@@ -119,7 +119,7 @@ export function SpotifyNowPlaying() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
-                className="relative overflow-hidden rounded-lg border border-[#1DB954]/20 p-2 sm:p-4 bg-gradient-to-br from-[#1DB954]/20 to-card dark:from-[#1DB954]/30 dark:to-background bg-black/30 dark:bg-transparent"
+                className="hover:shadow-md hover:scale-[1.02] transition-all duration-300 relative overflow-hidden rounded-lg border border-[#1DB954]/20 p-2 sm:p-4 bg-gradient-to-br from-[#1DB954]/20 to-card dark:from-[#1DB954]/30 dark:to-background bg-black/30 dark:bg-transparent"
             >
                 <div className="flex items-center gap-1 sm:gap-2 mb-1 sm:mb-3">
                     <div className="flex items-center gap-1 sm:gap-2">
