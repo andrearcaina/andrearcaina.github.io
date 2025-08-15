@@ -3,8 +3,8 @@ import { GitHubRepoCards } from "@/components/github-repo-cards"
 import { FadeInUp, TextShimmer, PageTransition } from "@/components/motion-components"
 
 export const metadata = { 
-  title: "Andre Arcaina Projects",
-  description: "A showcase of my projects and GitHub repositories."
+  title: "andre arcaina's projects",
+  description: "a showcase of my projects and github repositories"
 }
 
 export default async function ProjectsPage() {

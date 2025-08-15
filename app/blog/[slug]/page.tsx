@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params
   const post = await getPostBySlug(slug)
   return {
-    title: post?.meta.title ?? "Post",
+    title: post?.meta.title ?? "post",
     description: post?.meta.description || post?.meta.summary,
   }
 }

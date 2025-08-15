@@ -3,8 +3,8 @@ import { PostList } from "@/components/post-list"
 import { FadeInUp, TextShimmer, PageTransition } from "@/components/motion-components"
 
 export const metadata = {
-  title: "Andre Arcaina Blog",
-  description: "Writings on life, engineering, systems, and software development.",
+  title: "andre arcaina's blog",
+  description: "writings on life, engineering, systems, and software development.",
 }
 
 export default async function BlogPage() {
