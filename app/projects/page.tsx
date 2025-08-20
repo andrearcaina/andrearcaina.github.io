@@ -8,7 +8,7 @@ export const metadata = {
 }
 
 export default async function ProjectsPage() {
-  const repos = await fetchRecentRepos("andrearcaina", 11, 11)
+  const repos = await fetchRecentRepos(13, 13)
   return (
     <PageTransition>
       <div className="py-8 md:py-12 space-y-6">

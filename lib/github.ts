@@ -14,9 +14,9 @@ export type GitHubRepo = {
   topics?: string[]
 }
 
-export async function fetchRecentRepos(username: string, perPage = 10, initialFetch = 20) {
+export async function fetchRecentRepos(perPage = 10, initialFetch = 20) {
   const res = await fetch(
-    `https://api.github.com/users/${username}/repos?sort=updated&direction=desc&per_page=${initialFetch}`,
+    `https://api.github.com/users/andrearcaina/repos?sort=updated&direction=desc&per_page=${initialFetch}`,
     { headers: { Accept: "application/vnd.github+json" }, next: { revalidate: 3600 } }
   )
   if (!res.ok) return []
@@ -25,11 +25,11 @@ export async function fetchRecentRepos(username: string, perPage = 10, initialFe
   const filtered = data.filter(r => 
     !r.fork && 
     !r.archived && 
-    r.owner?.login?.toLowerCase() === username.toLowerCase() &&
+    r.owner?.login?.toLowerCase() === 'andrearcaina' &&
     r.name.toLowerCase() !== 'andrearcaina'
   )
   
-  const priorityRepos = ['fafnir', 'vivid', 'zephyr', 'nectar']
+  const priorityRepos = ['fafnir', 'vivid', 'pathfinder', 'zephyr']
   
   const priority = filtered.filter(repo => 
     priorityRepos.some(priorityName => repo.name.toLowerCase().includes(priorityName.toLowerCase()))

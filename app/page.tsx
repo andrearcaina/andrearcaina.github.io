@@ -26,7 +26,7 @@ import {
 export default async function HomePage() {
   const [posts, repos] = await Promise.all([
     getAllPosts().then((p) => p.slice(0, 3)),
-    fetchRecentRepos("andrearcaina", 4, 20),
+    fetchRecentRepos(4),
   ])
 
   return (
