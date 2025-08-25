@@ -49,13 +49,12 @@ export const experiences: ExperienceItem[] = [
     start: "Jun 2025",
     end: "Present",
     bullets: [
-      "Prototyped a Go CLI then expanded into a Next.js + NeonDB dashboard analyzing 20+ codebases.",
       "Migrated 5,000+ lines from javax.* to jakarta.* to meet Jakarta EE 10 standards.",
       "Modernized legacy apps from JSF 2.2 to Jakarta Faces 4.0 and PrimeFaces.",
-      "Cut Tomcat build times by 33% by moving from Ivy to Maven.",
-      "Refactored production geospatial tools using C#, .NET, ArcGIS; migrated Oracle Spatial → PostGIS via Python/GDAL.",
+      "Cut Apache Tomcat build times by 33% by moving from Apache Ivy to Maven.",
+      "Prototyped a Go CLI to analyze 20+ codebases, later expanding into a dashboard.",
     ],
-    tech: ["Go", "Next.js", "NeonDB", "Java", "Jakarta EE", "C#", ".NET", "ArcGIS", "PostGIS", "GDAL", "Python"],
+    tech: ["Java", "JPA", "Jakarta EE", "Go", "Next.js", "Supabase", "PostgreSQL"],
   },
   {
     role: "Backend Engineer",

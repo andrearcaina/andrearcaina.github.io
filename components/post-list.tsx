@@ -13,7 +13,7 @@ export function PostList({ posts }: { posts: Post[] }) {
       {posts.map((p, i) => (
         <article key={p.slug} className="space-y-1">
           <h3 className="text-base font-semibold">
-            <Link className="underline underline-offset-4 hover:text-foreground text-muted-foreground" href={`/blog/${p.slug}`}>
+            <Link className="underline underline-offset-4 transition-all duration-300 hover:shadow-md hover:scale-[1.02] hover:border-muted-foreground hover:text-foreground text-muted-foreground" href={`/blog/${p.slug}`}>
               {p.meta.title}
             </Link>
           </h3>
@@ -21,8 +21,7 @@ export function PostList({ posts }: { posts: Post[] }) {
             <p className="text-sm text-muted-foreground">{p.meta.summary}</p>
           )}
           <p className="text-xs text-muted-foreground">
-            {p.meta.publishedAt ? new Date(p.meta.publishedAt).toLocaleDateString() : 
-             p.meta.date ? new Date(p.meta.date).toLocaleDateString() : ""}
+            {p.meta.publishedAt ? new Date(p.meta.publishedAt).toLocaleDateString() : ""}
           </p>
           {i < posts.length - 1 && <Separator className="mt-3" />}
         </article>

@@ -132,7 +132,7 @@ export default async function HomePage() {
           <section>
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-lg font-medium">my most <TextShimmer>coveted projects</TextShimmer> goes in the home page :P</h2>
-              <Link href="/projects" className="text-sm text-muted-foreground underline underline-offset-4 hover:text-foreground">
+              <Link href="/projects" className="text-sm text-muted-foreground underline underline-offset-4 transition-all duration-300 hover:shadow-md hover:scale-[1.02] hover:border-muted-foreground hover:text-foreground">
                 all projects →
               </Link>
             </div>
@@ -146,7 +146,7 @@ export default async function HomePage() {
           <section>
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-lg font-medium">latest <TextShimmer>posts</TextShimmer> by yours truly (currently experimenting)</h2>
-              <Link href="/blog" className="text-sm text-muted-foreground underline underline-offset-4 hover:text-foreground">
+              <Link href="/blog" className="text-sm text-muted-foreground underline underline-offset-4 transition-all duration-300 hover:shadow-md hover:scale-[1.02] hover:border-muted-foreground hover:text-foreground">
                 all posts →
               </Link>
             </div>

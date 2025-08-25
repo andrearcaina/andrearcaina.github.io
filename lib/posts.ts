@@ -27,7 +27,7 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
     const raw = await fs.readFile(fullPath, "utf8")
     const { data, content } = parseFrontmatter(raw)
     const contentHtml = await mdToHtml(content)
-    const dateField = data.publishedAt || data.date
+    const dateField = data.publishedAt
     const dateISO = dateField ? new Date(dateField).toISOString() : undefined
     return { slug, meta: { ...data, dateISO }, content, contentHtml }
   } catch {
@@ -39,8 +39,8 @@ export async function getAllPosts(): Promise<Post[]> {
   const slugs = await getPostSlugs()
   const posts = await Promise.all(slugs.map((s) => getPostBySlug(s)))
   return (posts.filter(Boolean) as Post[]).sort((a, b) => {
-    const da = a.meta.publishedAt || a.meta.date ? new Date(a.meta.publishedAt || a.meta.date!).getTime() : 0
-    const db = b.meta.publishedAt || b.meta.date ? new Date(b.meta.publishedAt || b.meta.date!).getTime() : 0
+    const da = a.meta.publishedAt ? new Date(a.meta.publishedAt).getTime() : 0
+    const db = b.meta.publishedAt ? new Date(b.meta.publishedAt).getTime() : 0
     return db - da
   })
 }
