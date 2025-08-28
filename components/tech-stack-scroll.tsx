@@ -41,7 +41,7 @@ const TECH_STACK = [
     { name: "Go", icon: SiGo, url: "https://golang.org", color: "#00ADD8" },
     { name: "Python", icon: SiPython, url: "https://python.org", color: "#3776AB" },
     { name: "Java", icon: FaJava, url: "https://www.java.com/en/", color: "#ED8B00" },
-    { name: "C#", icon: () => <CustomIcon src="/images/csharp.png" alt="C#" />, url: "https://docs.microsoft.com/en-us/dotnet/csharp", color: "#512BD4" },
+    // { name: "C#", icon: () => <CustomIcon src="/images/csharp.png" alt="C#" />, url: "https://docs.microsoft.com/en-us/dotnet/csharp", color: "#512BD4" },
     { name: "JavaScript", icon: SiJavascript, url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript", color: "#F7DF1E" },
     { name: "TypeScript", icon: SiTypescript, url: "https://typescriptlang.org", color: "#3178C6" },
     
@@ -50,7 +50,7 @@ const TECH_STACK = [
     { name: "Flask", icon: SiFlask, url: "https://flask.palletsprojects.com/en/stable/", color: "" },
     { name: "FastAPI", icon: SiFastapi, url: "https://fastapi.tiangolo.com", color: "#009688" },
     { name: "Django", icon: SiDjango, url: "https://djangoproject.com", color: "#092E20" },
-    { name: ".NET", icon: SiDotnet, url: "https://dotnet.microsoft.com", color: "#512BD4" },
+    // { name: ".NET", icon: SiDotnet, url: "https://dotnet.microsoft.com", color: "#512BD4" },
     { name: "Node.js", icon: SiNodedotjs, url: "https://nodejs.org", color: "#339933" },
     
     // Frameworks - Frontend
@@ -60,11 +60,11 @@ const TECH_STACK = [
     
     // Libraries
     { name: "SQLAlchemy", icon: SiSqlalchemy, url: "https://sqlalchemy.org", color: "#D71F00" },
-    { name: "Hibernate", icon: SiHibernate, url: "https://hibernate.org", color: "#59666C" },
+    // { name: "Hibernate", icon: SiHibernate, url: "https://hibernate.org", color: "#59666C" },
     { name: "GraphQL", icon: SiGraphql, url: "https://graphql.org", color: "#E10098" },
     { name: "WebSockets", icon: () => <CustomIcon src="/images/websockets.png" alt="WebSockets" />, url: "https://websockets.spec.whatwg.org/", color: "" },
-    { name: "ArcGIS", icon: SiArcgis, url: "https://www.arcgis.com", color: "#3178C6" },
-    { name: "GDAL", icon: SiQgis, url: "https://gdal.org", color: "#589632" },
+    // { name: "ArcGIS", icon: SiArcgis, url: "https://www.arcgis.com", color: "#3178C6" },
+    // { name: "GDAL", icon: SiQgis, url: "https://gdal.org", color: "#589632" },
     { name: "OpenCV", icon: SiOpencv, url: "https://opencv.org", color: "#5C3EE8" },
     
     // Databases - Relational
@@ -88,7 +88,7 @@ const TECH_STACK = [
     
     // Tools - CI/CD
     { name: "GitHub Actions", icon: SiGithubactions, url: "https://github.com/features/actions", color: "#2088FF" },
-    { name: "CircleCI", icon: SiCircleci, url: "https://circleci.com", color: "#343434" },
+    // { name: "CircleCI", icon: SiCircleci, url: "https://circleci.com", color: "#343434" },
     
     // Tools - Other
     { name: "Postman", icon: SiPostman, url: "https://postman.com", color: "#FF6C37" },
