@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { FiStar, FiGitBranch, FiEye, FiExternalLink } from 'react-icons/fi'
+import { TbBrowserShare } from "react-icons/tb";
 import Link from "next/link"
 import type { GitHubRepo } from "@/lib/github"
 
@@ -37,6 +38,17 @@ export function GitHubRepoCards({ repos = [] as GitHubRepo[] }) {
               >
                 <FiExternalLink className="h-4 w-4" />
               </Link>
+              {r.homepage && (
+                <Link
+                  href={r.homepage}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-muted-foreground transition-colors hover:text-foreground"
+                  aria-label={`Open ${r.name} homepage`}
+                >
+                  <TbBrowserShare className="h-4 w-4" />
+                </Link>
+              )}
             </CardTitle>
             {r.description && (
               <p className="mt-1 text-sm text-muted-foreground line-clamp-2">{r.description}</p>
