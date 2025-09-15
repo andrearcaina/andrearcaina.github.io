@@ -52,9 +52,8 @@ export const experiences: ExperienceItem[] = [
       "Migrated 5,000+ lines from javax.* to jakarta.* to meet Jakarta EE 10 standards.",
       "Modernized legacy apps from JSF 2.2 to Jakarta Faces 4.0 and PrimeFaces.",
       "Cut Apache Tomcat build times by 33% by moving from Apache Ivy to Maven.",
-      "Prototyped a Go CLI to analyze 20+ codebases, later expanding into a dashboard.",
     ],
-    tech: ["Java", "JPA", "Jakarta EE", "Go", "Next.js", "Supabase", "PostgreSQL"],
+    tech: ["Java", "JPA", "Jakarta EE", "Maven", "Tomcat", "JSF", "GitLab"],
   },
   {
     role: "Backend Engineer",
