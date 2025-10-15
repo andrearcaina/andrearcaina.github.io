@@ -30,7 +30,7 @@ export async function fetchRecentRepos(perPage = 10, initialFetch = 20) {
     r.name.toLowerCase() !== 'andrearcaina'
   )
   
-  const priorityRepos = ['whisp', 'fafnir', 'pathfinder', 'vivid']
+  const priorityRepos = ['fafnir', 'vivid', 'whisp', 'pathfinder']
   
   const priority = filtered.filter(repo => 
     priorityRepos.some(priorityName => repo.name.toLowerCase().includes(priorityName.toLowerCase()))

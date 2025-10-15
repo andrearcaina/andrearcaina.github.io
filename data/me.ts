@@ -49,11 +49,13 @@ export const experiences: ExperienceItem[] = [
     start: "Jun 2025",
     end: "Present",
     bullets: [
+      "Developed Spring Boot microservice to process and validate ice telemetry data.",
       "Migrated 5,000+ lines from javax.* to jakarta.* to meet Jakarta EE 10 standards.",
-      "Modernized legacy apps from JSF 2.2 to Jakarta Faces 4.0 and PrimeFaces.",
       "Cut Apache Tomcat build times by 33% by moving from Apache Ivy to Maven.",
+      "Contributed to migration of Oracle DB to PostgreSQL, transferring over 80 GB of data.",
+      "Refactored data access logic to use psycopg2 instead of oracledb for Python services and APIs."
     ],
-    tech: ["Java", "JPA", "Jakarta EE", "Maven", "Tomcat", "JSF", "GitLab"],
+    tech: ["Java", "Spring Boot", "JPA", "Jakarta EE", "Maven", "Apache Tomcat", "JSF", "Python", "Oracle", "Postgres", "GitLab"],
   },
   {
     role: "Backend Engineer",
@@ -62,8 +64,8 @@ export const experiences: ExperienceItem[] = [
     start: "Jan 2025",
     end: "Present",
     bullets: [
-      "Developed 6+ CRUD endpoints with CLEAN architecture for users/items.",
-      "Added 15+ unit/integration tests, boosting coverage by 75%.",
+      "Developed 13+ RESTful API endpoints in Go with CLEAN architecture for 3+ PostgreSQL databases.",
+      "Added 25+ unit/integration tests, boosting overall project coverage by 75%.",
       "Used SQLc for type‑safe queries and generated OpenAPI/Swagger specs to scaffold Go server code.",
     ],
     tech: ["Go", "SQLc", "OpenAPI", "Swagger", "PostgreSQL", "Docker"],
@@ -75,7 +77,7 @@ export const experiences: ExperienceItem[] = [
     start: "May 2024",
     end: "Aug 2024",
     bullets: [
-      "Built MVP converting COBOL copybooks → JSON using Java, Spring Boot, Thymeleaf.",
+      "Built Java backend services using Spring Boot, designing RESTful APIs to convert COBOL copybooks to JSON.",
       "Implemented uploads + record visualization via jQuery, AJAX, DataTables.",
       "Wrote and documented a Postman test suite across company APIs.",
     ],
