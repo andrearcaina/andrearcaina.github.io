@@ -9,11 +9,11 @@ export function Education() {
         <p>
           {education.institution} — {education.degree}
         </p>
-        <p>{education.start} – {education.end} · {education.location} · CGPA: {education.cgpa}</p>
+        <p>{education.date} · {education.location}</p>
+        <p className="pt-2">Involvements: {education.involvements.join(" · ")}</p>
         <p className="pt-2">
           Coursework: {education.courses.join(", ")}
         </p>
-        <p className="pt-2">Involvements: {education.involvements.join(" · ")}</p>
       </div>
     </section>
   )

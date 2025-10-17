@@ -4,8 +4,8 @@ import React from 'react'
 import Autoplay from "embla-carousel-autoplay"
 import Image from 'next/image'
 
-import { FaJava } from 'react-icons/fa'
-import { VscVscode } from "react-icons/vsc"
+import { FaJava, FaGitAlt, FaJenkins } from 'react-icons/fa'
+import { VscVscode, VscTerminalBash } from "react-icons/vsc"
 
 import { 
     SiGo, SiPython, SiJavascript, SiTypescript, SiPostgresql,
@@ -15,16 +15,16 @@ import {
     SiPrometheus, SiGrafana, SiPostman, SiSwagger, SiOpencv,
 } from 'react-icons/si'
 
-import { DiVisualstudio } from "react-icons/di";
+import { DiVisualstudio, DiRedis, DiMysql } from "react-icons/di";
 import { FcLinux } from "react-icons/fc";
 
-import { DiMysql } from 'react-icons/di'
 import Link from 'next/link'
 import {
     Carousel,
     CarouselContent,
     CarouselItem,
 } from "@/components/ui/carousel"
+import { IconBase } from 'react-icons/lib'
 
 const CustomIcon = ({ src, alt }: { src: string; alt: string }) => (
     <Image
@@ -41,7 +41,7 @@ const TECH_STACK = [
     { name: "Go", icon: SiGo, url: "https://golang.org", color: "#00ADD8" },
     { name: "Python", icon: SiPython, url: "https://python.org", color: "#3776AB" },
     { name: "Java", icon: FaJava, url: "https://www.java.com/en/", color: "#ED8B00" },
-    // { name: "C#", icon: () => <CustomIcon src="/images/csharp.png" alt="C#" />, url: "https://docs.microsoft.com/en-us/dotnet/csharp", color: "#512BD4" },
+    { name: "C#", icon: () => <CustomIcon src="/images/csharp.png" alt="C#" />, url: "https://docs.microsoft.com/en-us/dotnet/csharp", color: "#512BD4" },
     { name: "JavaScript", icon: SiJavascript, url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript", color: "#F7DF1E" },
     { name: "TypeScript", icon: SiTypescript, url: "https://typescriptlang.org", color: "#3178C6" },
     
@@ -50,7 +50,7 @@ const TECH_STACK = [
     { name: "Flask", icon: SiFlask, url: "https://flask.palletsprojects.com/en/stable/", color: "" },
     { name: "FastAPI", icon: SiFastapi, url: "https://fastapi.tiangolo.com", color: "#009688" },
     { name: "Django", icon: SiDjango, url: "https://djangoproject.com", color: "#092E20" },
-    // { name: ".NET", icon: SiDotnet, url: "https://dotnet.microsoft.com", color: "#512BD4" },
+    { name: ".NET", icon: SiDotnet, url: "https://dotnet.microsoft.com", color: "#512BD4" },
     { name: "Node.js", icon: SiNodedotjs, url: "https://nodejs.org", color: "#339933" },
     
     // Frameworks - Frontend
@@ -63,14 +63,14 @@ const TECH_STACK = [
     // { name: "Hibernate", icon: SiHibernate, url: "https://hibernate.org", color: "#59666C" },
     { name: "GraphQL", icon: SiGraphql, url: "https://graphql.org", color: "#E10098" },
     { name: "WebSockets", icon: () => <CustomIcon src="/images/websockets.png" alt="WebSockets" />, url: "https://websockets.spec.whatwg.org/", color: "" },
-    // { name: "ArcGIS", icon: SiArcgis, url: "https://www.arcgis.com", color: "#3178C6" },
-    // { name: "GDAL", icon: SiQgis, url: "https://gdal.org", color: "#589632" },
-    { name: "OpenCV", icon: SiOpencv, url: "https://opencv.org", color: "#5C3EE8" },
+    { name: "ArcGIS", icon: SiArcgis, url: "https://www.arcgis.com", color: "#3178C6" },
+    { name: "GDAL", icon: SiQgis, url: "https://gdal.org", color: "#589632" },
+    // { name: "OpenCV", icon: SiOpencv, url: "https://opencv.org", color: "#5C3EE8" },
     
     // Databases - Relational
-    { name: "MySQL", icon: DiMysql, url: "https://www.mysql.com", color: "#4479A1" },
     { name: "PostgreSQL", icon: SiPostgresql, url: "https://postgresql.org", color: "#4169E1" },
-    
+    { name: "MySQL", icon: DiMysql, url: "https://www.mysql.com", color: "#4479A1" },
+
     // Databases - Relational + Cloud
     { name: "Oracle", icon: SiOracle, url: "https://oracle.com", color: "#F80000" },
     { name: "Supabase", icon: SiSupabase, url: "https://supabase.com", color: "#3ECF8E" },
@@ -78,7 +78,8 @@ const TECH_STACK = [
 
     // Databases - NoSQL
     { name: "MongoDB", icon: SiMongodb, url: "https://mongodb.com", color: "#47A248" },
-    
+    { name: "Redis", icon: DiRedis, url: "https://redis.io", color: "#DC382D" },
+
     // Tools - Cloud
     { name: "GCP", icon: SiGooglecloud, url: "https://cloud.google.com", color: "#4285F4" },
     
@@ -88,11 +89,14 @@ const TECH_STACK = [
     
     // Tools - CI/CD
     { name: "GitHub Actions", icon: SiGithubactions, url: "https://github.com/features/actions", color: "#2088FF" },
+    { name: "Jenkins", icon: FaJenkins, url: "https://jenkins.io", color: "" },
     // { name: "CircleCI", icon: SiCircleci, url: "https://circleci.com", color: "#343434" },
-    
+
     // Tools - Other
+    { name: "Git", icon: FaGitAlt, url: "https://git-scm.com", color: "#F05032" },
     { name: "Postman", icon: SiPostman, url: "https://postman.com", color: "#FF6C37" },
     { name: "Swagger", icon: SiSwagger, url: "https://swagger.io", color: "#85EA2D" },
+    { name: "Bash", icon: VscTerminalBash, url: "https://www.gnu.org/software/bash/", color: "" },
     
     // Tools - Monitoring
     { name: "Prometheus", icon: SiPrometheus, url: "https://prometheus.io", color: "#E6522C" },
