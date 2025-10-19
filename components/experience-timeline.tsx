@@ -23,7 +23,7 @@ export function ExperienceTimeline({
                 <span className="text-muted-foreground">{exp.company}</span>
               </CardTitle>
               <p className="text-xs text-muted-foreground">
-                {exp.start} — {exp.end} {exp.location ? `· ${exp.location}` : ""}
+                {exp.date} {exp.location ? `· ${exp.location}` : ""}
               </p>
             </CardHeader>
             <CardContent className="space-y-2">
