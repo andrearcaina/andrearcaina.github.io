@@ -2,12 +2,13 @@ import "server-only"
 import { promises as fs } from "fs"
 import path from "path"
 import { mdToHtml, parseFrontmatter, type MDMeta } from "./markdown"
+import type { MDXRemoteSerializeResult } from 'next-mdx-remote'
 
 export type Post = {
   slug: string
   meta: MDMeta & { dateISO?: string }
   content: string
-  contentHtml: string
+  contentHtml: MDXRemoteSerializeResult
 }
 
 const POSTS_DIR = path.join(process.cwd(), "content", "posts")
@@ -39,8 +40,8 @@ export async function getAllPosts(): Promise<Post[]> {
   const slugs = await getPostSlugs()
   const posts = await Promise.all(slugs.map((s) => getPostBySlug(s)))
   return (posts.filter(Boolean) as Post[]).sort((a, b) => {
-    const da = a.meta.publishedAt ? new Date(a.meta.publishedAt).getTime() : 0
-    const db = b.meta.publishedAt ? new Date(b.meta.publishedAt).getTime() : 0
-    return db - da
+    const dateA = a.meta.publishedAt ? new Date(a.meta.publishedAt).getTime() : 0
+    const dateB = b.meta.publishedAt ? new Date(b.meta.publishedAt).getTime() : 0
+    return dateB - dateA
   })
 }

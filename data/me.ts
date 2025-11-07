@@ -46,12 +46,11 @@ export const experiences: ExperienceItem[] = [
     date: "Jun 2025 — Present",
     bullets: [
       "Developed Spring Boot microservice to process and validate ice telemetry data.",
-      "Migrated 5,000+ lines from javax.* to jakarta.* to meet Jakarta EE 10 standards.",
-      "Cut Apache Tomcat build times by 33% by moving from Apache Ivy to Maven.",
-      "Contributed to migration of Oracle DB to PostgreSQL, transferring over 80 GB of data.",
-      "Refactored data access logic to use psycopg2 instead of oracledb for Python services and APIs."
+      "Modified and documented a C/C++ ETL pipeline for Synthetic Aperture Radar (SAR) satellite data, mapping end-to-end data flows across decoding, calibration, and encoding modules to support system modernization.",
+      "Modernized 8+ Java 1.8 codebases to Jakarta EE 10, refactoring 5,000+ LOC and resolving 1,200+ compiler warnings.",
+      "Integrated PostgreSQL database operations with psycopg2, enhancing data access performance and validation logic."
     ],
-    tech: ["Java", "Spring Boot", "JPA", "Jakarta EE", "Maven", "Apache Tomcat", "JSF", "Python", "Oracle", "PostgreSQL", "GitLab"],
+    tech: ["Java", "Spring Boot", "JPA", "Jakarta EE", "Maven", "Apache Tomcat", "C", "C++", "Python", "PyQt", "Oracle", "PostgreSQL", "GitLab", "Linux"],
   },
   {
     role: "Backend Engineer",
@@ -59,8 +58,8 @@ export const experiences: ExperienceItem[] = [
     location: "Toronto, ON",
     date: "Jan 2025 — Present",
     bullets: [
-      "Developed 13+ RESTful API endpoints in Go with CLEAN architecture for 3+ PostgreSQL databases.",
-      "Added 25+ unit/integration tests, boosting overall project coverage by 75%.",
+      "Developed 27+ RESTful API endpoints in Go with CLEAN architecture for 3+ PostgreSQL databases.",
+      "Added 37+ unit, mock integration, and end-to-end tests to ensure reliability and correctness of business logic.",
       "Used SQLc for type‑safe queries and generated OpenAPI/Swagger specs to scaffold Go server code.",
     ],
     tech: ["Go", "SQLc", "OpenAPI", "Swagger", "PostgreSQL", "Docker"],

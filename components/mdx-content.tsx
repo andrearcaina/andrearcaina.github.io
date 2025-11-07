@@ -52,7 +52,29 @@ const components: MDXComponents = {
     p: (props: any) => <p className="mb-4 leading-7" {...props} />,
     ul: (props: any) => <ul className="mb-4 ml-6 list-disc space-y-1" {...props} />,
     ol: (props: any) => <ol className="mb-4 ml-6 list-decimal space-y-1" {...props} />,
-    li: (props: any) => <li className="leading-7" {...props} />,
+    li: ({ children, ...props }: any) => {
+        if (typeof children === 'string') {
+            const match = children.match(/^\[([ xX])\] (.*)/)
+            
+            if (match) {
+                const checked = match[1].toLowerCase() === 'x'
+                const text = match[2]
+                return (
+                    <li className="flex items-center leading-7 mb-2" {...props}>
+                        <input
+                            type="checkbox"
+                            checked={checked}
+                            readOnly
+                            className="mr-2 h-4 w-4 cursor-pointer accent-primary"
+                        />
+                        <span>{text}</span>
+                    </li>
+                )
+            }
+        }
+
+        return <li className="leading-7 mb-2" {...props}>{children}</li>
+    },
     
     blockquote: (props: any) => (
         <blockquote className="mb-4 border-l-4 border-border bg-muted/50 pl-4 py-2 italic" {...props} />
@@ -64,6 +86,8 @@ const components: MDXComponents = {
     a: (props: any) => (
         <a 
             className="text-primary underline underline-offset-4 hover:text-primary/80" 
+            target="_blank"
+            rel="noopener noreferrer"
             {...props} 
         />
     ),

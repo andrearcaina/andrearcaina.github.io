@@ -21,8 +21,13 @@ export function PostList({ posts }: { posts: Post[] }) {
             <p className="text-sm text-muted-foreground">{p.meta.summary}</p>
           )}
           <p className="text-xs text-muted-foreground">
-            {p.meta.publishedAt ? new Date(p.meta.publishedAt).toLocaleDateString() : ""}
+            Published: {p.meta.publishedAt ? new Date(p.meta.publishedAt).toLocaleDateString() : ""}
           </p>
+          {p.meta.lastUpdatedAt && (  
+            <p className="text-xs text-muted-foreground">
+              Last Updated: {new Date(p.meta.lastUpdatedAt).toLocaleDateString()}
+            </p>
+          )}
           {i < posts.length - 1 && <Separator className="mt-3" />}
         </article>
       ))}

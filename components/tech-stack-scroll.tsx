@@ -5,6 +5,7 @@ import Autoplay from "embla-carousel-autoplay"
 import Image from 'next/image'
 
 import { FaJava, FaGitAlt, FaJenkins } from 'react-icons/fa'
+import { FaC } from "react-icons/fa6"
 import { VscVscode, VscTerminalBash } from "react-icons/vsc"
 
 import { 
@@ -14,6 +15,8 @@ import {
     SiDocker, SiKubernetes, SiGithubactions, SiCircleci, SiGraphql, SiSqlalchemy, SiHibernate, SiArcgis, SiQgis, 
     SiPrometheus, SiGrafana, SiPostman, SiSwagger, SiOpencv,
 } from 'react-icons/si'
+
+import { TbBrandCpp } from "react-icons/tb"
 
 import { DiVisualstudio, DiRedis, DiMysql } from "react-icons/di";
 import { FcLinux } from "react-icons/fc";
@@ -41,7 +44,9 @@ const TECH_STACK = [
     { name: "Go", icon: SiGo, url: "https://golang.org", color: "#00ADD8" },
     { name: "Python", icon: SiPython, url: "https://python.org", color: "#3776AB" },
     { name: "Java", icon: FaJava, url: "https://www.java.com/en/", color: "#ED8B00" },
-    { name: "C#", icon: () => <CustomIcon src="/images/csharp.png" alt="C#" />, url: "https://docs.microsoft.com/en-us/dotnet/csharp", color: "#512BD4" },
+    { name: "C", icon: FaC, url: "https://en.cppreference.com/w/", color: "#A8B9CC" },
+    { name: "C++", icon: TbBrandCpp, url: "https://en.cppreference.com/w/", color: "#00599C" },
+    // { name: "C#", icon: () => <CustomIcon src="/images/csharp.png" alt="C#" />, url: "https://docs.microsoft.com/en-us/dotnet/csharp", color: "#512BD4" },
     { name: "JavaScript", icon: SiJavascript, url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript", color: "#F7DF1E" },
     { name: "TypeScript", icon: SiTypescript, url: "https://typescriptlang.org", color: "#3178C6" },
     
@@ -50,7 +55,7 @@ const TECH_STACK = [
     { name: "Flask", icon: SiFlask, url: "https://flask.palletsprojects.com/en/stable/", color: "" },
     { name: "FastAPI", icon: SiFastapi, url: "https://fastapi.tiangolo.com", color: "#009688" },
     { name: "Django", icon: SiDjango, url: "https://djangoproject.com", color: "#092E20" },
-    { name: ".NET", icon: SiDotnet, url: "https://dotnet.microsoft.com", color: "#512BD4" },
+    // { name: ".NET", icon: SiDotnet, url: "https://dotnet.microsoft.com", color: "#512BD4" },
     { name: "Node.js", icon: SiNodedotjs, url: "https://nodejs.org", color: "#339933" },
     
     // Frameworks - Frontend

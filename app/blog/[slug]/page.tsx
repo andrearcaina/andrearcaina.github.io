@@ -32,6 +32,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   const { meta, content } = post
   const { title, image, publishedAt } = meta
   const publishedDate = publishedAt
+  const lastUpdatedAt = meta.lastUpdatedAt
 
   return (
     <article className="mt-8 flex flex-col gap-8 pb-16">
@@ -52,7 +53,12 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         <h1 className="text-3xl font-bold tracking-tight">{title}</h1>
         {publishedDate && (
           <p className="mt-2 text-sm text-muted-foreground">
-            {formatDate(publishedDate)}
+            Published: {formatDate(publishedDate)}
+          </p>
+        )}
+        {lastUpdatedAt && (
+          <p className="mt-1 text-sm text-muted-foreground">
+            Last Updated: {formatDate(lastUpdatedAt)}
           </p>
         )}
       </header>
