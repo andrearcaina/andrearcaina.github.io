@@ -2,10 +2,10 @@
 title: "fafnir"
 summary: "a project i've been working on recently"
 publishedAt: "2025-11-06"
-lastUpdatedAt: "2025-11-06"
+lastUpdatedAt: "2025-11-12"
 ---
 
-## part 1 ?
+## part 1
 
 This project [fafnir](https://github.com/andrearcaina/fafnir) is a distributed and scalable microservice backend for trading platforms (will be simulated). 
 I'm mainly coding everything in **Go**, but might use **Python**, **Java**, or **C++** down the line depending on the service.
@@ -25,4 +25,35 @@ Here is the related issue on GitHub: [Implement NATS + auth validation logic #4]
 
 Going through, I have many more features to be implemented (check TODO on README), and hopefully learn something new
 
-## part 2 (soon?)
+## part 2
+
+Here is the GitHub issue related to this part: [kubernetes local implementation #5](https://github.com/andrearcaina/fafnir/issues/5)
+
+I have now implemented Kubernetes as a deployment alternative instead of Docker Compose. I used something called [minikube](https://minikube.sigs.k8s.io/docs/), which is 
+basically a local Kubernetes cluster for well, local development and fast learning. 
+
+I also installed `kubectl`, which if `minikube` is the Kubernetes cluster, `kubectl` would be the 
+user's control plane tool, or CLI, that interacts with the Kubernetes cluster. I then tested minikube with these following commands:
+```bash
+> minikube start
+> minikube kubectl -- get po -A
+> minikube dashboard
+> kubectl create deployment hello-minikube --image=kicbase/echo-server:1.0
+> kubectl expose deployment hello-minikube --type=NodePort --port=8080
+> kubectl get services hello-minikube
+> minikube service hello-minikube
+
+# visit localhost address
+```
+With this, I was able to get started in migrating a multi-container deployment to a multi-node kubernetes cluster!
+
+Or so I thought 😅
+
+Turns out, it took a bit longer than I expected. I had to dive deeper into Kubernetes concepts like the kubelet, kube-proxy, etcd, services, deployments, and pods.
+I also needed to learn what a [kubernetes manifest](https://testkube.io/blog/kubernetes-manifest-files-guide) was and how to define and manage cluster resources declaratively.
+
+After all that, I then revised my rough architecture design so many times (too many to count), but finally was able to get a workable and reasonable diagram:
+
+![Revised Dev Design of #1](https://github.com/andrearcaina/fafnir/raw/main/docs/designs/images/k8s_node_network_design_1.png)
+
+It definitely took more time and rewrites than I expected, but I learned a ton about Kubernetes in the process. Up next, NATS implementation (lol)
