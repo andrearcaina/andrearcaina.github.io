@@ -13,7 +13,7 @@ export const profile = {
     github: "https://github.com/andrearcaina",
     linkedin: "https://www.linkedin.com/in/andre-arcaina/",
     contact: "/contact",
-    resume: "/resume/Andre_Arcaina_Full_Stack_SWE_Resume.pdf"
+    resume: "/resume/resume.pdf"
   },
 }
 
@@ -45,12 +45,12 @@ export const experiences: ExperienceItem[] = [
     location: "North York, ON",
     date: "Jun 2025 — Present",
     bullets: [
-      "Developed Spring Boot microservice to process and validate ice telemetry data.",
+      "Rebuilt 2+ legacy VB6 tools using Python and PyQt, integrating the team’s standard logging framework to make debugging and auditing significantly faster.",
+      "Secured database operations by implementing parameterized SQL queries with psycopg, preventing SQL injection attacks and improving performance for iceberg dataset validation.",
       "Modified and documented a C/C++ ETL pipeline for Synthetic Aperture Radar (SAR) satellite data, mapping end-to-end data flows across decoding, calibration, and encoding modules to support system modernization.",
-      "Modernized 8+ Java 1.8 codebases to Jakarta EE 10, refactoring 5,000+ LOC and resolving 1,200+ compiler warnings.",
-      "Integrated PostgreSQL database operations with psycopg2, enhancing data access performance and validation logic."
+      "Modernized 8+ Java 1.8 codebases to Jakarta EE 10, refactoring 5,000+ LOC and resolving 1,200+ compiler warnings."
     ],
-    tech: ["Java", "Spring Boot", "JPA", "Jakarta EE", "Maven", "Apache Tomcat", "C", "C++", "Python", "PyQt", "Oracle", "PostgreSQL", "GitLab", "Linux"],
+    tech: ["C", "C++", "Python", "PyQt", "Java", "JPA", "Jakarta EE", "Maven", "Apache Tomcat", "Oracle", "PostgreSQL", "GitLab", "Linux"],
   },
   {
     role: "Backend Engineer",

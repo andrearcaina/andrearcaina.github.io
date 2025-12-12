@@ -13,7 +13,7 @@ import {
     SiReact, SiNextdotjs, SiTailwindcss, SiSpringboot, SiDjango, SiFastapi, SiFlask,
     SiDotnet, SiNodedotjs, SiMongodb, SiSupabase, SiOracle, SiGooglecloud,
     SiDocker, SiKubernetes, SiGithubactions, SiCircleci, SiGraphql, SiSqlalchemy, SiHibernate, SiArcgis, SiQgis, 
-    SiPrometheus, SiGrafana, SiPostman, SiSwagger, SiOpencv,
+    SiPrometheus, SiGrafana, SiPostman, SiSwagger, SiOpencv, SiZedindustries 
 } from 'react-icons/si'
 
 import { TbBrandCpp } from "react-icons/tb"
@@ -68,8 +68,8 @@ const TECH_STACK = [
     // { name: "Hibernate", icon: SiHibernate, url: "https://hibernate.org", color: "#59666C" },
     { name: "GraphQL", icon: SiGraphql, url: "https://graphql.org", color: "#E10098" },
     { name: "WebSockets", icon: () => <CustomIcon src="/images/websockets.png" alt="WebSockets" />, url: "https://websockets.spec.whatwg.org/", color: "" },
-    { name: "ArcGIS", icon: SiArcgis, url: "https://www.arcgis.com", color: "#3178C6" },
-    { name: "GDAL", icon: SiQgis, url: "https://gdal.org", color: "#589632" },
+    // { name: "ArcGIS", icon: SiArcgis, url: "https://www.arcgis.com", color: "#3178C6" },
+    // { name: "GDAL", icon: SiQgis, url: "https://gdal.org", color: "#589632" },
     // { name: "OpenCV", icon: SiOpencv, url: "https://opencv.org", color: "#5C3EE8" },
     
     // Databases - Relational
@@ -108,11 +108,12 @@ const TECH_STACK = [
     { name: "Grafana", icon: SiGrafana, url: "https://grafana.com", color: "#F46800" },
     
     // IDEs/Text Editors
+    { name: "Zed" , icon: SiZedindustries, url: "https://zed.dev", color: "" },
     { name: "JetBrains IDEs", icon: () => <CustomIcon src="/images/jetbrains.png" alt="JetBrains IDEs" />, url: "https://jetbrains.com", color: "" },
     { name: "Goland", icon: () => <CustomIcon src="/images/goland.png" alt="Goland" />, url: "https://www.jetbrains.com/go/", color: "" },
     { name: "IntelliJ IDEA", icon: () => <CustomIcon src="/images/intellij.png" alt="IntelliJ IDEA" />, url: "https://www.jetbrains.com/idea/", color: "" },
     { name: "DataGrip", icon: () => <CustomIcon src="/images/datagrip.png" alt="DataGrip" />, url: "https://www.jetbrains.com/datagrip/", color: "" },
-    { name: "Visual Studio", icon: DiVisualstudio, url: "https://visualstudio.microsoft.com/", color: "#5C2D91" },
+    // { name: "Visual Studio", icon: DiVisualstudio, url: "https://visualstudio.microsoft.com/", color: "#5C2D91" },
     { name: "VS Code", icon: VscVscode, url: "https://code.visualstudio.com", color: "#007ACC" },
 
     // Operating Systems
