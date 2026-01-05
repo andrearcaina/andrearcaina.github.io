@@ -41,7 +41,7 @@ export default async function HomePage() {
               </h1>
               <FadeInUp delay={0.2}>
                 <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">
-                  Currently focused on <TextShimmer>full‑stack platforms</TextShimmer>, building infrastructure, and microservices. Developing at{" "}
+                  Currently focused on <TextShimmer>backend platforms</TextShimmer>, building infrastructure, and microservices. Developing at{" "}
                   <span className="font-medium">Environment and Climate Change Canada</span> (as an intern) and{" "}
                   <span className="font-medium">USSTM</span>.
                 </p>

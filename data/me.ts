@@ -28,13 +28,13 @@ export const education = {
     "Web Developer @ TMUCSA"
   ],
   courses: [
-    "Data Structures", 
-    "Algorithms",
+    "Data Structures and Algorithms", 
+    "Distributed Systems and Computer Networks",
+    "Operating Systems", 
+    "Database Systems", 
+    "Software Engineering",
+    "Computer Security",
     "Discrete Structures",
-    "Operating Systems I", 
-    "Database Systems I", 
-    "Computer Networks I",
-    "Computer Security I",
   ]
 }
 
