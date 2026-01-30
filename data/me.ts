@@ -48,9 +48,9 @@ export const experiences: ExperienceItem[] = [
       "Led a 3-person team to reverse-engineer a legacy C++ SAR decoding microservice, producing UML and architectural diagrams to document system design.",
       "Led a Python/PyQt replacement for legacy VB6 tooling, integrating structured logging to reduce debugging time for mission-critical software.",
       "Optimized validation of multiple product datasets (50,000+ rows) by implementing parameterized SQL queries in applications, eliminating SQL injection risks and reducing overall query latency.",
-      "Modernized 8+ Java 1.8 codebases to Jakarta EE 10, refactoring 5,000+ LOC and resolving 1,200+ compiler warnings."
+      "Modernized 8+ Java 1.8 codebases to Java 17 and Jakarta EE 10, refactoring 3,000+ LOC and resolving 1,200+ compiler warnings."
     ],
-    tech: ["C++", "RabbitMQ", "Python", "PyQt", "Java", "JPA", "Jakarta EE", "Maven", "Apache Tomcat", "Oracle", "PostgreSQL", "GitLab", "Linux"],
+    tech: ["C++", "RabbitMQ", "Java", "Maven", "JakartaEE", "Apache Tomcat", "Python", "PyQt", "PostgreSQL", "GitLab", "Linux"],
   },
   {
     role: "Backend Engineer",
@@ -62,7 +62,7 @@ export const experiences: ExperienceItem[] = [
       "Added 37+ unit, mock integration, and end-to-end tests to ensure reliability and correctness of business logic.",
       "Used SQLc for type‑safe queries and generated OpenAPI/Swagger specs to scaffold Go server code.",
     ],
-    tech: ["Go", "Docker", "AWS", "PostgreSQL", "Redis", "SQLc", "OpenAPI", "Swagger", "GNU Make"],
+    tech: ["Go", "AWS", "Docker", "PostgreSQL", "Redis", "SQLc", "OpenAPI", "Swagger", "GNU Make"],
   },
   {
     role: "Software Engineer Intern",

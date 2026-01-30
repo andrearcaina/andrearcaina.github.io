@@ -2,7 +2,7 @@
 title: "fafnir"
 summary: "a project i've been working on recently"
 publishedAt: "2025-11-06"
-lastUpdatedAt: "2025-11-12"
+lastUpdatedAt: "2026-01-30"
 ---
 
 ## part 1
@@ -19,7 +19,7 @@ and utilize a bunch of technologies such as [Redis](https://redis.io/), [gRPC](h
 
 Here is a rough sketch of what I have right now of the system architecture:
 
-![Revised Dev Design of #1](https://github.com/andrearcaina/fafnir/raw/main/docs/designs/images/revised_dev_design_1.png)
+![System High Level Diagram](https://github.com/andrearcaina/fafnir/raw/main/docs/designs/images/latest/system_hld.png)
 
 Here is the related issue on GitHub: [Implement NATS + auth validation logic #4](https://github.com/andrearcaina/fafnir/issues/4)
 
@@ -54,6 +54,31 @@ I also needed to learn what a [kubernetes manifest](https://testkube.io/blog/kub
 
 After all that, I then revised my rough architecture design so many times (too many to count), but finally was able to get a workable and reasonable diagram:
 
-![Revised Dev Design of #1](https://github.com/andrearcaina/fafnir/raw/main/docs/designs/images/k8s_node_network_design_1.png)
+![K8s Infra Design](https://github.com/andrearcaina/fafnir/raw/main/docs/designs/images/latest/k8s_infra.png)
 
 It definitely took more time and rewrites than I expected, but I learned a ton about Kubernetes in the process. Up next, NATS implementation (lol)
+
+## part 3
+
+Here is the GitHub issue(s) related to this part: [NATS #11](https://github.com/andrearcaina/fafnir/issues/11) & [Implement JetStream and NATS in K8s #20](https://github.com/andrearcaina/fafnir/issues/20)
+
+I was able to include NATS into the project, as well as attaching JetStream. Same protocol as how I implemented Kubernetes, except a different system.
+I had to learn about what an event broker was first, then what an event bus was (spoiler alert, they're not the same), then understand what a message queue is, 
+to then realize different types of terminology where some overlap and some don't. 
+Some words are: producers, consumers, publishers, subscribers, fan in, fan out, push, pull, subjects, topics, queues, worker groups, streams, ack, nack, saga, ... (did I get them all?).
+
+Definitely a blast though and courtesy to the [NATS documentation](https://docs.nats.io/) for such an easy developer experience
+
+From what I understand though, NATS JetStream works like this:
+
+- Multiple publishers (often microservices) can publish messages (e.g., `{product: "phone", cost: "15"}`) to a subject such as `orders.buy` on a NATS server (the broker itself).
+
+- When JetStream is enabled, if that subject matches the subject filter of a configured stream (for example, a stream named `ORDERS` configured with `orders.*`), the message is captured by the stream 
+and persisted according to the stream’s retention and storage policies.
+
+- Subscribers (other microservices) can then read these persisted messages. Depending on how subscribers are configured, messages may be fanned out to multiple subscribers, 
+or delivered to a queue group where subscribers share the workload as a worker pool.
+
+Here's a rough diagram that I made to show my thoughts:
+
+![NATS JetStream Diagram](https://github.com/andrearcaina/fafnir/raw/main/docs/designs/images/latest/nats_js.png)
