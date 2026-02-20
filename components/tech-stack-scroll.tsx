@@ -5,7 +5,7 @@ import Autoplay from "embla-carousel-autoplay"
 import Image from 'next/image'
 
 import { FaJava, FaGitAlt, FaJenkins } from 'react-icons/fa'
-import { FaC } from "react-icons/fa6"
+import { FaC, FaAws } from "react-icons/fa6"
 import { VscVscode, VscTerminalBash } from "react-icons/vsc"
 
 import { 
@@ -87,6 +87,7 @@ const TECH_STACK = [
 
     // Tools - Cloud
     { name: "GCP", icon: SiGooglecloud, url: "https://cloud.google.com", color: "#4285F4" },
+    { name: "AWS", icon: FaAws, url: "https://aws.amazon.com", color: "#FF9900" },
     
     // Tools - Containerization
     { name: "Docker", icon: SiDocker, url: "https://docker.com", color: "#2496ED" },
