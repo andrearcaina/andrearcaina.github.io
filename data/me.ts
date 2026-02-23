@@ -45,11 +45,11 @@ export const experiences: ExperienceItem[] = [
     location: "North York, ON",
     date: "Jun 2025 — Present",
     bullets: [
-      "Prototyped a Go-based control plane service to automate satellite workflow orchestration, implementing an SSE observability stream to track real-time file states and eliminate manual log searches, reducing debugging time across multiple components.",
-      "Led a 3-person team to reverse-engineer a legacy C++ SAR decoding microservice, producing UML and architectural diagrams to document system design.",
-      "Led a Python/PyQt replacement for legacy VB6 tooling, integrating structured logging to reduce debugging time for mission-critical software.",
+      "Reduced workflow triage and debugging time by developing a Go-based control plane with an SSE observability stream, eliminating manual log searches and providing real-time file state tracking.",
+      "Led a 3-person team to reverse-engineer a legacy C++ system, producing UML and architectural diagrams to document system design.",
+      "Modernized internal R\&D tooling by replacing a legacy VB6 application with a structured Python/PyQt GUI, implementing Graylog compatible structured logging and secure psycopg SQL queries to process 50,000+ row product datasets.",
       "Optimized validation of multiple product datasets (50,000+ rows) by implementing parameterized SQL queries in applications, eliminating SQL injection risks and reducing overall query latency.",
-      "Modernized 8+ Java 1.8 codebases to Java 17 and Jakarta EE 10, refactoring 3,000+ LOC and resolving 1,200+ compiler warnings."
+      "Standardized 8 legacy enterprise Java components to Java 17 and Jakarta EE 10, resolving over 300 compiler warnings and replacing deprecated APIs during the migration."
     ],
     tech: ["Go", "C++", "RabbitMQ", "Java", "Maven", "JakartaEE", "Apache Tomcat", "Python", "PyQt", "PostgreSQL", "GitLab", "Linux"],
   },
@@ -59,11 +59,10 @@ export const experiences: ExperienceItem[] = [
     location: "Toronto, ON",
     date: "Jan 2025 — Present",
     bullets: [
-      "Developed 27+ RESTful API endpoints in Go with CLEAN architecture for 3+ PostgreSQL databases.",
+      "Engineered a contract-first backend API in Go powering platform services for the undergraduate science student body, leveraging SQLc for type safety and OpenAPI to enforce strict definitions across 32+ endpoints.",
       "Built S3-based image storage with presigned URLs to support secure, horizontally scalable before and after item image uploads.",
       "Implemented a Redis-backed Asynq worker to asynchronously process queued email jobs and deliver notifications via AWS SES.",
       "Added 37+ unit, mock integration, and end-to-end tests to ensure reliability and correctness of business logic.",
-      "Used SQLc for type‑safe queries and generated OpenAPI/Swagger specs to scaffold Go server code.",
     ],
     tech: ["Go", "AWS", "Docker", "PostgreSQL", "Redis", "SQLc", "OpenAPI", "Swagger", "GNU Make"],
   },
@@ -73,9 +72,9 @@ export const experiences: ExperienceItem[] = [
     location: "Ottawa, ON",
     date: "May 2024 — Aug 2024",
     bullets: [
-      "Built Java backend services using Spring Boot, designing RESTful APIs to convert COBOL copybooks to JSON.",
-      "Implemented uploads + record visualization via jQuery, AJAX, DataTables.",
-      "Wrote and documented a Postman test suite across company APIs.",
+      "Engineered Spring Boot REST APIs bridging legacy mainframe systems with modern web applications, automating COBOL-to-JSON transformations for enterprise clients.",
+      "Built an interactive data inspection dashboard using jQuery and DataTables, enabling non-technical stakeholders to explore complex copybook structures without manual parsing.",
+      "Designed comprehensive Postman test suites achieving 70\%+ code coverage across all mainframe REST API systems.",
     ],
     tech: ["Java", "Spring Boot", "Thymeleaf", "JavaScript", "jQuery", "Postman", "GitHub Actions"],
   },
