@@ -12,7 +12,7 @@ export function ExperienceTimeline({
 }) {
   return (
     <section id="experience" className={cn("space-y-6", className)}>
-      <h2 className="text-lg font-medium">here are some of the <TextShimmer>experiences</TextShimmer> I've gained throughout my career:</h2>
+      <h2 className="text-lg font-medium">cool <TextShimmer>experiences</TextShimmer> i've gained</h2>
       <div className="space-y-4">
         {items.map((exp, i) => (
           <Card key={i} className="border border-border bg-card transition-all duration-300 hover:shadow-md hover:scale-[1.02] hover:border-muted-foreground">

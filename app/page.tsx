@@ -41,7 +41,7 @@ export default async function HomePage() {
               </h1>
               <FadeInUp delay={0.2}>
                 <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">
-                  Currently focused on <TextShimmer>backend platforms</TextShimmer>, building infrastructure, and microservices. Developing at{" "}
+                  Focused on <TextShimmer>distributed systems</TextShimmer>, cloud infrastructure, and backend development. Developing at{" "}
                   <span className="font-medium">Environment and Climate Change Canada</span> (as an intern) and{" "}
                   <span className="font-medium">USSTM</span>.
                 </p>
@@ -131,7 +131,7 @@ export default async function HomePage() {
         <FadeInUp delay={1.2}>
           <section>
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-medium">my most <TextShimmer>coveted projects</TextShimmer> goes in the home page :P</h2>
+              <h2 className="text-lg font-medium">some <TextShimmer>side projects</TextShimmer> i like to work on</h2>
               <Link href="/projects" className="text-sm text-muted-foreground underline underline-offset-4 transition-all duration-300 hover:shadow-md hover:scale-[1.02] hover:border-muted-foreground hover:text-foreground">
                 all projects →
               </Link>
@@ -145,7 +145,7 @@ export default async function HomePage() {
         <FadeInUp delay={1.4}>
           <section>
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-medium">latest <TextShimmer>posts</TextShimmer> by yours truly (currently experimenting)</h2>
+              <h2 className="text-lg font-medium">some random <TextShimmer>thoughts</TextShimmer> on stuff</h2>
               <Link href="/blog" className="text-sm text-muted-foreground underline underline-offset-4 transition-all duration-300 hover:shadow-md hover:scale-[1.02] hover:border-muted-foreground hover:text-foreground">
                 all posts →
               </Link>

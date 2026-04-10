@@ -100,7 +100,7 @@ export default function ContactPage() {
                   id="name" 
                   name="name" 
                   className="w-full"
-                  placeholder="Your full name"
+                  placeholder="Your Name"
                 />
               </div>
               
@@ -125,7 +125,7 @@ export default function ContactPage() {
                   id="message" 
                   name="message" 
                   className="w-full h-32 resize-none"
-                  placeholder="Tell me about your project or just say hello..."
+                  placeholder="What's up? :)"
                 />
               </div>
             </div>

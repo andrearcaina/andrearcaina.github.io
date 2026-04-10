@@ -48,7 +48,6 @@ export const experiences: ExperienceItem[] = [
       "Reduced workflow triage and debugging time by developing a Go-based control plane with an SSE observability stream, eliminating manual log searches and providing real-time file state tracking.",
       "Led a 3-person team to reverse-engineer a legacy C++ system, producing UML and architectural diagrams to document system design.",
       "Modernized internal R\&D tooling by replacing a legacy VB6 application with a structured Python/PyQt GUI, implementing Graylog compatible structured logging and secure psycopg SQL queries to process 50,000+ row product datasets.",
-      "Optimized validation of multiple product datasets (50,000+ rows) by implementing parameterized SQL queries in applications, eliminating SQL injection risks and reducing overall query latency.",
       "Standardized 8 legacy enterprise Java components to Java 17 and Jakarta EE 10, resolving over 300 compiler warnings and replacing deprecated APIs during the migration."
     ],
     tech: ["Go", "C++", "RabbitMQ", "Java", "Maven", "JakartaEE", "Apache Tomcat", "Python", "PyQt", "PostgreSQL", "GitLab", "Linux"],
@@ -72,9 +71,9 @@ export const experiences: ExperienceItem[] = [
     location: "Ottawa, ON",
     date: "May 2024 — Aug 2024",
     bullets: [
-      "Engineered Spring Boot REST APIs bridging legacy mainframe systems with modern web applications, automating COBOL-to-JSON transformations for enterprise clients.",
-      "Built an interactive data inspection dashboard using jQuery and DataTables, enabling non-technical stakeholders to explore complex copybook structures without manual parsing.",
-      "Designed comprehensive Postman test suites achieving 70\%+ code coverage across all mainframe REST API systems.",
+      "Developed a Spring Boot middleware service and jQuery dashboard, utilizing an external Java library to automate COBOL-to-JSON parsing and eliminate manual data inspection for the R&D team.",
+      "Presented the finalized tool to 12 R&D stakeholders, successfully demonstrating the new automated data-inspection workflow.",
+      "Designed and executed 72 comprehensive Postman test cases for a core mainframe REST API, rigorously validating JSON responses, edge cases, and data integrity across 3 distinct IBM Db2 database tables.",
     ],
     tech: ["Java", "Spring Boot", "Thymeleaf", "JavaScript", "jQuery", "Postman", "GitHub Actions"],
   },

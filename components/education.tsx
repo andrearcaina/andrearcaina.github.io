@@ -4,7 +4,7 @@ import { TextShimmer } from "@/components/motion-components"
 export function Education() {
   return (
     <section id="education" className="space-y-4">
-      <h2 className="text-lg font-medium">the things i do for <TextShimmer>education</TextShimmer></h2>
+      <h2 className="text-lg font-medium">my <TextShimmer>education</TextShimmer> journey</h2>
       <div className="text-sm leading-relaxed text-muted-foreground">
         <p>
           {education.institution} — {education.degree}

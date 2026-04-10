@@ -5,7 +5,7 @@ import Autoplay from "embla-carousel-autoplay"
 import Image from 'next/image'
 
 import { FaJava, FaGitAlt, FaJenkins } from 'react-icons/fa'
-import { FaC, FaAws } from "react-icons/fa6"
+import { FaC, FaAws, FaRust } from "react-icons/fa6"
 import { VscVscode, VscTerminalBash } from "react-icons/vsc"
 
 import { 
@@ -46,6 +46,7 @@ const TECH_STACK = [
     { name: "Java", icon: FaJava, url: "https://www.java.com/en/", color: "#ED8B00" },
     { name: "C", icon: FaC, url: "https://en.cppreference.com/w/", color: "#A8B9CC" },
     { name: "C++", icon: TbBrandCpp, url: "https://en.cppreference.com/w/", color: "#00599C" },
+    { name: "Rust", icon: FaRust, url: "https://rust-lang.org", color: "#DEA584" },
     // { name: "C#", icon: () => <CustomIcon src="/images/csharp.png" alt="C#" />, url: "https://docs.microsoft.com/en-us/dotnet/csharp", color: "#512BD4" },
     { name: "JavaScript", icon: SiJavascript, url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript", color: "#F7DF1E" },
     { name: "TypeScript", icon: SiTypescript, url: "https://typescriptlang.org", color: "#3178C6" },
@@ -56,18 +57,18 @@ const TECH_STACK = [
     { name: "FastAPI", icon: SiFastapi, url: "https://fastapi.tiangolo.com", color: "#009688" },
     { name: "Django", icon: SiDjango, url: "https://djangoproject.com", color: "#092E20" },
     // { name: ".NET", icon: SiDotnet, url: "https://dotnet.microsoft.com", color: "#512BD4" },
-    { name: "Node.js", icon: SiNodedotjs, url: "https://nodejs.org", color: "#339933" },
+    // { name: "Node.js", icon: SiNodedotjs, url: "https://nodejs.org", color: "#339933" },
     
     // Frameworks - Frontend
     { name: "React", icon: SiReact, url: "https://react.dev", color: "#61DAFB" },
     { name: "Next.js", icon: SiNextdotjs, url: "https://nextjs.org", color: "" },
-    { name: "Tailwind CSS", icon: SiTailwindcss, url: "https://tailwindcss.com", color: "#06B6D4" },
+    // { name: "Tailwind CSS", icon: SiTailwindcss, url: "https://tailwindcss.com", color: "#06B6D4" },
     
     // Libraries
-    { name: "SQLAlchemy", icon: SiSqlalchemy, url: "https://sqlalchemy.org", color: "#D71F00" },
+    // { name: "SQLAlchemy", icon: SiSqlalchemy, url: "https://sqlalchemy.org", color: "#D71F00" },
     // { name: "Hibernate", icon: SiHibernate, url: "https://hibernate.org", color: "#59666C" },
     { name: "GraphQL", icon: SiGraphql, url: "https://graphql.org", color: "#E10098" },
-    { name: "WebSockets", icon: () => <CustomIcon src="/images/websockets.png" alt="WebSockets" />, url: "https://websockets.spec.whatwg.org/", color: "" },
+    // { name: "WebSockets", icon: () => <CustomIcon src="/images/websockets.png" alt="WebSockets" />, url: "https://websockets.spec.whatwg.org/", color: "" },
     // { name: "ArcGIS", icon: SiArcgis, url: "https://www.arcgis.com", color: "#3178C6" },
     // { name: "GDAL", icon: SiQgis, url: "https://gdal.org", color: "#589632" },
     // { name: "OpenCV", icon: SiOpencv, url: "https://opencv.org", color: "#5C3EE8" },
@@ -100,7 +101,7 @@ const TECH_STACK = [
 
     // Tools - Other
     { name: "Git", icon: FaGitAlt, url: "https://git-scm.com", color: "#F05032" },
-    { name: "Postman", icon: SiPostman, url: "https://postman.com", color: "#FF6C37" },
+    // { name: "Postman", icon: SiPostman, url: "https://postman.com", color: "#FF6C37" },
     { name: "Swagger", icon: SiSwagger, url: "https://swagger.io", color: "#85EA2D" },
     { name: "Bash", icon: VscTerminalBash, url: "https://www.gnu.org/software/bash/", color: "" },
     
@@ -109,16 +110,16 @@ const TECH_STACK = [
     { name: "Grafana", icon: SiGrafana, url: "https://grafana.com", color: "#F46800" },
     
     // IDEs/Text Editors
-    { name: "Zed" , icon: SiZedindustries, url: "https://zed.dev", color: "" },
-    { name: "JetBrains IDEs", icon: () => <CustomIcon src="/images/jetbrains.png" alt="JetBrains IDEs" />, url: "https://jetbrains.com", color: "" },
-    { name: "Goland", icon: () => <CustomIcon src="/images/goland.png" alt="Goland" />, url: "https://www.jetbrains.com/go/", color: "" },
-    { name: "IntelliJ IDEA", icon: () => <CustomIcon src="/images/intellij.png" alt="IntelliJ IDEA" />, url: "https://www.jetbrains.com/idea/", color: "" },
-    { name: "DataGrip", icon: () => <CustomIcon src="/images/datagrip.png" alt="DataGrip" />, url: "https://www.jetbrains.com/datagrip/", color: "" },
+    // { name: "Zed" , icon: SiZedindustries, url: "https://zed.dev", color: "" },
+    // { name: "JetBrains IDEs", icon: () => <CustomIcon src="/images/jetbrains.png" alt="JetBrains IDEs" />, url: "https://jetbrains.com", color: "" },
+    // { name: "Goland", icon: () => <CustomIcon src="/images/goland.png" alt="Goland" />, url: "https://www.jetbrains.com/go/", color: "" },
+    // { name: "IntelliJ IDEA", icon: () => <CustomIcon src="/images/intellij.png" alt="IntelliJ IDEA" />, url: "https://www.jetbrains.com/idea/", color: "" },
+    // { name: "DataGrip", icon: () => <CustomIcon src="/images/datagrip.png" alt="DataGrip" />, url: "https://www.jetbrains.com/datagrip/", color: "" },
     // { name: "Visual Studio", icon: DiVisualstudio, url: "https://visualstudio.microsoft.com/", color: "#5C2D91" },
-    { name: "VS Code", icon: VscVscode, url: "https://code.visualstudio.com", color: "#007ACC" },
+    // { name: "VS Code", icon: VscVscode, url: "https://code.visualstudio.com", color: "#007ACC" },
 
     // Operating Systems
-    { name: "Linux", icon: FcLinux, url: "https://www.linux.org", color: "" },
+    // { name: "Linux", icon: FcLinux, url: "https://www.linux.org", color: "" },
 ]
 
 export function TechStackScroll() {
