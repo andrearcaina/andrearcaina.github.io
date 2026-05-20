@@ -5,7 +5,7 @@ import Autoplay from "embla-carousel-autoplay"
 import Image from 'next/image'
 
 import { FaJava, FaGitAlt, FaJenkins } from 'react-icons/fa'
-import { FaC, FaAws, FaRust } from "react-icons/fa6"
+import { FaAws, FaRust } from "react-icons/fa6"
 import { VscVscode, VscTerminalBash } from "react-icons/vsc"
 
 import { 
@@ -16,8 +16,6 @@ import {
     SiPrometheus, SiGrafana, SiPostman, SiSwagger, SiOpencv, SiZedindustries 
 } from 'react-icons/si'
 
-import { TbBrandCpp } from "react-icons/tb"
-
 import { DiVisualstudio, DiRedis, DiMysql } from "react-icons/di";
 import { FcLinux } from "react-icons/fc";
 
@@ -27,7 +25,6 @@ import {
     CarouselContent,
     CarouselItem,
 } from "@/components/ui/carousel"
-import { IconBase } from 'react-icons/lib'
 
 const CustomIcon = ({ src, alt }: { src: string; alt: string }) => (
     <Image
@@ -44,8 +41,8 @@ const TECH_STACK = [
     { name: "Go", icon: SiGo, url: "https://golang.org", color: "#00ADD8" },
     { name: "Python", icon: SiPython, url: "https://python.org", color: "#3776AB" },
     { name: "Java", icon: FaJava, url: "https://www.java.com/en/", color: "#ED8B00" },
-    { name: "C", icon: FaC, url: "https://en.cppreference.com/w/", color: "#A8B9CC" },
-    { name: "C++", icon: TbBrandCpp, url: "https://en.cppreference.com/w/", color: "#00599C" },
+    // { name: "C", icon: () => <CustomIcon src="/images/c.png" alt="C" />, url: "https://en.cppreference.com/w/", color: "#A8B9CC" },
+    { name: "C++", icon: () => <CustomIcon src="/images/c++.png" alt="C++" />, url: "https://en.cppreference.com/w/", color: "#00599C" },
     { name: "Rust", icon: FaRust, url: "https://rust-lang.org", color: "#DEA584" },
     // { name: "C#", icon: () => <CustomIcon src="/images/csharp.png" alt="C#" />, url: "https://docs.microsoft.com/en-us/dotnet/csharp", color: "#512BD4" },
     { name: "JavaScript", icon: SiJavascript, url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript", color: "#F7DF1E" },
