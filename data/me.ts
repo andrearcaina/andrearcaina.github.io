@@ -3,6 +3,7 @@ export type ExperienceItem = {
   company: string
   location?: string
   date: string
+  description: string
   bullets: string[]
   tech?: string[]
 }
@@ -44,19 +45,21 @@ export const experiences: ExperienceItem[] = [
     company: "Environment and Climate Change Canada",
     location: "North York, ON",
     date: "Jun 2025 — Present",
+    description: "Maintained and modernized mission-critical weather data systems by developing automated testing, refactoring backend services, and improving code quality and documentation.",
     bullets: [
       "Reduced workflow triage and debugging time by developing a Go-based control plane with an SSE observability stream, eliminating manual log searches and providing real-time file state tracking.",
       "Led a 3-person team to reverse-engineer a legacy C++ system, producing UML and architectural diagrams to document system design.",
       "Modernized internal R\&D tooling by replacing a legacy VB6 application with a structured Python/PyQt GUI, implementing Graylog compatible structured logging and secure psycopg SQL queries to process 50,000+ row product datasets.",
       "Standardized 8 legacy enterprise Java components to Java 17 and Jakarta EE 10, resolving over 300 compiler warnings and replacing deprecated APIs during the migration."
     ],
-    tech: ["Go", "C++", "RabbitMQ", "Java", "Maven", "JakartaEE", "Apache Tomcat", "Python", "PyQt", "PostgreSQL", "GitLab", "Linux"],
+    tech: ["Go", "C++", "Java", "Python", "PostgreSQL", "Maven", "Jakarta EE", "Apache Tomcat", "PyQt", "Jenkins", "GitLab", "Linux"],
   },
   {
     role: "Backend Engineer",
     company: "Undergraduate Science Society of TMU",
     location: "Toronto, ON",
     date: "Jan 2025 — Present",
+    description: "Worked on the backend team to design and develop a scalable, Go-based RESTful API to support the Undergraduate Science Society's platform services.",
     bullets: [
       "Engineered a contract-first backend API in Go powering platform services for the undergraduate science student body, leveraging SQLc for type safety and OpenAPI to enforce strict definitions across 32+ endpoints.",
       "Built S3-based image storage with presigned URLs to support secure, horizontally scalable before and after item image uploads.",
@@ -70,6 +73,7 @@ export const experiences: ExperienceItem[] = [
     company: "DataKinetics",
     location: "Ottawa, ON",
     date: "May 2024 — Aug 2024",
+    description: "Developed full-stack software solutions using Spring Boot to automate COBOL to JSON data parsing and streamline data inspection workflows for the R&D team.",
     bullets: [
       "Developed a Spring Boot middleware service and jQuery dashboard, utilizing an external Java library to automate COBOL-to-JSON parsing and eliminate manual data inspection for the R&D team.",
       "Presented the finalized tool to 12 R&D stakeholders, successfully demonstrating the new automated data-inspection workflow.",

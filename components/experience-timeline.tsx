@@ -15,7 +15,7 @@ export function ExperienceTimeline({
       <h2 className="text-lg font-medium">cool <TextShimmer>experiences</TextShimmer> i've gained</h2>
       <div className="space-y-4">
         {items.map((exp, i) => (
-          <Card key={i} className="border border-border bg-card transition-all duration-300 hover:shadow-md hover:scale-[1.02] hover:border-muted-foreground">
+          <Card key={i} className="border border-border bg-card transition-all duration-300 hover:shadow-md hover:scale-[1.01] hover:border-muted-foreground">
             <CardHeader className="pb-2">
               <CardTitle className="flex flex-wrap items-baseline gap-x-2 text-base">
                 <span className="font-semibold">{exp.role}</span>
@@ -27,16 +27,12 @@ export function ExperienceTimeline({
               </p>
             </CardHeader>
             <CardContent className="space-y-2">
-              <ul className="list-disc pl-5 text-sm leading-relaxed text-muted-foreground">
-                {exp.bullets.map((b, j) => (
-                  <li key={j}>{b}</li>
-                ))}
-              </ul>
-              {exp.tech && (
-                <p className="pt-2 text-xs text-muted-foreground">
-                  tech: <span className="italic">{exp.tech.join(", ")}</span>
-                </p>
-              )}
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                {exp.description}
+              </p>
+              <p className="pt-2 text-xs text-muted-foreground">
+                tech: <span className="italic">{exp.tech?.join(", ")}</span>
+              </p>
             </CardContent>
           </Card>
         ))}
