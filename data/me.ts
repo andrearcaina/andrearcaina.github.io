@@ -44,7 +44,7 @@ export const experiences: ExperienceItem[] = [
     role: "Software Engineer Intern",
     company: "Environment and Climate Change Canada",
     location: "North York, ON",
-    date: "Jun 2025 — Present",
+    date: "Jun 2025 — Aug 2026",
     description: "Maintained and modernized mission-critical weather data systems by developing automated testing, refactoring backend services, and improving code quality and documentation.",
     bullets: [
       "Reduced workflow triage and debugging time by developing a Go-based control plane with an SSE observability stream, eliminating manual log searches and providing real-time file state tracking.",
@@ -58,7 +58,7 @@ export const experiences: ExperienceItem[] = [
     role: "Backend Engineer",
     company: "Undergraduate Science Society of TMU",
     location: "Toronto, ON",
-    date: "Jan 2025 — Present",
+    date: "Jan 2025 — Apr 2026",
     description: "Worked on the backend team to design and develop a scalable, Go-based RESTful API to support the Undergraduate Science Society's platform services.",
     bullets: [
       "Engineered a contract-first backend API in Go powering platform services for the undergraduate science student body, leveraging SQLc for type safety and OpenAPI to enforce strict definitions across 32+ endpoints.",
