@@ -76,7 +76,7 @@ export async function GET(request: NextRequest) {
     console.error('Error fetching Spotify data:', error)
     return NextResponse.json({ 
       isPlaying: false,
-      message: "Unable to fetch current song"
+      message: "Currently listening to nothing"
     }, { status: 500 })
   }
 }
