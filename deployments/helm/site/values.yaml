@@ -1,0 +1,35 @@
+image:
+    repository: ghcr.io/andrearcaina/andrearcaina.github.io
+    tag: REPLACE_WITH_COMMIT_SHA
+    pullPolicy: IfNotPresent
+
+imagePullSecrets:
+    - name: ghcr-auth
+
+env:
+    apiHost: api.andrearcaina.ca
+    siteHost: andrearcaina.ca
+    allowedOrigins: https://andrearcaina.ca,https://www.andrearcaina.ca
+    spotifyRedirectURI: https://api.andrearcaina.ca/v1/spotify/callback
+
+secret:
+    name: andrearcaina-site-secrets
+
+resources:
+    requests:
+        cpu: 10m
+        memory: 32Mi
+    limits:
+        cpu: 200m
+        memory: 256Mi
+
+ingress:
+    className: traefik
+    annotations:
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        traefik.ingress.kubernetes.io/router.tls: "true"
+        traefik.ingress.kubernetes.io/router.tls.certresolver: cloudflare
+    hosts:
+        - andrearcaina.ca
+        - www.andrearcaina.ca
+        - api.andrearcaina.ca

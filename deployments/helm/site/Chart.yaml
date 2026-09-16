@@ -1,0 +1,6 @@
+apiVersion: v2
+name: site
+description: Andre Arcaina personal website and API
+type: application
+version: 0.1.0
+appVersion: "1.0.0"

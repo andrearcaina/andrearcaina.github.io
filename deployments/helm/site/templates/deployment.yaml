@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: {{ include "site.fullname" . }}
+    labels:
+        {{- include "site.labels" . | nindent 8 }}
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app.kubernetes.io/name: {{ include "site.name" . }}
+            app.kubernetes.io/instance: {{ .Release.Name }}
+    template:
+        metadata:
+            labels:
+                app.kubernetes.io/name: {{ include "site.name" . }}
+                app.kubernetes.io/instance: {{ .Release.Name }}
+        spec:
+            securityContext:
+                runAsNonRoot: true
+                runAsUser: 10001
+                runAsGroup: 10001
+                seccompProfile:
+                    type: RuntimeDefault
+            imagePullSecrets:
+                {{- toYaml .Values.imagePullSecrets | nindent 16 }}
+            nodeSelector:
+                kubernetes.io/hostname: homelab-vm2
+            containers:
+                - name: site
+                  image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+                  imagePullPolicy: {{ .Values.image.pullPolicy }}
+                  ports:
+                      - name: http
+                        containerPort: 8080
+                        protocol: TCP
+                  env:
+                      - name: API_HOST
+                        value: {{ .Values.env.apiHost | quote }}
+                      - name: SITE_HOST
+                        value: {{ .Values.env.siteHost | quote }}
+                      - name: ALLOWED_ORIGINS
+                        value: {{ .Values.env.allowedOrigins | quote }}
+                      - name: SPOTIFY_REDIRECT_URI
+                        value: {{ .Values.env.spotifyRedirectURI | quote }}
+                      - name: RESEND_API_KEY
+                        valueFrom:
+                            secretKeyRef:
+                                name: {{ .Values.secret.name }}
+                                key: RESEND_API_KEY
+                      - name: EMAIL
+                        valueFrom:
+                            secretKeyRef:
+                                name: {{ .Values.secret.name }}
+                                key: EMAIL
+                      - name: SPOTIFY_CLIENT_ID
+                        valueFrom:
+                            secretKeyRef:
+                                name: {{ .Values.secret.name }}
+                                key: SPOTIFY_CLIENT_ID
+                      - name: SPOTIFY_CLIENT_SECRET
+                        valueFrom:
+                            secretKeyRef:
+                                name: {{ .Values.secret.name }}
+                                key: SPOTIFY_CLIENT_SECRET
+                      - name: SPOTIFY_REFRESH_TOKEN
+                        valueFrom:
+                            secretKeyRef:
+                                name: {{ .Values.secret.name }}
+                                key: SPOTIFY_REFRESH_TOKEN
+                  readinessProbe:
+                      httpGet:
+                          path: /healthz
+                          port: http
+                      initialDelaySeconds: 2
+                      periodSeconds: 10
+                  livenessProbe:
+                      httpGet:
+                          path: /healthz
+                          port: http
+                      initialDelaySeconds: 5
+                      periodSeconds: 20
+                  resources:
+                      {{- toYaml .Values.resources | nindent 20 }}

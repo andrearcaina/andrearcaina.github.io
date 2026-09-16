@@ -1,0 +1,8 @@
+.git
+.github
+.env
+.env.*
+bin
+web/node_modules
+web/.next
+web/out
