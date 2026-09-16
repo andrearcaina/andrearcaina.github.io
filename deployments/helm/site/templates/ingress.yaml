@@ -1,22 +1,21 @@
+{{- if .Values.ingress.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
     name: {{ include "site.fullname" . }}
+    namespace: {{ .Release.Namespace }}
     labels:
         {{- include "site.labels" . | nindent 8 }}
     annotations:
         {{- toYaml .Values.ingress.annotations | nindent 8 }}
 spec:
     ingressClassName: {{ .Values.ingress.className }}
-    tls:
-        - hosts:
-            {{- toYaml .Values.ingress.hosts | nindent 12 }}
     rules:
         {{- range .Values.ingress.hosts }}
         - host: {{ . | quote }}
           http:
               paths:
-                  - path: /
+                  - path: {{ $.Values.ingress.path }}
                     pathType: Prefix
                     backend:
                         service:
@@ -24,3 +23,4 @@ spec:
                             port:
                                 name: http
         {{- end }}
+{{- end }}

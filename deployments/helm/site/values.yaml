@@ -6,6 +6,10 @@ image:
 imagePullSecrets:
     - name: ghcr-auth
 
+# VM 2 is the production worker in this cluster.
+nodeSelector:
+    kubernetes.io/hostname: homelab-vm2
+
 env:
     apiHost: api.andrearcaina.ca
     siteHost: andrearcaina.ca
@@ -24,12 +28,12 @@ resources:
         memory: 256Mi
 
 ingress:
+    enabled: true
     className: traefik
     annotations:
-        traefik.ingress.kubernetes.io/router.entrypoints: websecure
-        traefik.ingress.kubernetes.io/router.tls: "true"
-        traefik.ingress.kubernetes.io/router.tls.certresolver: cloudflare
+        traefik.ingress.kubernetes.io/router.entrypoints: web
     hosts:
         - andrearcaina.ca
         - www.andrearcaina.ca
         - api.andrearcaina.ca
+    path: /

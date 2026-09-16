@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
     name: {{ include "site.fullname" . }}
+    namespace: {{ .Release.Namespace }}
     labels:
         {{- include "site.labels" . | nindent 8 }}
 spec:
@@ -25,7 +26,7 @@ spec:
             imagePullSecrets:
                 {{- toYaml .Values.imagePullSecrets | nindent 16 }}
             nodeSelector:
-                kubernetes.io/hostname: homelab-vm2
+                {{- toYaml .Values.nodeSelector | nindent 16 }}
             containers:
                 - name: site
                   image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
