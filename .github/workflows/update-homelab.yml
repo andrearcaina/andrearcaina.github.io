@@ -1,0 +1,72 @@
+name: Update Homelab Image Tag
+
+on:
+    workflow_run:
+        workflows:
+            - Build and Push Site Image
+        types:
+            - completed
+        branches:
+            - main
+
+permissions:
+    contents: read
+
+jobs:
+    changes:
+        if: github.event.workflow_run.conclusion == 'success'
+        runs-on: ubuntu-latest
+        outputs:
+            changed: ${{ steps.filter.outputs.changed }}
+
+        steps:
+            - name: Check out tested commit
+              uses: actions/checkout@v4
+              with:
+                  ref: ${{ github.event.workflow_run.head_sha }}
+                  fetch-depth: 2
+
+            - name: Check for image changes
+              id: filter
+              env:
+                  COMMIT_SHA: ${{ github.event.workflow_run.head_sha }}
+              run: |
+                  if git diff --quiet "${COMMIT_SHA}^" "${COMMIT_SHA}" -- \
+                      Dockerfile Makefile go.mod go.sum cmd/ internal/ web/; then
+                      echo "changed=false" >> "$GITHUB_OUTPUT"
+                  else
+                      echo "changed=true" >> "$GITHUB_OUTPUT"
+                  fi
+
+    update:
+        needs: changes
+        if: needs.changes.outputs.changed == 'true'
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Check out homelab repository
+              uses: actions/checkout@v4
+              with:
+                  repository: andrearcaina/homelab
+                  ref: main
+                  path: homelab
+                  token: ${{ secrets.HOMELAB_REPO_TOKEN }}
+
+            - name: Update Site image tag
+              env:
+                  IMAGE_TAG: ${{ github.event.workflow_run.head_sha }}
+              run: |
+                  sed -i "/repository: ghcr.io\/andrearcaina\/andrearcaina.github.io/{n;s/tag:.*/tag: ${IMAGE_TAG}/;}" \
+                      homelab/clusters/homelab/apps/site/helmrelease.yaml
+
+            - name: Create homelab pull request
+              uses: peter-evans/create-pull-request@v7
+              with:
+                  token: ${{ secrets.HOMELAB_REPO_TOKEN }}
+                  path: homelab
+                  base: main
+                  branch: automation/update-site-image
+                  commit-message: Update Site image
+                  title: Update Site image
+                  body: Update the homelab image tag to the successful Site build.
+                  delete-branch: true

@@ -15,10 +15,42 @@ permissions:
     packages: write
 
 jobs:
-    publish:
+    changes:
         if: >-
             github.event.workflow_run.conclusion == 'success' &&
             github.event.workflow_run.head_branch == 'main'
+        runs-on: ubuntu-latest
+        outputs:
+            changed: ${{ steps.filter.outputs.changed }}
+
+        steps:
+            - name: Check out tested commit
+              uses: actions/checkout@v4
+              with:
+                  ref: ${{ github.event.workflow_run.head_sha }}
+                  fetch-depth: 2
+
+            - name: Check for image changes
+              id: filter
+              env:
+                  COMMIT_SHA: ${{ github.event.workflow_run.head_sha }}
+              run: |
+                  if git diff --quiet "${COMMIT_SHA}^" "${COMMIT_SHA}" -- \
+                      Dockerfile \
+                      Makefile \
+                      go.mod \
+                      go.sum \
+                      cmd/ \
+                      internal/ \
+                      web/; then
+                      echo "changed=false" >> "$GITHUB_OUTPUT"
+                  else
+                      echo "changed=true" >> "$GITHUB_OUTPUT"
+                  fi
+
+    publish:
+        needs: changes
+        if: needs.changes.outputs.changed == 'true'
         runs-on: ubuntu-latest
 
         steps:
