@@ -4,9 +4,11 @@ import (
 	"context"
 	"fmt"
 	"sort"
+	"strconv"
 	"strings"
 	"time"
 
+	"golang.org/x/net/html"
 	"resty.dev/v3"
 )
 
@@ -59,16 +61,6 @@ type graphqlResponse struct {
 	Data struct {
 		User struct {
 			Contributions struct {
-				Calendar struct {
-					Total int `json:"totalContributions"`
-					Weeks []struct {
-						Days []struct {
-							Date  string `json:"date"`
-							Count int    `json:"contributionCount"`
-							Level string `json:"contributionLevel"`
-						} `json:"contributionDays"`
-					} `json:"weeks"`
-				} `json:"contributionCalendar"`
 				PullRequests struct {
 					Nodes []struct {
 						OccurredAt  string `json:"occurredAt"`
@@ -159,23 +151,14 @@ func (c *Client) RecentRepositories(ctx context.Context, perPage, initialFetch i
 }
 
 func (c *Client) Activity(ctx context.Context) (Activity, error) {
-	if c.token == "" {
-		return Activity{}, fmt.Errorf("GitHub GraphQL token is not configured")
+	calendar, err := c.contributionCalendar(ctx)
+	if err != nil {
+		return Activity{}, err
 	}
 
 	query := `query($login: String!, $from: DateTime!, $to: DateTime!) {
   user(login: $login) {
     contributionsCollection(from: $from, to: $to) {
-      contributionCalendar {
-        totalContributions
-        weeks {
-          contributionDays {
-            date
-            contributionCount
-            contributionLevel
-          }
-        }
-      }
       pullRequestContributions(first: 10) {
         nodes {
           occurredAt
@@ -219,13 +202,6 @@ func (c *Client) Activity(ctx context.Context) (Activity, error) {
 		return Activity{}, fmt.Errorf("GitHub GraphQL error: %s", result.Errors[0].Message)
 	}
 
-	calendar := result.Data.User.Contributions.Calendar
-	days := make([]ActivityDay, 0, 370)
-	for _, week := range calendar.Weeks {
-		for _, day := range week.Days {
-			days = append(days, ActivityDay{Date: day.Date, Count: day.Count, Level: contributionLevel(day.Level)})
-		}
-	}
 	pullRequests := make([]PullRequest, 0, len(result.Data.User.Contributions.PullRequests.Nodes))
 	for _, contribution := range result.Data.User.Contributions.PullRequests.Nodes {
 		if contribution.PullRequest.Repository.IsPrivate {
@@ -238,25 +214,151 @@ func (c *Client) Activity(ctx context.Context) (Activity, error) {
 			OccurredAt: contribution.OccurredAt,
 		})
 	}
-	if len(days) == 0 {
-		return Activity{}, fmt.Errorf("GitHub GraphQL contribution calendar contained no days")
-	}
-	return Activity{Total: calendar.Total, Days: days, PullRequests: pullRequests}, nil
+	return Activity{Total: calendar.Total, Days: calendar.Days, PullRequests: pullRequests}, nil
 }
 
-func contributionLevel(level string) int {
-	switch level {
-	case "FIRST_QUARTILE":
-		return 1
-	case "SECOND_QUARTILE":
-		return 2
-	case "THIRD_QUARTILE":
-		return 3
-	case "FOURTH_QUARTILE":
-		return 4
-	default:
+func (c *Client) contributionCalendar(ctx context.Context) (Activity, error) {
+	response, err := c.client.R().
+		SetContext(ctx).
+		SetHeader("Accept", "text/html").
+		SetHeader("User-Agent", "andrearcaina-site/1.0").
+		Get("https://github.com/users/" + c.username + "/contributions")
+	if err != nil {
+		return Activity{}, err
+	}
+	if response.StatusCode() >= 400 {
+		return Activity{}, fmt.Errorf("GitHub contributions page returned status %d", response.StatusCode())
+	}
+
+	document, err := html.Parse(strings.NewReader(response.String()))
+	if err != nil {
+		return Activity{}, err
+	}
+	return parseContributionCalendar(document)
+}
+
+func parseContributionCalendar(document *html.Node) (Activity, error) {
+	tooltips := make(map[string]string)
+	var collectTooltips func(*html.Node)
+	collectTooltips = func(node *html.Node) {
+		if node.Type == html.ElementNode && node.Data == "tool-tip" {
+			if target, ok := attribute(node, "for"); ok {
+				tooltips[target] = strings.TrimSpace(textContent(node))
+			}
+		}
+		for child := node.FirstChild; child != nil; child = child.NextSibling {
+			collectTooltips(child)
+		}
+	}
+	collectTooltips(document)
+
+	activity := Activity{Days: make([]ActivityDay, 0, 370)}
+	var collectDays func(*html.Node)
+	collectDays = func(node *html.Node) {
+		if node.Type == html.ElementNode && node.Data == "td" && hasClass(node, "ContributionCalendar-day") {
+			date, dateOK := attribute(node, "data-date")
+			levelText, levelOK := attribute(node, "data-level")
+			cellID, cellIDOK := attribute(node, "id")
+			if dateOK && levelOK && cellIDOK {
+				level, levelErr := strconv.Atoi(levelText)
+				count := contributionCount(tooltips[cellID])
+				if levelErr == nil {
+					activity.Days = append(activity.Days, ActivityDay{Date: date, Count: count, Level: level})
+					activity.Total += count
+				}
+			}
+		}
+		for child := node.FirstChild; child != nil; child = child.NextSibling {
+			collectDays(child)
+		}
+	}
+	collectDays(document)
+	if len(activity.Days) == 0 {
+		return Activity{}, fmt.Errorf("GitHub contributions page contained no calendar days")
+	}
+	sort.Slice(activity.Days, func(i, j int) bool {
+		return activity.Days[i].Date < activity.Days[j].Date
+	})
+
+	if total, ok := contributionHeaderTotal(document); ok {
+		activity.Total = total
+	}
+
+	return activity, nil
+}
+
+func contributionHeaderTotal(document *html.Node) (int, bool) {
+	var total int
+	var found bool
+	var visit func(*html.Node)
+	visit = func(node *html.Node) {
+		if found {
+			return
+		}
+		if node.Type == html.ElementNode && node.Data == "h2" {
+			if id, ok := attribute(node, "id"); ok && id == "js-contribution-activity-description" {
+				fields := strings.Fields(textContent(node))
+				if len(fields) > 0 {
+					parsed, err := strconv.Atoi(strings.ReplaceAll(fields[0], ",", ""))
+					if err == nil {
+						returnValue := parsed
+						total = returnValue
+						found = true
+					}
+				}
+			}
+		}
+		for child := node.FirstChild; child != nil; child = child.NextSibling {
+			visit(child)
+		}
+	}
+	visit(document)
+	return total, found
+}
+
+func attribute(node *html.Node, name string) (string, bool) {
+	for _, attr := range node.Attr {
+		if attr.Key == name {
+			return attr.Val, true
+		}
+	}
+	return "", false
+}
+
+func hasClass(node *html.Node, className string) bool {
+	classes, ok := attribute(node, "class")
+	if !ok {
+		return false
+	}
+	for _, class := range strings.Fields(classes) {
+		if class == className {
+			return true
+		}
+	}
+	return false
+}
+
+func textContent(node *html.Node) string {
+	if node.Type == html.TextNode {
+		return node.Data
+	}
+	var builder strings.Builder
+	for child := node.FirstChild; child != nil; child = child.NextSibling {
+		builder.WriteString(textContent(child))
+	}
+	return builder.String()
+}
+
+func contributionCount(label string) int {
+	fields := strings.Fields(label)
+	if len(fields) == 0 || fields[0] == "No" {
 		return 0
 	}
+	count, err := strconv.Atoi(fields[0])
+	if err != nil {
+		return 0
+	}
+	return count
 }
 
 func priorityIndex(name string, priorities []string) int {

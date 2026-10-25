@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"crypto/rand"
 	"encoding/base64"
 	"encoding/json"
@@ -37,17 +38,19 @@ type Handler struct {
 }
 
 func NewHandler(cfg *config.Config, appLogger *logger.Logger) *Handler {
-	return &Handler{
+	handler := &Handler{
 		config:         cfg,
 		logger:         appLogger,
 		client:         &http.Client{Timeout: 10 * time.Second},
 		email:          email.NewClient(cfg.ResendAPIKey),
 		github:         github.NewClient("andrearcaina", cfg.GitHubToken),
-		hevy:           hevy.NewClient(cfg.HevyUsername, cfg.HevyAccessToken, cfg.HevyRefreshToken),
+		hevy:           hevy.NewClient(cfg.HevyUsername, cfg.HevyEmail, cfg.HevyPassword, cfg.HevyHeadless, cfg.HevyRefreshInterval),
 		contactLimiter: ratelimit.New(5, time.Minute),
 		githubLimiter:  ratelimit.New(30, time.Minute),
 		spotifyLimiter: ratelimit.New(30, time.Minute),
 	}
+	handler.hevy.Start(context.Background())
+	return handler
 }
 
 func (h *Handler) ServeRoutes() chi.Router {

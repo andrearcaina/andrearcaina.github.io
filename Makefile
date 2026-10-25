@@ -1,4 +1,4 @@
-.PHONY: build build-go install-web build-web clean-web run dev fmt fmt-check tidy test vet check clean
+.PHONY: build build-go install-web build-web playwright clean-web run dev fmt fmt-check tidy test vet check clean
 
 build: build-web build-go
 
@@ -8,11 +8,14 @@ install-web:
 build-web: clean-web
 	npm --prefix web run build
 
+playwright:
+	go run github.com/mxschmitt/playwright-go/cmd/playwright@v0.6201.1 install chromium
+
 build-go:
 	mkdir -p bin
 	go build -o bin/site ./cmd/server
 
-run: build
+run: build playwright
 	./bin/site
 
 fmt:

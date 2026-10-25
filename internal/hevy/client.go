@@ -4,28 +4,24 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"net/http"
 	"sort"
-	"strconv"
+	"strings"
 	"sync"
 	"time"
 
-	"resty.dev/v3"
+	"github.com/jellydator/ttlcache/v3"
+	"github.com/mxschmitt/playwright-go"
 )
 
-const (
-	apiURL     = "https://api.hevyapp.com"
-	hevyAPIKey = "shelobs_hevy_web"
-	pageSize   = 5
-	maxPages   = 20
-)
+const summaryCacheKey = "current-month"
 
 type Client struct {
-	client       *resty.Client
-	username     string
-	refreshToken string
-	accessToken  string
-	tokenMu      sync.Mutex
+	username, email, password string
+	headless                  bool
+	refreshInterval           time.Duration
+	cache                     *ttlcache.Cache[string, WorkoutSummary]
+	refreshMu                 sync.Mutex
+	lastErr                   error
 }
 
 type WorkoutSummary struct {
@@ -68,8 +64,7 @@ type exercise struct {
 }
 
 type set struct {
-	Type string            `json:"indicator"`
-	PRs  []json.RawMessage `json:"prs"`
+	PRs []json.RawMessage `json:"prs"`
 }
 
 type flexibleTime struct {
@@ -78,11 +73,10 @@ type flexibleTime struct {
 
 func (t *flexibleTime) UnmarshalJSON(value []byte) error {
 	var number float64
-	if err := json.Unmarshal(value, &number); err == nil {
+	if json.Unmarshal(value, &number) == nil {
 		t.Time = time.Unix(int64(number), 0)
 		return nil
 	}
-
 	var text string
 	if err := json.Unmarshal(value, &text); err != nil {
 		return err
@@ -95,202 +89,242 @@ func (t *flexibleTime) UnmarshalJSON(value []byte) error {
 	return nil
 }
 
-func NewClient(username, accessToken, refreshToken string) *Client {
+func NewClient(username, email, password string, headless bool, refreshInterval time.Duration) *Client {
+	if refreshInterval <= 0 {
+		refreshInterval = 30 * time.Minute
+	}
 	return &Client{
-		client:       resty.New().SetTimeout(10 * time.Second),
-		username:     username,
-		accessToken:  accessToken,
-		refreshToken: refreshToken,
+		username:        username,
+		email:           email,
+		password:        password,
+		headless:        headless,
+		refreshInterval: refreshInterval,
+		cache: ttlcache.New[string, WorkoutSummary](
+			ttlcache.WithTTL[string, WorkoutSummary](refreshInterval),
+			ttlcache.WithCapacity[string, WorkoutSummary](1),
+		),
 	}
 }
 
-func (c *Client) CurrentMonthSummary(ctx context.Context, now time.Time) (WorkoutSummary, error) {
-	if c.refreshToken == "" {
-		return WorkoutSummary{}, fmt.Errorf("Hevy refresh token is not configured")
-	}
-	if c.username == "" {
-		return WorkoutSummary{}, fmt.Errorf("Hevy username is not configured")
+func (c *Client) Start(ctx context.Context) {
+	go func() {
+		c.refresh(ctx)
+		ticker := time.NewTicker(c.refreshInterval)
+		defer ticker.Stop()
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case <-ticker.C:
+				c.refresh(ctx)
+			}
+		}
+	}()
+}
+
+func (c *Client) CurrentMonthSummary(ctx context.Context, _ time.Time) (WorkoutSummary, error) {
+	if item := c.cache.Get(summaryCacheKey); item != nil {
+		return item.Value(), nil
 	}
 
-	location := now.Location()
-	startOfMonth := time.Date(now.Year(), now.Month(), 1, 0, 0, 0, 0, location)
+	c.refresh(ctx)
+	if item := c.cache.Get(summaryCacheKey); item != nil {
+		return item.Value(), nil
+	}
+
+	c.refreshMu.Lock()
+	lastErr := c.lastErr
+	c.refreshMu.Unlock()
+	if lastErr != nil {
+		return WorkoutSummary{}, fmt.Errorf("Hevy summary refresh failed: %w", lastErr)
+	}
+
+	return WorkoutSummary{}, fmt.Errorf("Hevy summary is not ready yet")
+}
+
+func (c *Client) refresh(ctx context.Context) {
+	c.refreshMu.Lock()
+	defer c.refreshMu.Unlock()
+
+	if c.email == "" || c.password == "" {
+		c.lastErr = fmt.Errorf("HEVY_EMAIL and HEVY_PASSWORD are not configured")
+		return
+	}
+
+	summary, err := c.scrape(ctx, time.Now())
+	if err != nil {
+		c.lastErr = err
+		return
+	}
+
+	c.lastErr = nil
+	c.cache.Set(summaryCacheKey, summary, ttlcache.DefaultTTL)
+}
+
+func (c *Client) scrape(ctx context.Context, now time.Time) (WorkoutSummary, error) {
+	pw, err := playwright.Run()
+	if err != nil {
+		return WorkoutSummary{}, err
+	}
+	defer pw.Stop()
+	browser, err := pw.Chromium.Launch(playwright.BrowserTypeLaunchOptions{Headless: &c.headless})
+	if err != nil {
+		return WorkoutSummary{}, err
+	}
+	defer browser.Close()
+	page, err := browser.NewPage()
+	if err != nil {
+		return WorkoutSummary{}, err
+	}
+	if _, err = page.Goto("https://hevy.com/login"); err != nil {
+		return WorkoutSummary{}, err
+	}
+	page.WaitForTimeout(2000)
+	if err = page.GetByText("Or with email").Click(); err != nil {
+		return WorkoutSummary{}, fmt.Errorf("could not open Hevy email login at %s (%s): %w", page.URL(), pageState(page), err)
+	}
+	page.WaitForTimeout(500)
+	emailInput := page.Locator("input:not([type]), input[type='email'], input[name='email'], input[autocomplete='email'], input[placeholder*='email' i], input[type='text']").First()
+	if err = emailInput.Fill(c.email); err != nil {
+		return WorkoutSummary{}, fmt.Errorf("could not find Hevy email input at %s (%s): %w", page.URL(), pageState(page), err)
+	}
+	if err = page.Locator("input[type='password'], input[name='password'], input[autocomplete='current-password']").First().Fill(c.password); err != nil {
+		return WorkoutSummary{}, fmt.Errorf("could not find Hevy password input at %s (%s): %w", page.URL(), pageState(page), err)
+	}
+	if err = clickLoginButton(page); err != nil {
+		return WorkoutSummary{}, fmt.Errorf("could not submit Hevy login at %s (%s): %w", page.URL(), pageState(page), err)
+	}
+
+	page.WaitForTimeout(1500)
+	bodyCh := make(chan []byte, 1)
+	page.OnResponse(func(response playwright.Response) {
+		if strings.Contains(response.URL(), "/user_workouts_paged") && response.Status() == 200 {
+			if body, bodyErr := response.Body(); bodyErr == nil {
+				select {
+				case bodyCh <- body:
+				default:
+				}
+			}
+		}
+	})
+	if _, err = page.Goto("https://hevy.com/profile"); err != nil {
+		return WorkoutSummary{}, err
+	}
+
+	var body []byte
+	select {
+	case body = <-bodyCh:
+	case <-ctx.Done():
+		return WorkoutSummary{}, ctx.Err()
+	case <-time.After(30 * time.Second):
+		return WorkoutSummary{}, fmt.Errorf("timed out waiting for Hevy workout data")
+	}
+	var data workoutPage
+	if err = json.Unmarshal(body, &data); err != nil {
+		return WorkoutSummary{}, err
+	}
+
+	return summarize(data.Workouts, now), nil
+}
+
+func clickLoginButton(page playwright.Page) error {
+	buttons, err := page.Locator("button").All()
+	if err != nil {
+		return err
+	}
+
+	for _, button := range buttons {
+		text, textErr := button.InnerText()
+		visible, visibleErr := button.IsVisible()
+		enabled, enabledErr := button.IsEnabled()
+		if textErr != nil || visibleErr != nil || enabledErr != nil || !visible || !enabled {
+			continue
+		}
+
+		label := strings.ToLower(strings.Join(strings.Fields(text), " "))
+		if label == "login" || label == "log in" {
+			return button.Click()
+		}
+	}
+
+	return fmt.Errorf("no enabled Login button found")
+}
+
+func pageState(page playwright.Page) string {
+	title, _ := page.Title()
+	body, _ := page.Locator("body").InnerText()
+	body = strings.Join(strings.Fields(body), " ")
+	if len(body) > 240 {
+		body = body[:240] + "..."
+	}
+
+	inputCount, _ := page.Locator("input").Count()
+	inputs := make([]string, 0, inputCount)
+	for index := 0; index < inputCount; index++ {
+		input := page.Locator("input").Nth(index)
+		inputType, _ := input.GetAttribute("type")
+		placeholder, _ := input.GetAttribute("placeholder")
+		name, _ := input.GetAttribute("name")
+		inputs = append(inputs, fmt.Sprintf("type=%q name=%q placeholder=%q", inputType, name, placeholder))
+	}
+
+	return fmt.Sprintf("title=%q body=%q inputs=%v", title, body, inputs)
+}
+
+func summarize(workouts []workout, now time.Time) WorkoutSummary {
+	startOfMonth := time.Date(now.Year(), now.Month(), 1, 0, 0, 0, 0, now.Location())
 	summary := WorkoutSummary{
 		Month:       startOfMonth.Format("January"),
-		Year:        startOfMonth.Year(),
-		MonthNumber: int(startOfMonth.Month()),
-		WorkoutDays: make([]int, 0),
+		Year:        now.Year(),
+		MonthNumber: int(now.Month()),
+		WorkoutDays: []int{},
 	}
-	workoutDays := make(map[int]struct{})
+	days := map[int]struct{}{}
 
-	for pageNumber := 0; pageNumber < maxPages; pageNumber++ {
-		offset := pageNumber * pageSize
-		page, err := c.workoutsPage(ctx, offset)
-		if err != nil {
-			return WorkoutSummary{}, err
+	for _, workout := range workouts {
+		start := workout.StartTime.In(now.Location())
+		if start.Before(startOfMonth) || start.After(now) {
+			continue
 		}
-		if len(page.Workouts) == 0 {
-			break
+		summary.Workouts++
+		days[start.Day()] = struct{}{}
+		if summary.RecentWorkout == nil {
+			summary.RecentWorkout = preview(workout, now.Location())
+		}
+		if !workout.EndTime.IsZero() && workout.EndTime.After(start) {
+			summary.DurationSeconds += int(workout.EndTime.Sub(start).Seconds())
 		}
 
-		stop := false
-		for _, workout := range page.Workouts {
-			start := workout.StartTime.In(location)
-			if start.Before(startOfMonth) {
-				stop = true
-				continue
-			}
-			if start.After(now) {
-				continue
-			}
-
-			summary.Workouts++
-			workoutDays[start.Day()] = struct{}{}
-			if summary.RecentWorkout == nil {
-				summary.RecentWorkout = workout.preview(location)
-			}
-			if !workout.EndTime.IsZero() && workout.EndTime.After(start) {
-				summary.DurationSeconds += int(workout.EndTime.Sub(start).Seconds())
-			}
-			summary.VolumeLbs += workout.EstimatedVolumeKg * 2.2046226218
-		}
-		if stop || len(page.Workouts) < pageSize {
-			break
-		}
+		summary.VolumeLbs += workout.EstimatedVolumeKg * 2.2046226218
 	}
-	for day := range workoutDays {
+
+	for day := range days {
 		summary.WorkoutDays = append(summary.WorkoutDays, day)
 	}
 	sort.Ints(summary.WorkoutDays)
-
-	return summary, nil
+	return summary
 }
 
-func (workout workout) preview(location *time.Location) *WorkoutPreview {
-	workoutID := workout.ShortID
-	if workoutID == "" {
-		workoutID = workout.ID
+func preview(workout workout, location *time.Location) *WorkoutPreview {
+	id := workout.ShortID
+	if id == "" {
+		id = workout.ID
 	}
-	preview := &WorkoutPreview{
+	result := &WorkoutPreview{
 		Date:      workout.StartTime.In(location).Format("Jan 2, 2006"),
 		Title:     workout.Name,
-		URL:       "https://hevy.com/workout/" + workoutID,
+		URL:       "https://hevy.com/workout/" + id,
 		VolumeLbs: workout.EstimatedVolumeKg * 2.2046226218,
 	}
 	if !workout.EndTime.IsZero() && workout.EndTime.After(workout.StartTime.Time) {
-		preview.DurationSeconds = int(workout.EndTime.Sub(workout.StartTime.Time).Seconds())
+		result.DurationSeconds = int(workout.EndTime.Sub(workout.StartTime.Time).Seconds())
 	}
 	for _, exercise := range workout.Exercises {
-		preview.Sets += len(exercise.Sets)
+		result.Sets += len(exercise.Sets)
 		for _, set := range exercise.Sets {
-			preview.Records += len(set.PRs)
+			result.Records += len(set.PRs)
 		}
 	}
-	return preview
-}
 
-func (c *Client) workoutsPage(ctx context.Context, offset int) (workoutPage, error) {
-	accessToken, err := c.ensureAccessToken(ctx)
-	if err != nil {
-		return workoutPage{}, err
-	}
-
-	page, response, err := c.requestWorkoutsPage(ctx, offset, accessToken)
-	if err != nil {
-		return workoutPage{}, err
-	}
-	if response.StatusCode() == http.StatusUnauthorized {
-		c.tokenMu.Lock()
-		c.accessToken = ""
-		c.tokenMu.Unlock()
-		accessToken, err = c.refreshAccessToken(ctx)
-		if err != nil {
-			return workoutPage{}, err
-		}
-		page, response, err = c.requestWorkoutsPage(ctx, offset, accessToken)
-		if err != nil {
-			return workoutPage{}, err
-		}
-	}
-	if response.StatusCode() == http.StatusNotModified {
-		return page, nil
-	}
-	if response.StatusCode() >= http.StatusBadRequest {
-		return workoutPage{}, fmt.Errorf("Hevy returned status %d: %s", response.StatusCode(), response.String())
-	}
-	return page, nil
-}
-
-func (c *Client) requestWorkoutsPage(ctx context.Context, offset int, accessToken string) (workoutPage, *resty.Response, error) {
-	var page workoutPage
-	request := c.client.R()
-	if accessToken != "" {
-		request.SetHeader("Authorization", "Bearer "+accessToken).SetHeader("auth-token", accessToken)
-	}
-	response, err := request.
-		SetContext(ctx).
-		SetHeader("Accept", "application/json").
-		SetHeader("Hevy-Platform", "web").
-		SetHeader("x-api-key", hevyAPIKey).
-		SetHeader("x-client-time", strconv.FormatInt(time.Now().Unix(), 10)).
-		SetHeader("Authorization", "Bearer "+c.accessToken).
-		SetQueryParams(map[string]string{
-			"username": c.username,
-			"limit":    strconv.Itoa(pageSize),
-			"offset":   strconv.Itoa(offset),
-		}).
-		SetResult(&page).
-		Get(apiURL + "/user_workouts_paged")
-	if err != nil {
-		return workoutPage{}, response, err
-	}
-	return page, response, nil
-}
-
-type tokenResponse struct {
-	AccessToken  string `json:"access_token"`
-	RefreshToken string `json:"refresh_token"`
-}
-
-func (c *Client) ensureAccessToken(ctx context.Context) (string, error) {
-	c.tokenMu.Lock()
-	accessToken := c.accessToken
-	c.tokenMu.Unlock()
-	if accessToken != "" {
-		return accessToken, nil
-	}
-	return c.refreshAccessToken(ctx)
-}
-
-func (c *Client) refreshAccessToken(ctx context.Context) (string, error) {
-	c.tokenMu.Lock()
-	defer c.tokenMu.Unlock()
-	if c.accessToken != "" {
-		return c.accessToken, nil
-	}
-
-	var tokens tokenResponse
-	request := c.client.R()
-	if c.accessToken != "" {
-		request.SetHeader("Authorization", "Bearer "+c.accessToken)
-	}
-	response, err := request.
-		SetContext(ctx).
-		SetHeader("Accept", "application/json").
-		SetHeader("Hevy-Platform", "web").
-		SetHeader("x-api-key", hevyAPIKey).
-		SetHeader("x-client-time", strconv.FormatInt(time.Now().Unix(), 10)).
-		SetBody(map[string]string{"refresh_token": c.refreshToken}).
-		SetResult(&tokens).
-		Post(apiURL + "/auth/refresh_token")
-	if err != nil {
-		return "", err
-	}
-	if response.StatusCode() >= http.StatusBadRequest || tokens.AccessToken == "" {
-		return "", fmt.Errorf("Hevy token refresh returned status %d: %s", response.StatusCode(), response.String())
-	}
-	c.accessToken = tokens.AccessToken
-	if tokens.RefreshToken != "" {
-		c.refreshToken = tokens.RefreshToken
-	}
-	return c.accessToken, nil
+	return result
 }
