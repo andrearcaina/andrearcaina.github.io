@@ -124,7 +124,7 @@ export function SpotifyNowPlaying() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -20 }}
-        className="relative h-24 overflow-hidden rounded-lg border border-[#1DB954]/20 bg-gradient-to-br from-[#1DB954]/20 to-card p-2 transition-all duration-300 hover:scale-[1.02] hover:shadow-md dark:from-[#1DB954]/30 dark:to-background dark:bg-transparent"
+        className="relative min-w-0 h-24 overflow-hidden rounded-lg border border-[#1DB954]/20 bg-gradient-to-br from-[#1DB954]/20 to-card p-2 transition-all duration-300 hover:scale-[1.02] hover:shadow-md dark:from-[#1DB954]/30 dark:to-background dark:bg-transparent"
       >
         <div className="mb-1 flex items-center gap-2">
           <div className="flex items-center gap-2">

@@ -60,9 +60,9 @@ spec:
                                 name: {{ .Values.secret.name }}
                                 key: HEVY_PASSWORD
                       - name: HEVY_HEADLESS
-                        value: "true"
+                        value: {{ .Values.env.hevyHeadless | quote }}
                       - name: HEVY_REFRESH_INTERVAL
-                        value: "30m"
+                        value: {{ .Values.env.hevyRefreshInterval | quote }}
                       - name: SPOTIFY_REDIRECT_URI
                         value: {{ .Values.env.spotifyRedirectURI | quote }}
                       - name: RESEND_API_KEY

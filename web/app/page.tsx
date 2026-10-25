@@ -132,12 +132,12 @@ export default async function HomePage() {
         <Separator />
 
         <FadeInUp delay={0.6}>
-          <section id="activity" className="space-y-4">
+          <section id="activity" className="min-w-0 space-y-4">
             <h2 className="text-lg font-medium">
               recent <TextShimmer>activity</TextShimmer> in my life
             </h2>
-            <div className="grid gap-3 md:grid-cols-2 md:items-stretch">
-              <div className="space-y-3">
+            <div className="grid min-w-0 gap-3 md:grid-cols-2 md:items-stretch">
+              <div className="min-w-0 space-y-3">
                 <GitHubActivity />
                 <SpotifyNowPlaying />
               </div>

@@ -67,12 +67,12 @@ export function GitHubActivity() {
         </span>
       </div>
       <div ref={calendarRef} className="overflow-x-auto pb-1">
-        <div className="grid min-w-[390px] grid-flow-col grid-rows-7 gap-[3px] sm:min-w-[430px]">
+        <div className="grid min-w-[360px] grid-flow-col grid-rows-7 gap-[2px] sm:min-w-[430px] sm:gap-[3px]">
           {activity.days.slice(-371).map((day) => (
             <span
               key={day.date}
               title={`${day.count} contribution${day.count === 1 ? "" : "s"} on ${day.date}`}
-              className={`h-2 w-2 rounded-[2px] activity-level-${day.level} sm:h-2.5 sm:w-2.5`}
+              className={`h-[5px] w-[5px] rounded-[1px] activity-level-${day.level} sm:h-2.5 sm:w-2.5 sm:rounded-[2px]`}
             />
           ))}
         </div>
@@ -82,7 +82,7 @@ export function GitHubActivity() {
         {[0, 1, 2, 3, 4].map((level) => (
           <span
             key={level}
-            className={`h-2 w-2 rounded-[2px] activity-level-${level} sm:h-2.5 sm:w-2.5`}
+            className={`h-[5px] w-[5px] rounded-[1px] activity-level-${level} sm:h-2.5 sm:w-2.5 sm:rounded-[2px]`}
           />
         ))}
         <span>More</span>
