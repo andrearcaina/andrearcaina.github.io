@@ -15,11 +15,11 @@ env:
 
 resources:
     requests:
-        cpu: 10m
-        memory: 32Mi
-    limits:
-        cpu: 200m
+        cpu: 250m
         memory: 256Mi
+    limits:
+        cpu: 1
+        memory: 1Gi
 
 ingress:
     enabled: true
