@@ -3,25 +3,25 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: oklch(0.99 0 0);
-  --foreground: oklch(0.15 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.15 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.15 0 0);
-  --primary: oklch(0.52 0.14 225);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.96 0 0);
-  --secondary-foreground: oklch(0.15 0 0);
-  --muted: oklch(0.96 0 0);
-  --muted-foreground: oklch(0.35 0 0);
-  --accent: oklch(0.96 0 0);
-  --accent-foreground: oklch(0.15 0 0);
+  --background: #edf2f6;
+  --foreground: #0b1626;
+  --card: #ffffff;
+  --card-foreground: #0b1626;
+  --popover: #ffffff;
+  --popover-foreground: #0b1626;
+  --primary: #0369a1;
+  --primary-foreground: #ffffff;
+  --secondary: #e5edf4;
+  --secondary-foreground: #0b1626;
+  --muted: #e5edf4;
+  --muted-foreground: #334155;
+  --accent: #e5edf4;
+  --accent-foreground: #0b1626;
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.88 0 0);
-  --input: oklch(0.88 0 0);
-  --ring: oklch(0.52 0.14 225);
+  --border: #d3dde6;
+  --input: #d3dde6;
+  --ring: #0369a1;
   --chart-1: oklch(0.463 0.132 240);
   --chart-2: oklch(0.55 0.12 220);
   --chart-3: oklch(0.65 0.15 200);
@@ -94,18 +94,34 @@
 }
 
 .activity-level-0 {
-  background-color: color-mix(in oklab, var(--muted) 70%, transparent);
+  background-color: #e8eef4;
 }
 .activity-level-1 {
-  background-color: color-mix(in oklab, var(--primary) 25%, var(--muted));
+  background-color: #c8e3f1;
 }
 .activity-level-2 {
-  background-color: color-mix(in oklab, var(--primary) 45%, var(--muted));
+  background-color: #82c5e5;
 }
 .activity-level-3 {
-  background-color: color-mix(in oklab, var(--primary) 68%, var(--muted));
+  background-color: #299aca;
 }
 .activity-level-4 {
+  background-color: #0369a1;
+}
+
+.dark .activity-level-0 {
+  background-color: color-mix(in oklab, var(--muted) 70%, transparent);
+}
+.dark .activity-level-1 {
+  background-color: color-mix(in oklab, var(--primary) 25%, var(--muted));
+}
+.dark .activity-level-2 {
+  background-color: color-mix(in oklab, var(--primary) 45%, var(--muted));
+}
+.dark .activity-level-3 {
+  background-color: color-mix(in oklab, var(--primary) 68%, var(--muted));
+}
+.dark .activity-level-4 {
   background-color: var(--primary);
 }
 
@@ -167,6 +183,16 @@
 
 .button-hover-fix:hover {
   background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Keep the light theme cool and let cards sit visibly above the page surface. */
+:root:not(.dark) .button-hover-fix {
+  background-color: var(--secondary);
+  border-color: var(--border);
+}
+
+:root:not(.dark) .border-border.bg-card {
+  box-shadow: 0 1px 2px rgba(15, 30, 50, 0.04);
 }
 
 /* Theme transition animation */
