@@ -6,6 +6,9 @@ secret:
     name: andrearcaina-site-secrets
 
 env:
+    apiHost: api.andrearcaina.ca
+    siteHost: andrearcaina.ca
+    allowedOrigins: https://andrearcaina.ca,https://www.andrearcaina.ca,https://andrearcaina.vercel.app,http://localhost:3000,http://localhost:8080
     hevyUsername: andre331
 
 resources:

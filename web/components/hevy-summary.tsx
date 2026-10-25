@@ -47,7 +47,7 @@ export function HevySummary() {
   }, []);
 
   return (
-    <div className="flex min-h-[220px] h-full flex-col rounded-lg border border-border bg-card p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-md">
+    <div className="flex min-h-[220px] flex-col rounded-lg border border-border bg-card p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-md md:h-full">
       <div className="flex items-start justify-between gap-4">
         <span className="text-lg font-semibold">
           {summary ? `${summary.month} ${summary.year}` : "Hevy"}

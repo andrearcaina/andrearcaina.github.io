@@ -49,16 +49,20 @@ spec:
                                 key: GITHUB_TOKEN
                       - name: HEVY_USERNAME
                         value: {{ .Values.env.hevyUsername | quote }}
-                      - name: HEVY_ACCESS_TOKEN
+                      - name: HEVY_EMAIL
                         valueFrom:
                             secretKeyRef:
                                 name: {{ .Values.secret.name }}
-                                key: HEVY_ACCESS_TOKEN
-                      - name: HEVY_REFRESH_TOKEN
+                                key: HEVY_EMAIL
+                      - name: HEVY_PASSWORD
                         valueFrom:
                             secretKeyRef:
                                 name: {{ .Values.secret.name }}
-                                key: HEVY_REFRESH_TOKEN
+                                key: HEVY_PASSWORD
+                      - name: HEVY_HEADLESS
+                        value: "true"
+                      - name: HEVY_REFRESH_INTERVAL
+                        value: "30m"
                       - name: SPOTIFY_REDIRECT_URI
                         value: {{ .Values.env.spotifyRedirectURI | quote }}
                       - name: RESEND_API_KEY
