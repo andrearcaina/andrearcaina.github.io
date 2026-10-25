@@ -19,7 +19,7 @@ export function ExperienceTimeline({
         {items.map((exp, i) => (
           <Card
             key={i}
-            className="border border-border bg-card transition-all duration-300 hover:shadow-md hover:scale-[1.01] hover:border-muted-foreground"
+            className="border border-border bg-card transition-all duration-300 hover:shadow-md hover:scale-[1.01]"
           >
             <CardHeader className="pb-2">
               <CardTitle className="flex flex-wrap items-baseline gap-x-2 text-base">

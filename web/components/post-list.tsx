@@ -14,7 +14,7 @@ export function PostList({ posts }: { posts: Post[] }) {
         <article key={p.slug} className="space-y-1">
           <h3 className="text-base font-semibold">
             <Link
-              className="underline underline-offset-4 transition-all duration-300 hover:shadow-md hover:scale-[1.02] hover:border-muted-foreground hover:text-foreground text-muted-foreground"
+              className="underline underline-offset-4 transition-all duration-300 hover:shadow-md hover:scale-[1.02] hover:text-foreground text-muted-foreground"
               href={`/blog/${p.slug}`}
             >
               {p.meta.title}

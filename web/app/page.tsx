@@ -183,7 +183,7 @@ export default async function HomePage() {
               </h2>
               <Link
                 href="/projects"
-                className="text-sm text-muted-foreground underline underline-offset-4 transition-all duration-300 hover:shadow-md hover:scale-[1.02] hover:border-muted-foreground hover:text-foreground"
+                className="text-sm text-muted-foreground underline underline-offset-4 transition-all duration-300 hover:shadow-md hover:scale-[1.02] hover:text-foreground"
               >
                 all projects →
               </Link>
@@ -198,11 +198,11 @@ export default async function HomePage() {
           <section>
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-lg font-medium">
-                some random <TextShimmer>thoughts</TextShimmer> on stuff
+                some <TextShimmer>thoughts</TextShimmer> on random stuff
               </h2>
               <Link
                 href="/blog"
-                className="text-sm text-muted-foreground underline underline-offset-4 transition-all duration-300 hover:shadow-md hover:scale-[1.02] hover:border-muted-foreground hover:text-foreground"
+                className="text-sm text-muted-foreground underline underline-offset-4 transition-all duration-300 hover:shadow-md hover:scale-[1.02] hover:text-foreground"
               >
                 all posts →
               </Link>

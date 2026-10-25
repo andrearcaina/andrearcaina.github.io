@@ -56,7 +56,7 @@ export function GitHubRepoCards({ limit = 10 }: { limit?: number }) {
       {repos.map((r) => (
         <Card
           key={r.id}
-          className="group border border-border bg-card transition-all duration-300 hover:shadow-md hover:scale-[1.02] hover:border-muted-foreground"
+          className="group border border-border bg-card transition-all duration-300 hover:shadow-md hover:scale-[1.02]"
         >
           <CardHeader className="pb-2">
             <CardTitle className="flex items-center gap-2 text-base">
