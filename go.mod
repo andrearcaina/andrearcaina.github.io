@@ -3,7 +3,7 @@ module github.com/andrearcaina/andrearcaina.github.io
 go 1.26.7
 
 require (
-	github.com/go-chi/chi/v5 v5.2.5
+	github.com/go-chi/chi/v5 v5.4.0
 	github.com/go-chi/httprate v0.16.0
 	github.com/jellydator/ttlcache/v3 v3.4.1
 	github.com/joho/godotenv v1.5.1
