@@ -5,6 +5,9 @@ nodeSelector:
 secret:
     name: andrearcaina-site-secrets
 
+env:
+    hevyUsername: andre331
+
 resources:
     requests:
         cpu: 10m

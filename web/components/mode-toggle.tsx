@@ -1,16 +1,16 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { FiSun, FiMoon } from 'react-icons/fi'
-import { Button } from "@/components/ui/button"
-import { useTheme } from "next-themes"
+import * as React from "react";
+import { FiSun, FiMoon } from "react-icons/fi";
+import { Button } from "@/components/ui/button";
+import { useTheme } from "next-themes";
 
 export function ModeToggle({ className = "" }: { className?: string }) {
-  const { theme, setTheme } = useTheme()
-  
+  const { theme, setTheme } = useTheme();
+
   const toggle = React.useCallback(() => {
-    setTheme(theme === "dark" ? "light" : "dark")
-  }, [theme, setTheme])
+    setTheme(theme === "dark" ? "light" : "dark");
+  }, [theme, setTheme]);
 
   return (
     <div className="relative isolate">
@@ -27,5 +27,5 @@ export function ModeToggle({ className = "" }: { className?: string }) {
         </div>
       </Button>
     </div>
-  )
+  );
 }

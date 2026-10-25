@@ -1,21 +1,26 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import type { ExperienceItem } from "@/data/me"
-import { cn } from "@/lib/utils"
-import { TextShimmer } from "@/components/motion-components"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import type { ExperienceItem } from "@/data/me";
+import { cn } from "@/lib/utils";
+import { TextShimmer } from "@/components/motion-components";
 
 export function ExperienceTimeline({
   items = [],
   className = "",
 }: {
-  items?: ExperienceItem[]
-  className?: string
+  items?: ExperienceItem[];
+  className?: string;
 }) {
   return (
     <section id="experience" className={cn("space-y-6", className)}>
-      <h2 className="text-lg font-medium">cool <TextShimmer>experiences</TextShimmer> i've gained</h2>
+      <h2 className="text-lg font-medium">
+        cool <TextShimmer>experiences</TextShimmer> i've gained
+      </h2>
       <div className="space-y-4">
         {items.map((exp, i) => (
-          <Card key={i} className="border border-border bg-card transition-all duration-300 hover:shadow-md hover:scale-[1.01] hover:border-muted-foreground">
+          <Card
+            key={i}
+            className="border border-border bg-card transition-all duration-300 hover:shadow-md hover:scale-[1.01] hover:border-muted-foreground"
+          >
             <CardHeader className="pb-2">
               <CardTitle className="flex flex-wrap items-baseline gap-x-2 text-base">
                 <span className="font-semibold">{exp.role}</span>
@@ -38,5 +43,5 @@ export function ExperienceTimeline({
         ))}
       </div>
     </section>
-  )
+  );
 }

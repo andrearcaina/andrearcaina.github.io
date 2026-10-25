@@ -42,6 +42,23 @@ spec:
                         value: {{ .Values.env.siteHost | quote }}
                       - name: ALLOWED_ORIGINS
                         value: {{ .Values.env.allowedOrigins | quote }}
+                      - name: GITHUB_TOKEN
+                        valueFrom:
+                            secretKeyRef:
+                                name: {{ .Values.secret.name }}
+                                key: GITHUB_TOKEN
+                      - name: HEVY_USERNAME
+                        value: {{ .Values.env.hevyUsername | quote }}
+                      - name: HEVY_ACCESS_TOKEN
+                        valueFrom:
+                            secretKeyRef:
+                                name: {{ .Values.secret.name }}
+                                key: HEVY_ACCESS_TOKEN
+                      - name: HEVY_REFRESH_TOKEN
+                        valueFrom:
+                            secretKeyRef:
+                                name: {{ .Values.secret.name }}
+                                key: HEVY_REFRESH_TOKEN
                       - name: SPOTIFY_REDIRECT_URI
                         value: {{ .Values.env.spotifyRedirectURI | quote }}
                       - name: RESEND_API_KEY

@@ -17,6 +17,7 @@ import (
 	"github.com/andrearcaina/andrearcaina.github.io/internal/config"
 	"github.com/andrearcaina/andrearcaina.github.io/internal/email"
 	"github.com/andrearcaina/andrearcaina.github.io/internal/github"
+	"github.com/andrearcaina/andrearcaina.github.io/internal/hevy"
 	"github.com/andrearcaina/andrearcaina.github.io/internal/logger"
 	"github.com/andrearcaina/andrearcaina.github.io/internal/ratelimit"
 	"github.com/go-chi/chi/v5"
@@ -28,6 +29,7 @@ type Handler struct {
 	client         *http.Client
 	email          *email.Client
 	github         *github.Client
+	hevy           *hevy.Client
 	contactLimiter *ratelimit.Limiter
 	githubLimiter  *ratelimit.Limiter
 	spotifyLimiter *ratelimit.Limiter
@@ -40,7 +42,8 @@ func NewHandler(cfg *config.Config, appLogger *logger.Logger) *Handler {
 		logger:         appLogger,
 		client:         &http.Client{Timeout: 10 * time.Second},
 		email:          email.NewClient(cfg.ResendAPIKey),
-		github:         github.NewClient("andrearcaina"),
+		github:         github.NewClient("andrearcaina", cfg.GitHubToken),
+		hevy:           hevy.NewClient(cfg.HevyUsername, cfg.HevyAccessToken, cfg.HevyRefreshToken),
 		contactLimiter: ratelimit.New(5, time.Minute),
 		githubLimiter:  ratelimit.New(30, time.Minute),
 		spotifyLimiter: ratelimit.New(30, time.Minute),
@@ -54,11 +57,35 @@ func (h *Handler) ServeRoutes() chi.Router {
 	router.Get("/healthz", h.health)
 	router.With(h.contactLimiter.Middleware).Post("/v1/contact", h.contact)
 	router.With(h.githubLimiter.Middleware).Get("/v1/github/repos", h.githubRepos)
+	router.With(h.githubLimiter.Middleware).Get("/v1/github/activity", h.githubActivity)
+	router.With(h.githubLimiter.Middleware).Get("/v1/hevy/summary", h.hevySummary)
 	router.With(h.spotifyLimiter.Middleware).Get("/v1/spotify/now-playing", h.spotify)
 	router.With(h.spotifyLimiter.Middleware).Get("/v1/spotify/login", h.spotifyLogin)
 	router.With(h.spotifyLimiter.Middleware).Get("/v1/spotify/callback", h.spotifyCallback)
 
 	return router
+}
+
+func (h *Handler) githubActivity(w http.ResponseWriter, r *http.Request) {
+	activity, err := h.github.Activity(r.Context())
+	if err != nil {
+		h.logger.Error(r.Context(), "Failed to fetch GitHub activity", "error", err)
+		writeError(w, http.StatusBadGateway, "failed to fetch GitHub activity")
+		return
+	}
+
+	writeJSON(w, http.StatusOK, activity)
+}
+
+func (h *Handler) hevySummary(w http.ResponseWriter, r *http.Request) {
+	summary, err := h.hevy.CurrentMonthSummary(r.Context(), time.Now())
+	if err != nil {
+		h.logger.Error(r.Context(), "Failed to fetch Hevy summary", "error", err)
+		writeError(w, http.StatusBadGateway, "failed to fetch Hevy summary")
+		return
+	}
+
+	writeJSON(w, http.StatusOK, summary)
 }
 
 func (h *Handler) githubRepos(w http.ResponseWriter, r *http.Request) {

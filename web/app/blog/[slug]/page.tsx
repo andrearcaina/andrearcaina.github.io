@@ -1,38 +1,46 @@
-import { getAllPosts, getPostBySlug } from "@/lib/posts"
-import { formatDate } from "@/lib/utils"
-import { LinkWithIcon } from "@/components/link-with-icon"
-import type { Metadata } from "next"
-import Image from "next/image"
-import { notFound } from "next/navigation"
-import { FiArrowLeft } from "react-icons/fi"
-import MDXContent from "@/components/mdx-content"
+import { getAllPosts, getPostBySlug } from "@/lib/posts";
+import { formatDate } from "@/lib/utils";
+import { LinkWithIcon } from "@/components/link-with-icon";
+import type { Metadata } from "next";
+import Image from "next/image";
+import { notFound } from "next/navigation";
+import { FiArrowLeft } from "react-icons/fi";
+import MDXContent from "@/components/mdx-content";
 
 export async function generateStaticParams() {
-  const posts = await getAllPosts()
-  return posts.map((p) => ({ slug: p.slug }))
+  const posts = await getAllPosts();
+  return posts.map((p) => ({ slug: p.slug }));
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const { slug } = await params
-  const post = await getPostBySlug(slug)
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const post = await getPostBySlug(slug);
   return {
     title: post?.meta.title ?? "post",
     description: post?.meta.description || post?.meta.summary,
-  }
+  };
 }
 
-export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params
-  const post = await getPostBySlug(slug)
-  
+export default async function PostPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const post = await getPostBySlug(slug);
+
   if (!post) {
-    notFound()
+    notFound();
   }
 
-  const { meta, content } = post
-  const { title, image, publishedAt } = meta
-  const publishedDate = publishedAt
-  const lastUpdatedAt = meta.lastUpdatedAt
+  const { meta, content } = post;
+  const { title, image, publishedAt } = meta;
+  const publishedDate = publishedAt;
+  const lastUpdatedAt = meta.lastUpdatedAt;
 
   return (
     <article className="mt-8 flex flex-col gap-8 pb-16">
@@ -67,5 +75,5 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         <MDXContent source={content} />
       </main>
     </article>
-  )
+  );
 }

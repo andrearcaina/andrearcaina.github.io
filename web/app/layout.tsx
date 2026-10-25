@@ -1,25 +1,23 @@
-import type { Metadata } from 'next'
-import { GeistSans } from 'geist/font/sans'
-import { GeistMono } from 'geist/font/mono'
-import { ThemeProvider } from '@/components/theme-provider'
-import { Nav } from "@/components/nav"
-import { Footer } from "@/components/footer"
-import './globals.css'
+import type { Metadata } from "next";
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
+import { ThemeProvider } from "@/components/theme-provider";
+import { Nav } from "@/components/nav";
+import { Footer } from "@/components/footer";
+import "./globals.css";
 
 export const metadata: Metadata = {
-  title: 'andre arcaina',
-  description: 'My own portfolio website!',
-  icons: { 
-    other: [
-      { rel: 'icon', url: '/images/icon.svg', type: 'image/svg+xml' }
-    ]
-  }
-}
+  title: "andre arcaina",
+  description: "My own portfolio website!",
+  icons: {
+    other: [{ rel: "icon", url: "/images/icon.svg", type: "image/svg+xml" }],
+  },
+};
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
@@ -47,5 +45,5 @@ html {
         </ThemeProvider>
       </body>
     </html>
-  )
+  );
 }

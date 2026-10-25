@@ -1,29 +1,31 @@
-import Link from "next/link"
-import { Separator } from "@/components/ui/separator"
-import { profile, experiences } from "@/data/me"
-import { ExperienceTimeline } from "@/components/experience-timeline"
-import { Education } from "@/components/education"
-import { getAllPosts } from "@/lib/posts"
-import { GitHubRepoCards } from "@/components/github-repo-cards"
-import { PostList } from "@/components/post-list"
-import { TechStackScroll } from "@/components/tech-stack-scroll"
-import { SpotifyNowPlaying } from "@/components/spotify-now-playing"
-import { Button } from "@/components/ui/button"
-import { FaLinkedin, FaGithub } from 'react-icons/fa'
-import { MdMail, MdDescription } from 'react-icons/md'
-import { ProfileImageWithEasterEgg } from "@/components/profile-image-easter-egg"
-import { 
-  FadeInUp, 
-  StaggerContainer, 
-  StaggerItem, 
-  TextShimmer, 
-  NameHover, 
+import Link from "next/link";
+import { Separator } from "@/components/ui/separator";
+import { profile, experiences } from "@/data/me";
+import { ExperienceTimeline } from "@/components/experience-timeline";
+import { Education } from "@/components/education";
+import { getAllPosts } from "@/lib/posts";
+import { GitHubRepoCards } from "@/components/github-repo-cards";
+import { PostList } from "@/components/post-list";
+import { TechStackScroll } from "@/components/tech-stack-scroll";
+import { SpotifyNowPlaying } from "@/components/spotify-now-playing";
+import { GitHubActivity } from "@/components/github-activity";
+import { HevySummary } from "@/components/hevy-summary";
+import { Button } from "@/components/ui/button";
+import { FaLinkedin, FaGithub } from "react-icons/fa";
+import { MdMail, MdDescription } from "react-icons/md";
+import { ProfileImageWithEasterEgg } from "@/components/profile-image-easter-egg";
+import {
+  FadeInUp,
+  StaggerContainer,
+  StaggerItem,
+  TextShimmer,
+  NameHover,
   ButtonMotion,
-  PageTransition 
-} from "@/components/motion-components"
+  PageTransition,
+} from "@/components/motion-components";
 
 export default async function HomePage() {
-  const posts = (await getAllPosts()).slice(0, 3)
+  const posts = (await getAllPosts()).slice(0, 3);
 
   return (
     <PageTransition>
@@ -33,13 +35,21 @@ export default async function HomePage() {
             <div className="md:col-span-3 space-y-6">
               <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
                 <NameHover>{profile.name}</NameHover>{" "}
-                <span className="italic text-muted-foreground">, a software and cloud engineer</span>
+                <span className="italic text-muted-foreground">
+                  , a systems, infrastructure, and cloud engineer
+                </span>
               </h1>
               <FadeInUp delay={0.2}>
                 <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">
-                  Focused on <TextShimmer>distributed systems</TextShimmer>, cloud infrastructure, and backend development. Developing at{" "}
-                  <span className="font-medium">Environment and Climate Change Canada</span> (as an intern) and{" "}
+                  Focused on <TextShimmer>distributed systems</TextShimmer>,
+                  cloud infrastructure, and backend development. Contributing to
+                  CNCF projects including{" "}
+                  <span className="font-medium">
+                    Kepler, Flux CD, and gRPC-Go
+                  </span>{" "}
+                  while building systems at{" "}
                   <span className="font-medium">USSTM</span>.
+                  {" "}Currently looking for new grad opportunities.
                 </p>
               </FadeInUp>
 
@@ -47,8 +57,16 @@ export default async function HomePage() {
                 <div className="flex flex-wrap gap-3">
                   <StaggerItem>
                     <ButtonMotion>
-                      <Button asChild variant="secondary" className="button-hover-fix">
-                        <Link href={profile.links.resume} target="_blank" rel="noreferrer">
+                      <Button
+                        asChild
+                        variant="secondary"
+                        className="button-hover-fix"
+                      >
+                        <Link
+                          href={profile.links.resume}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
                           <MdDescription className="mr-2 h-4 w-4" /> resume
                         </Link>
                       </Button>
@@ -56,8 +74,16 @@ export default async function HomePage() {
                   </StaggerItem>
                   <StaggerItem>
                     <ButtonMotion>
-                      <Button asChild variant="outline" className="button-hover-fix">
-                        <Link href={profile.links.linkedin} target="_blank" rel="noreferrer">
+                      <Button
+                        asChild
+                        variant="outline"
+                        className="button-hover-fix"
+                      >
+                        <Link
+                          href={profile.links.linkedin}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
                           <FaLinkedin className="mr-2 h-4 w-4" /> linkedin
                         </Link>
                       </Button>
@@ -65,8 +91,16 @@ export default async function HomePage() {
                   </StaggerItem>
                   <StaggerItem>
                     <ButtonMotion>
-                      <Button asChild variant="outline" className="button-hover-fix">
-                        <Link href={profile.links.github} target="_blank" rel="noreferrer">
+                      <Button
+                        asChild
+                        variant="outline"
+                        className="button-hover-fix"
+                      >
+                        <Link
+                          href={profile.links.github}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
                           <FaGithub className="mr-2 h-4 w-4" /> github
                         </Link>
                       </Button>
@@ -74,7 +108,11 @@ export default async function HomePage() {
                   </StaggerItem>
                   <StaggerItem>
                     <ButtonMotion>
-                      <Button asChild variant="outline" className="button-hover-fix">
+                      <Button
+                        asChild
+                        variant="outline"
+                        className="button-hover-fix"
+                      >
                         <Link href={profile.links.contact}>
                           <MdMail className="mr-2 h-4 w-4" /> contact
                         </Link>
@@ -83,15 +121,28 @@ export default async function HomePage() {
                   </StaggerItem>
                 </div>
               </StaggerContainer>
-
-              <FadeInUp delay={0.6}>
-                <SpotifyNowPlaying />
-              </FadeInUp>
             </div>
 
             <FadeInUp delay={0.4}>
               <ProfileImageWithEasterEgg />
             </FadeInUp>
+          </section>
+        </FadeInUp>
+
+        <Separator />
+
+        <FadeInUp delay={0.6}>
+          <section id="activity" className="space-y-4">
+            <h2 className="text-lg font-medium">
+              recent <TextShimmer>activity</TextShimmer> in my life
+            </h2>
+            <div className="grid gap-3 md:grid-cols-2 md:items-stretch">
+              <div className="space-y-3">
+                <GitHubActivity />
+                <SpotifyNowPlaying />
+              </div>
+              <HevySummary />
+            </div>
           </section>
         </FadeInUp>
 
@@ -127,8 +178,13 @@ export default async function HomePage() {
         <FadeInUp delay={1.2}>
           <section>
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-medium">some <TextShimmer>side projects</TextShimmer> i like to work on</h2>
-              <Link href="/projects" className="text-sm text-muted-foreground underline underline-offset-4 transition-all duration-300 hover:shadow-md hover:scale-[1.02] hover:border-muted-foreground hover:text-foreground">
+              <h2 className="text-lg font-medium">
+                some <TextShimmer>side projects</TextShimmer> i like to work on
+              </h2>
+              <Link
+                href="/projects"
+                className="text-sm text-muted-foreground underline underline-offset-4 transition-all duration-300 hover:shadow-md hover:scale-[1.02] hover:border-muted-foreground hover:text-foreground"
+              >
                 all projects →
               </Link>
             </div>
@@ -141,8 +197,13 @@ export default async function HomePage() {
         <FadeInUp delay={1.4}>
           <section>
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-medium">some random <TextShimmer>thoughts</TextShimmer> on stuff</h2>
-              <Link href="/blog" className="text-sm text-muted-foreground underline underline-offset-4 transition-all duration-300 hover:shadow-md hover:scale-[1.02] hover:border-muted-foreground hover:text-foreground">
+              <h2 className="text-lg font-medium">
+                some random <TextShimmer>thoughts</TextShimmer> on stuff
+              </h2>
+              <Link
+                href="/blog"
+                className="text-sm text-muted-foreground underline underline-offset-4 transition-all duration-300 hover:shadow-md hover:scale-[1.02] hover:border-muted-foreground hover:text-foreground"
+              >
                 all posts →
               </Link>
             </div>
@@ -151,5 +212,5 @@ export default async function HomePage() {
         </FadeInUp>
       </div>
     </PageTransition>
-  )
+  );
 }

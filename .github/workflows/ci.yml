@@ -30,16 +30,10 @@ jobs:
                   cache-dependency-path: web/package-lock.json
 
             - name: Install frontend dependencies
-              run: npm --prefix web ci
+              run: make install-web
 
-            - name: Check formatting
-              run: make fmt-check
+            - name: Run format check, vet, and tests
+              run: make check
 
-            - name: Run tests
-              run: make test
-
-            - name: Run vet
-              run: make vet
-
-            - name: Build frontend
-              run: npm --prefix web run build
+            - name: Clean and build frontend
+              run: make build-web

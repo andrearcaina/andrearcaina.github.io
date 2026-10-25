@@ -8,34 +8,42 @@ import (
 )
 
 type Config struct {
-	Port            string
-	StaticDir       string
-	APIHost         string
-	SiteHost        string
-	ResendAPIKey    string
-	Email           string
-	SpotifyClientID string
-	SpotifySecret   string
-	SpotifyRefresh  string
-	SpotifyRedirect string
-	AllowedOrigins  []string
+	Port             string
+	StaticDir        string
+	APIHost          string
+	SiteHost         string
+	ResendAPIKey     string
+	Email            string
+	GitHubToken      string
+	HevyUsername     string
+	HevyAccessToken  string
+	HevyRefreshToken string
+	SpotifyClientID  string
+	SpotifySecret    string
+	SpotifyRefresh   string
+	SpotifyRedirect  string
+	AllowedOrigins   []string
 }
 
 func New() *Config {
 	_ = godotenv.Load()
 
 	return &Config{
-		Port:            ":" + getEnv("PORT", "8080"),
-		StaticDir:       getEnv("STATIC_DIR", "./web/out"),
-		APIHost:         getEnv("API_HOST", "api.andrearcaina.ca"),
-		SiteHost:        getEnv("SITE_HOST", "andrearcaina.ca"),
-		ResendAPIKey:    os.Getenv("RESEND_API_KEY"),
-		Email:           os.Getenv("EMAIL"),
-		SpotifyClientID: os.Getenv("SPOTIFY_CLIENT_ID"),
-		SpotifySecret:   os.Getenv("SPOTIFY_CLIENT_SECRET"),
-		SpotifyRefresh:  os.Getenv("SPOTIFY_REFRESH_TOKEN"),
-		SpotifyRedirect: os.Getenv("SPOTIFY_REDIRECT_URI"),
-		AllowedOrigins:  splitOrigins(getEnv("ALLOWED_ORIGINS", "https://andrearcaina.ca,https://www.andrearcaina.ca,https://andrearcaina.vercel.app,http://localhost:3000,http://localhost:8080")),
+		Port:             ":" + getEnv("PORT", "8080"),
+		StaticDir:        getEnv("STATIC_DIR", "./web/out"),
+		APIHost:          getEnv("API_HOST", "api.andrearcaina.ca"),
+		SiteHost:         getEnv("SITE_HOST", "andrearcaina.ca"),
+		ResendAPIKey:     os.Getenv("RESEND_API_KEY"),
+		Email:            os.Getenv("EMAIL"),
+		GitHubToken:      os.Getenv("GITHUB_TOKEN"),
+		HevyUsername:     getEnv("HEVY_USERNAME", "andre331"),
+		HevyAccessToken:  os.Getenv("HEVY_ACCESS_TOKEN"),
+		HevyRefreshToken: os.Getenv("HEVY_REFRESH_TOKEN"),
+		SpotifyClientID:  os.Getenv("SPOTIFY_CLIENT_ID"),
+		SpotifySecret:    os.Getenv("SPOTIFY_CLIENT_SECRET"),
+		SpotifyRefresh:   os.Getenv("SPOTIFY_REFRESH_TOKEN"),
+		SpotifyRedirect:  os.Getenv("SPOTIFY_REDIRECT_URI"),
+		AllowedOrigins:   splitOrigins(getEnv("ALLOWED_ORIGINS", "https://andrearcaina.ca,https://www.andrearcaina.ca,https://andrearcaina.vercel.app,http://localhost:3000,http://localhost:8080")),
 	}
 }
 

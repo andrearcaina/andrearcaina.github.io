@@ -1,8 +1,11 @@
-.PHONY: build build-go build-web run dev fmt fmt-check tidy test vet check clean
+.PHONY: build build-go install-web build-web clean-web run dev fmt fmt-check tidy test vet check clean
 
 build: build-web build-go
 
-build-web:
+install-web:
+	npm --prefix web ci
+
+build-web: clean-web
 	npm --prefix web run build
 
 build-go:
@@ -27,7 +30,10 @@ test:
 vet:
 	go vet ./...
 
-check: fmt-check test vet
+check: fmt-check vet test
 
-clean:
+clean-web:
+	rm -rf web/out web/.next
+
+clean: clean-web
 	rm -rf bin/*

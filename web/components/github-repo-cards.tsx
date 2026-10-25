@@ -1,42 +1,46 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { FiStar, FiGitBranch, FiEye, FiExternalLink } from 'react-icons/fi'
+import { useEffect, useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { FiStar, FiGitBranch, FiEye, FiExternalLink } from "react-icons/fi";
 import { TbBrowserShare } from "react-icons/tb";
-import Link from "next/link"
+import Link from "next/link";
 type GitHubRepo = {
-  id: number
-  name: string
-  html_url: string
-  homepage: string | null
-  description: string | null
-  stargazers_count: number
-  forks_count: number
-  watchers_count: number
-  language: string | null
-  topics?: string[]
-}
+  id: number;
+  name: string;
+  html_url: string;
+  homepage: string | null;
+  description: string | null;
+  stargazers_count: number;
+  forks_count: number;
+  watchers_count: number;
+  language: string | null;
+  topics?: string[];
+};
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || (
-  typeof window !== "undefined" && window.location.hostname === "localhost"
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL ||
+  (typeof window !== "undefined" && window.location.hostname === "localhost"
     ? "http://api.localhost:8080"
-    : "https://api.andrearcaina.ca"
-)
+    : "https://api.andrearcaina.ca");
 
 export function GitHubRepoCards({ limit = 10 }: { limit?: number }) {
-  const [repos, setRepos] = useState<GitHubRepo[] | null>(null)
+  const [repos, setRepos] = useState<GitHubRepo[] | null>(null);
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/v1/github/repos?limit=${limit}`)
-      .then((response) => response.ok ? response.json() : Promise.reject(response.status))
+      .then((response) =>
+        response.ok ? response.json() : Promise.reject(response.status),
+      )
       .then(setRepos)
-      .catch(() => setRepos([]))
-  }, [limit])
+      .catch(() => setRepos([]));
+  }, [limit]);
 
   if (repos === null) {
-    return <p className="text-sm text-muted-foreground">Loading repositories...</p>
+    return (
+      <p className="text-sm text-muted-foreground">Loading repositories...</p>
+    );
   }
 
   if (!repos.length) {
@@ -44,13 +48,16 @@ export function GitHubRepoCards({ limit = 10 }: { limit?: number }) {
       <p className="text-sm text-muted-foreground">
         Couldn{"'"}t load repositories right now. Try again later.
       </p>
-    )
+    );
   }
 
   return (
     <div className="grid gap-4 md:grid-cols-2">
       {repos.map((r) => (
-        <Card key={r.id} className="group border border-border bg-card transition-all duration-300 hover:shadow-md hover:scale-[1.02] hover:border-muted-foreground">
+        <Card
+          key={r.id}
+          className="group border border-border bg-card transition-all duration-300 hover:shadow-md hover:scale-[1.02] hover:border-muted-foreground"
+        >
           <CardHeader className="pb-2">
             <CardTitle className="flex items-center gap-2 text-base">
               <Link
@@ -84,7 +91,9 @@ export function GitHubRepoCards({ limit = 10 }: { limit?: number }) {
               )}
             </CardTitle>
             {r.description && (
-              <p className="mt-1 text-sm text-muted-foreground line-clamp-2">{r.description}</p>
+              <p className="mt-1 text-sm text-muted-foreground line-clamp-2">
+                {r.description}
+              </p>
             )}
           </CardHeader>
           <CardContent className="flex flex-wrap items-center justify-between gap-3">
@@ -106,7 +115,11 @@ export function GitHubRepoCards({ limit = 10 }: { limit?: number }) {
             {r.topics && r.topics.length > 0 && (
               <div className="flex flex-wrap gap-1">
                 {r.topics.map((topic, index) => (
-                  <Badge key={index} variant="secondary" className="px-2 py-0 text-[10px]">
+                  <Badge
+                    key={index}
+                    variant="secondary"
+                    className="px-2 py-0 text-[10px]"
+                  >
                     {topic}
                   </Badge>
                 ))}
@@ -116,5 +129,5 @@ export function GitHubRepoCards({ limit = 10 }: { limit?: number }) {
         </Card>
       ))}
     </div>
-  )
+  );
 }
