@@ -196,9 +196,13 @@ func (c *Client) scrape(ctx context.Context, now time.Time) (WorkoutSummary, err
 	}
 
 	page.WaitForTimeout(1500)
-	bodyCh := make(chan []byte, 1)
+	if strings.Contains(page.URL(), "/login") {
+		return WorkoutSummary{}, fmt.Errorf("Hevy login did not complete at %s (%s)", page.URL(), pageState(page))
+	}
+	bodyCh := make(chan []byte, 32)
 	page.OnResponse(func(response playwright.Response) {
-		if strings.Contains(response.URL(), "/user_workouts_paged") && response.Status() == 200 {
+		url := strings.ToLower(response.URL())
+		if response.Status() == 200 && (strings.Contains(url, "workout") || strings.Contains(url, "api.hevy")) {
 			if body, bodyErr := response.Body(); bodyErr == nil {
 				select {
 				case bodyCh <- body:
@@ -210,21 +214,90 @@ func (c *Client) scrape(ctx context.Context, now time.Time) (WorkoutSummary, err
 	if _, err = page.Goto("https://hevy.com/profile"); err != nil {
 		return WorkoutSummary{}, err
 	}
-
-	var body []byte
-	select {
-	case body = <-bodyCh:
-	case <-ctx.Done():
-		return WorkoutSummary{}, ctx.Err()
-	case <-time.After(30 * time.Second):
-		return WorkoutSummary{}, fmt.Errorf("timed out waiting for Hevy workout data")
+	if strings.Contains(page.URL(), "/login") {
+		return WorkoutSummary{}, fmt.Errorf("Hevy profile redirected to login at %s (%s)", page.URL(), pageState(page))
 	}
-	var data workoutPage
-	if err = json.Unmarshal(body, &data); err != nil {
+
+	workouts := make(map[string]workout)
+	collect := func() error {
+		for {
+			select {
+			case body := <-bodyCh:
+				var data workoutPage
+				if err := json.Unmarshal(body, &data); err != nil {
+					continue
+				}
+				for _, item := range data.Workouts {
+					key := item.ID
+					if key == "" {
+						key = item.ShortID
+					}
+					if key != "" {
+						workouts[key] = item
+					}
+				}
+			default:
+				return nil
+			}
+		}
+	}
+
+	deadline := time.NewTimer(30 * time.Second)
+	defer deadline.Stop()
+	for attempt, unchanged := 0, 0; attempt < 20; attempt++ {
+		select {
+		case <-ctx.Done():
+			return WorkoutSummary{}, ctx.Err()
+		case <-deadline.C:
+			if len(workouts) == 0 {
+				return WorkoutSummary{}, fmt.Errorf("timed out waiting for Hevy workout data")
+			}
+			attempt = 20
+		default:
+		}
+
+		before := len(workouts)
+		if err := collect(); err != nil {
+			return WorkoutSummary{}, err
+		}
+		if len(workouts) == before {
+			unchanged++
+		} else {
+			unchanged = 0
+		}
+		if len(workouts) > 0 && unchanged >= 5 {
+			break
+		}
+
+		_, _ = page.Evaluate(`() => {
+			const candidates = [...document.querySelectorAll('div')]
+				.filter(element => {
+					const rect = element.getBoundingClientRect();
+					const style = getComputedStyle(element);
+					return rect.width > 0 && rect.height > 100 &&
+						element.scrollHeight > element.clientHeight + 100 &&
+						['auto', 'scroll'].includes(style.overflowY);
+				})
+				.sort((a, b) => b.scrollHeight - a.scrollHeight);
+			const target = candidates[0] || document.scrollingElement;
+			if (target) target.scrollTop = target.scrollHeight;
+		}`)
+		page.WaitForTimeout(1000)
+	}
+	if err := collect(); err != nil {
 		return WorkoutSummary{}, err
 	}
-
-	return summarize(data.Workouts, now), nil
+	if len(workouts) == 0 {
+		return WorkoutSummary{}, fmt.Errorf("Hevy profile returned no workouts")
+	}
+	items := make([]workout, 0, len(workouts))
+	for _, item := range workouts {
+		items = append(items, item)
+	}
+	sort.Slice(items, func(i, j int) bool {
+		return items[i].StartTime.After(items[j].StartTime.Time)
+	})
+	return summarize(items, now), nil
 }
 
 func clickLoginButton(page playwright.Page) error {

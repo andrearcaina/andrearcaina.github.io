@@ -134,14 +134,9 @@ export function HevySummary() {
                   <p className="text-[10px] text-muted-foreground">
                     {summary.recentWorkout.date}
                   </p>
-                  <Link
-                    href={summary.recentWorkout.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="block truncate text-base font-semibold transition-colors hover:text-primary"
-                  >
+                  <p className="truncate text-base font-semibold">
                     {summary.recentWorkout.title || "Recent workout"}
-                  </Link>
+                  </p>
                 </div>
                 <Link
                   href={summary.recentWorkout.url}
