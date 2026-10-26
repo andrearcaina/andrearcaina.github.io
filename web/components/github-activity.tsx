@@ -3,6 +3,11 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { FaGithub } from "react-icons/fa";
+import {
+  GoGitMerge,
+  GoGitPullRequest,
+  GoGitPullRequestClosed,
+} from "react-icons/go";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL ||
@@ -16,6 +21,8 @@ type PullRequest = {
   url: string;
   repository: string;
   occurredAt: string;
+  state: "OPEN" | "CLOSED";
+  merged: boolean;
 };
 type Activity = {
   total: number;
@@ -45,9 +52,14 @@ export function GitHubActivity() {
   if (!activity) {
     return (
       <div
-        className="h-[108px] animate-pulse rounded-lg border border-border bg-card"
-        aria-label="Loading GitHub activity"
-      />
+        className="flex h-[108px] items-center justify-center rounded-lg border border-border bg-card"
+        role="status"
+        aria-label="Fetching GitHub contributions"
+      >
+        <span className="animate-pulse text-xs text-muted-foreground">
+          fetching GitHub contributions...
+        </span>
+      </div>
     );
   }
 
@@ -99,11 +111,40 @@ export function GitHubActivity() {
                 href={pullRequest.url}
                 target="_blank"
                 rel="noreferrer"
-                className="block truncate text-xs text-muted-foreground transition-colors hover:text-primary"
+                className="flex min-w-0 items-center gap-2 text-xs text-muted-foreground transition-colors hover:text-primary"
               >
-                {pullRequest.title}{" "}
-                <span className="text-[10px] text-primary/80">
-                  · {pullRequest.repository}
+                <span
+                  aria-label={
+                    pullRequest.merged
+                      ? "Merged pull request"
+                      : `${pullRequest.state.toLowerCase()} pull request`
+                  }
+                  title={
+                    pullRequest.merged
+                      ? "Merged"
+                      : pullRequest.state.toLowerCase()
+                  }
+                  className={`shrink-0 ${
+                    pullRequest.merged
+                      ? "text-purple-400"
+                      : pullRequest.state === "OPEN"
+                        ? "text-emerald-400"
+                        : "text-red-400"
+                  }`}
+                >
+                  {pullRequest.merged ? (
+                    <GoGitMerge className="h-3.5 w-3.5" />
+                  ) : pullRequest.state === "OPEN" ? (
+                    <GoGitPullRequest className="h-3.5 w-3.5" />
+                  ) : (
+                    <GoGitPullRequestClosed className="h-3.5 w-3.5" />
+                  )}
+                </span>
+                <span className="min-w-0 flex-1 truncate">
+                  {pullRequest.title}{" "}
+                  <span className="text-[10px] text-primary/80">
+                    · {pullRequest.repository}
+                  </span>
                 </span>
               </Link>
             ))}

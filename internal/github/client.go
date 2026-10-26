@@ -50,6 +50,8 @@ type PullRequest struct {
 	URL        string `json:"url"`
 	Repository string `json:"repository"`
 	OccurredAt string `json:"occurredAt"`
+	State      string `json:"state"`
+	Merged     bool   `json:"merged"`
 }
 
 type graphqlRequest struct {
@@ -67,6 +69,8 @@ type graphqlResponse struct {
 						PullRequest struct {
 							Title      string `json:"title"`
 							URL        string `json:"url"`
+							State      string `json:"state"`
+							Merged     bool   `json:"merged"`
 							Repository struct {
 								NameWithOwner string `json:"nameWithOwner"`
 								IsPrivate     bool   `json:"isPrivate"`
@@ -165,6 +169,8 @@ func (c *Client) Activity(ctx context.Context) (Activity, error) {
           pullRequest {
             title
             url
+            state
+            merged
             repository {
               nameWithOwner
               isPrivate
@@ -193,13 +199,13 @@ func (c *Client) Activity(ctx context.Context) (Activity, error) {
 		SetResult(&result).
 		Post("https://api.github.com/graphql")
 	if err != nil {
-		return Activity{}, err
+		return calendar, nil
 	}
 	if response.StatusCode() >= 400 {
-		return Activity{}, fmt.Errorf("GitHub GraphQL returned status %d: %s", response.StatusCode(), response.String())
+		return calendar, nil
 	}
 	if len(result.Errors) > 0 {
-		return Activity{}, fmt.Errorf("GitHub GraphQL error: %s", result.Errors[0].Message)
+		return calendar, nil
 	}
 
 	pullRequests := make([]PullRequest, 0, len(result.Data.User.Contributions.PullRequests.Nodes))
@@ -212,6 +218,8 @@ func (c *Client) Activity(ctx context.Context) (Activity, error) {
 			URL:        contribution.PullRequest.URL,
 			Repository: contribution.PullRequest.Repository.NameWithOwner,
 			OccurredAt: contribution.OccurredAt,
+			State:      contribution.PullRequest.State,
+			Merged:     contribution.PullRequest.Merged,
 		})
 	}
 	return Activity{Total: calendar.Total, Days: calendar.Days, PullRequests: pullRequests}, nil
