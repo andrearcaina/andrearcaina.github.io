@@ -10,7 +10,7 @@ RUN --mount=type=cache,target=/root/.npm \
 COPY web ./web
 RUN npm --prefix web run build
 
-FROM golang:1.26-bookworm AS build
+FROM golang:1.27.3-bookworm AS build
 
 WORKDIR /src
 COPY go.mod go.sum ./

@@ -86,7 +86,7 @@ func headers(next http.Handler) http.Handler {
 		w.Header().Set("X-Frame-Options", "DENY")
 		w.Header().Set("Referrer-Policy", "strict-origin-when-cross-origin")
 		w.Header().Set("Permissions-Policy", "camera=(), microphone=(), geolocation=(), payment=()")
-		w.Header().Set("Content-Security-Policy", "default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' http://api.localhost:8080 https://api.andrearcaina.ca https://api.github.com https://api.spotify.com https://accounts.spotify.com https://cloudflareinsights.com; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com; upgrade-insecure-requests")
+		w.Header().Set("Content-Security-Policy", "default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; img-src 'self' data: blob: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' http://api.localhost:8080 https://api.andrearcaina.ca https://api.github.com https://api.spotify.com https://accounts.spotify.com https://cloudflareinsights.com; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com; upgrade-insecure-requests")
 		next.ServeHTTP(w, r)
 	})
 }

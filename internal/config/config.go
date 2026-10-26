@@ -2,6 +2,7 @@ package config
 
 import (
 	"os"
+	"slices"
 	"strconv"
 	"strings"
 	"time"
@@ -64,12 +65,7 @@ func New() *Config {
 }
 
 func contains(values []string, target string) bool {
-	for _, value := range values {
-		if value == target {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(values, target)
 }
 
 func getBool(key string, fallback bool) bool {

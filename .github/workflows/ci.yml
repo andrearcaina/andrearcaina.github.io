@@ -32,8 +32,17 @@ jobs:
             - name: Install frontend dependencies
               run: make install-web
 
-            - name: Run format check, vet, and tests
+            - name: Install golangci-lint
+              uses: golangci/golangci-lint-action@v9
+              with:
+                  version: v2.15.0
+                  install-only: true
+
+            - name: Run fix, format, vet, lint, test
               run: make check
 
-            - name: Clean and build frontend
-              run: make build-web
+            - name: Build binary file and web assets
+              run: make build
+
+            - name: Clean up
+              run: make clean

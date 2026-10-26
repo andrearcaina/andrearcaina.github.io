@@ -1,0 +1,290 @@
+openapi: 3.1.0
+info:
+  title: andrearcaina.ca API
+  description: Public API for andrearcaina.ca.
+  version: 1.0.0
+  contact:
+    name: Andre Arcaina
+    url: https://andrearcaina.ca
+servers:
+  - url: https://api.andrearcaina.ca
+    description: Production API
+tags:
+  - name: system
+  - name: contact
+  - name: github
+  - name: hevy
+  - name: spotify
+paths:
+  /healthz:
+    get:
+      operationId: health
+      tags: [system]
+      summary: Check API health
+      responses:
+        '200':
+          description: The API is healthy.
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: ok
+  /v1/contact:
+    post:
+      operationId: sendContactMessage
+      tags: [contact]
+      summary: Send a contact message
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactRequest'
+      responses:
+        '200':
+          description: Message sent successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400': {$ref: '#/components/responses/BadRequest'}
+        '429': {$ref: '#/components/responses/RateLimited'}
+        '502': {$ref: '#/components/responses/BadGateway'}
+        '503': {$ref: '#/components/responses/ServiceUnavailable'}
+  /v1/github/repos:
+    get:
+      operationId: listGitHubRepositories
+      tags: [github]
+      summary: List recent public repositories
+      parameters:
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: Recent public repositories.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {$ref: '#/components/schemas/Repository'}
+        '429': {$ref: '#/components/responses/RateLimited'}
+        '502': {$ref: '#/components/responses/BadGateway'}
+  /v1/github/activity:
+    get:
+      operationId: getGitHubActivity
+      tags: [github]
+      summary: Get GitHub contribution activity
+      responses:
+        '200':
+          description: Contribution activity.
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/GitHubActivity'}
+        '429': {$ref: '#/components/responses/RateLimited'}
+        '502': {$ref: '#/components/responses/BadGateway'}
+  /v1/hevy/summary:
+    get:
+      operationId: getHevySummary
+      tags: [hevy]
+      summary: Get the current month's workout summary
+      responses:
+        '200':
+          description: Current month's workout summary.
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/WorkoutSummary'}
+        '429': {$ref: '#/components/responses/RateLimited'}
+        '502': {$ref: '#/components/responses/BadGateway'}
+  /v1/spotify/now-playing:
+    get:
+      operationId: getSpotifyNowPlaying
+      tags: [spotify]
+      summary: Get the currently playing Spotify track
+      responses:
+        '200':
+          description: Current Spotify playback state.
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SpotifyNowPlaying'}
+        '429': {$ref: '#/components/responses/RateLimited'}
+  /v1/spotify/login:
+    get:
+      operationId: startSpotifyLogin
+      tags: [spotify]
+      summary: Start Spotify authorization
+      responses:
+        '302': {description: Redirects to Spotify authorization.}
+        '429': {$ref: '#/components/responses/RateLimited'}
+  /v1/spotify/callback:
+    get:
+      operationId: spotifyCallback
+      tags: [spotify]
+      summary: Complete Spotify authorization
+      parameters:
+        - name: code
+          in: query
+          required: true
+          schema: {type: string}
+        - name: state
+          in: query
+          required: true
+          schema: {type: string}
+      responses:
+        '200':
+          description: Spotify authorization succeeded.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [message, refresh_token]
+                properties:
+                  message: {type: string}
+                  refresh_token: {type: string}
+        '400': {$ref: '#/components/responses/BadRequest'}
+        '429': {$ref: '#/components/responses/RateLimited'}
+        '502': {$ref: '#/components/responses/BadGateway'}
+components:
+  parameters:
+    Limit:
+      name: limit
+      in: query
+      description: Maximum number of repositories to return.
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 20
+        default: 10
+  responses:
+    BadRequest:
+      description: The request is invalid.
+      content:
+        application/json:
+          schema: {$ref: '#/components/schemas/ErrorResponse'}
+    RateLimited:
+      description: Too many requests.
+      content:
+        application/json:
+          schema: {$ref: '#/components/schemas/ErrorResponse'}
+    BadGateway:
+      description: An upstream service failed.
+      content:
+        application/json:
+          schema: {$ref: '#/components/schemas/ErrorResponse'}
+    ServiceUnavailable:
+      description: The service is not configured.
+      content:
+        application/json:
+          schema: {$ref: '#/components/schemas/ErrorResponse'}
+  schemas:
+    ErrorResponse:
+      type: object
+      required: [error]
+      properties:
+        error: {type: string}
+    ContactRequest:
+      type: object
+      required: [name, email, message]
+      properties:
+        name: {type: string, maxLength: 100}
+        email: {type: string, format: email, maxLength: 320}
+        message: {type: string, maxLength: 10000}
+    SuccessResponse:
+      type: object
+      required: [success]
+      properties:
+        success: {type: boolean, const: true}
+    Repository:
+      type: object
+      required: [id, name, html_url, stars, forks, watchers, pushed_at, archived, fork, owner, topics]
+      properties:
+        id: {type: integer}
+        name: {type: string}
+        html_url: {type: string, format: uri}
+        homepage: {type: [string, 'null'], format: uri}
+        description: {type: [string, 'null']}
+        stargazers_count: {type: integer}
+        forks_count: {type: integer}
+        watchers_count: {type: integer}
+        language: {type: [string, 'null']}
+        pushed_at: {type: string, format: date-time}
+        archived: {type: boolean}
+        fork: {type: boolean}
+        owner:
+          type: object
+          required: [login]
+          properties:
+            login: {type: string}
+        topics:
+          type: array
+          items: {type: string}
+    GitHubActivity:
+      type: object
+      required: [total, days, pullRequests]
+      properties:
+        total: {type: integer}
+        days:
+          type: array
+          items: {$ref: '#/components/schemas/ActivityDay'}
+        pullRequests:
+          type: array
+          items: {$ref: '#/components/schemas/PullRequest'}
+    ActivityDay:
+      type: object
+      required: [date, count, level]
+      properties:
+        date: {type: string, format: date}
+        count: {type: integer}
+        level: {type: integer}
+    PullRequest:
+      type: object
+      required: [title, url, repository, occurredAt, state, merged, isDraft]
+      properties:
+        title: {type: string}
+        url: {type: string, format: uri}
+        repository: {type: string}
+        occurredAt: {type: string, format: date-time}
+        state: {type: string}
+        merged: {type: boolean}
+        isDraft: {type: boolean}
+    WorkoutSummary:
+      type: object
+      required: [month, year, monthNumber, workouts, durationSeconds, volumeLbs, workoutDays]
+      properties:
+        month: {type: string}
+        year: {type: integer}
+        monthNumber: {type: integer}
+        workouts: {type: integer}
+        durationSeconds: {type: integer}
+        volumeLbs: {type: number}
+        workoutDays:
+          type: array
+          items: {type: integer}
+        recentWorkout:
+          anyOf:
+            - {$ref: '#/components/schemas/WorkoutPreview'}
+            - {type: 'null'}
+    WorkoutPreview:
+      type: object
+      required: [date, title, url, durationSeconds, volumeLbs, sets, records]
+      properties:
+        date: {type: string, format: date}
+        title: {type: string}
+        url: {type: string, format: uri}
+        durationSeconds: {type: integer}
+        volumeLbs: {type: number}
+        sets: {type: integer}
+        records: {type: integer}
+    SpotifyNowPlaying:
+      type: object
+      required: [isPlaying]
+      properties:
+        isPlaying: {type: boolean}
+        title: {type: string}
+        artist: {type: string}
+        album: {type: string}
+        albumImageUrl: {type: string, format: uri}
+        songUrl: {type: string, format: uri}
+        duration: {type: integer}
+        progress: {type: integer}
+        explicit: {type: boolean}
+        message: {type: string}

@@ -10,6 +10,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"slices"
 	"strconv"
 	"strings"
 	"sync"
@@ -63,6 +64,8 @@ func (h *Handler) ServeRoutes() chi.Router {
 	router := chi.NewRouter()
 	router.Use(h.cors, ratelimit.ClientIP)
 
+	router.Get("/v1/docs", docs)
+	router.Get("/openapi.yaml", openapi)
 	router.Get("/healthz", h.health)
 	router.With(h.contactLimiter.Middleware).Post("/v1/contact", h.contact)
 	router.With(h.githubLimiter.Middleware).Get("/v1/github/repos", h.githubRepos)
@@ -205,7 +208,7 @@ func (h *Handler) refreshSpotify() {
 		h.setSpotifyCurrent(spotifyNowPlaying{Message: "Currently listening to nothing"})
 		return
 	}
-	defer response.Body.Close()
+	defer func() { _ = response.Body.Close() }()
 	if response.StatusCode == http.StatusNoContent || response.StatusCode >= http.StatusBadRequest {
 		h.setSpotifyCurrent(spotifyNowPlaying{Message: "Not currently listening to anything"})
 		return
@@ -261,13 +264,13 @@ func (h *Handler) spotifyAccessToken(ctx context.Context) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	defer response.Body.Close()
+	defer func() { _ = response.Body.Close() }()
 	body, err := io.ReadAll(io.LimitReader(response.Body, 4<<10))
 	if err != nil {
 		return "", err
 	}
 	if response.StatusCode >= http.StatusBadRequest {
-		return "", fmt.Errorf("Spotify token endpoint returned status %d: %s", response.StatusCode, strings.TrimSpace(string(body)))
+		return "", fmt.Errorf("spotify token endpoint returned status %d: %s", response.StatusCode, strings.TrimSpace(string(body)))
 	}
 
 	var token spotifyTokenResponse
@@ -327,7 +330,7 @@ func (h *Handler) spotifyCallback(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusBadGateway, "Spotify token exchange failed")
 		return
 	}
-	defer response.Body.Close()
+	defer func() { _ = response.Body.Close() }()
 	if response.StatusCode >= http.StatusBadRequest {
 		writeError(w, http.StatusBadGateway, "Spotify token exchange failed")
 		return
@@ -350,12 +353,9 @@ func (h *Handler) spotifyCallback(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) cors(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		origin := r.Header.Get("Origin")
-		for _, allowed := range h.config.AllowedOrigins {
-			if origin == allowed {
-				w.Header().Set("Access-Control-Allow-Origin", origin)
-				w.Header().Set("Vary", "Origin")
-				break
-			}
+		if slices.Contains(h.config.AllowedOrigins, origin) {
+			w.Header().Set("Access-Control-Allow-Origin", origin)
+			w.Header().Set("Vary", "Origin")
 		}
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")

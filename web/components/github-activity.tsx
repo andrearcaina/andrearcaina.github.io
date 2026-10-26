@@ -7,6 +7,7 @@ import {
   GoGitMerge,
   GoGitPullRequest,
   GoGitPullRequestClosed,
+  GoGitPullRequestDraft,
 } from "react-icons/go";
 
 const API_BASE_URL =
@@ -23,6 +24,7 @@ type PullRequest = {
   occurredAt: string;
   state?: "OPEN" | "CLOSED";
   merged?: boolean;
+  isDraft?: boolean;
 };
 type Activity = {
   total: number;
@@ -132,24 +134,32 @@ export function GitHubActivity() {
               >
                 <span
                   aria-label={
-                    pullRequest.merged
+                    pullRequest.isDraft
+                      ? "Draft pull request"
+                      : pullRequest.merged
                       ? "Merged pull request"
                       : `${pullRequest.state?.toLowerCase() ?? "closed"} pull request`
                   }
                   title={
-                    pullRequest.merged
+                    pullRequest.isDraft
+                      ? "Draft"
+                      : pullRequest.merged
                       ? "Merged"
                       : (pullRequest.state?.toLowerCase() ?? "closed")
                   }
                   className={`shrink-0 ${
-                    pullRequest.merged
+                    pullRequest.isDraft
+                      ? "text-muted-foreground"
+                      : pullRequest.merged
                       ? "text-purple-400"
                       : pullRequest.state === "OPEN"
                         ? "text-emerald-400"
                         : "text-red-400"
                   }`}
                 >
-                  {pullRequest.merged ? (
+                  {pullRequest.isDraft ? (
+                    <GoGitPullRequestDraft className="h-3.5 w-3.5" />
+                  ) : pullRequest.merged ? (
                     <GoGitMerge className="h-3.5 w-3.5" />
                   ) : pullRequest.state === "OPEN" ? (
                     <GoGitPullRequest className="h-3.5 w-3.5" />

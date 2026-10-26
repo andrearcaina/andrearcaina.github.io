@@ -3,6 +3,7 @@ package github
 import (
 	"context"
 	"fmt"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -52,6 +53,7 @@ type PullRequest struct {
 	OccurredAt string `json:"occurredAt"`
 	State      string `json:"state"`
 	Merged     bool   `json:"merged"`
+	IsDraft    bool   `json:"isDraft"`
 }
 
 type graphqlRequest struct {
@@ -62,23 +64,20 @@ type graphqlRequest struct {
 type graphqlResponse struct {
 	Data struct {
 		User struct {
-			Contributions struct {
-				PullRequests struct {
-					Nodes []struct {
-						OccurredAt  string `json:"occurredAt"`
-						PullRequest struct {
-							Title      string `json:"title"`
-							URL        string `json:"url"`
-							State      string `json:"state"`
-							Merged     bool   `json:"merged"`
-							Repository struct {
-								NameWithOwner string `json:"nameWithOwner"`
-								IsPrivate     bool   `json:"isPrivate"`
-							} `json:"repository"`
-						} `json:"pullRequest"`
-					} `json:"nodes"`
-				} `json:"pullRequestContributions"`
-			} `json:"contributionsCollection"`
+			PullRequests struct {
+				Nodes []struct {
+					Title      string `json:"title"`
+					URL        string `json:"url"`
+					CreatedAt  string `json:"createdAt"`
+					State      string `json:"state"`
+					Merged     bool   `json:"merged"`
+					IsDraft    bool   `json:"isDraft"`
+					Repository struct {
+						NameWithOwner string `json:"nameWithOwner"`
+						IsPrivate     bool   `json:"isPrivate"`
+					} `json:"repository"`
+				} `json:"nodes"`
+			} `json:"pullRequests"`
 		} `json:"user"`
 	} `json:"data"`
 	Errors []struct {
@@ -160,34 +159,28 @@ func (c *Client) Activity(ctx context.Context) (Activity, error) {
 		return Activity{}, err
 	}
 
-	query := `query($login: String!, $from: DateTime!, $to: DateTime!) {
+	query := `query($login: String!) {
   user(login: $login) {
-    contributionsCollection(from: $from, to: $to) {
-      pullRequestContributions(first: 10) {
-        nodes {
-          occurredAt
-          pullRequest {
-            title
-            url
-            state
-            merged
-            repository {
-              nameWithOwner
-              isPrivate
-            }
-          }
+    pullRequests(first: 10, orderBy: {field: CREATED_AT, direction: DESC}) {
+      nodes {
+        title
+        url
+        createdAt
+        state
+        merged
+        isDraft
+        repository {
+          nameWithOwner
+          isPrivate
         }
       }
     }
   }
 }`
-	now := time.Now().UTC()
 	body := graphqlRequest{
 		Query: query,
 		Variables: map[string]string{
 			"login": c.username,
-			"from":  now.AddDate(-1, 0, 0).Format(time.RFC3339),
-			"to":    now.Format(time.RFC3339),
 		},
 	}
 	var result graphqlResponse
@@ -208,18 +201,19 @@ func (c *Client) Activity(ctx context.Context) (Activity, error) {
 		return calendar, nil
 	}
 
-	pullRequests := make([]PullRequest, 0, len(result.Data.User.Contributions.PullRequests.Nodes))
-	for _, contribution := range result.Data.User.Contributions.PullRequests.Nodes {
-		if contribution.PullRequest.Repository.IsPrivate {
+	pullRequests := make([]PullRequest, 0, len(result.Data.User.PullRequests.Nodes))
+	for _, pullRequest := range result.Data.User.PullRequests.Nodes {
+		if pullRequest.Repository.IsPrivate {
 			continue
 		}
 		pullRequests = append(pullRequests, PullRequest{
-			Title:      contribution.PullRequest.Title,
-			URL:        contribution.PullRequest.URL,
-			Repository: contribution.PullRequest.Repository.NameWithOwner,
-			OccurredAt: contribution.OccurredAt,
-			State:      contribution.PullRequest.State,
-			Merged:     contribution.PullRequest.Merged,
+			Title:      pullRequest.Title,
+			URL:        pullRequest.URL,
+			Repository: pullRequest.Repository.NameWithOwner,
+			OccurredAt: pullRequest.CreatedAt,
+			State:      pullRequest.State,
+			Merged:     pullRequest.Merged,
+			IsDraft:    pullRequest.IsDraft,
 		})
 	}
 	return Activity{Total: calendar.Total, Days: calendar.Days, PullRequests: pullRequests}, nil
@@ -338,12 +332,7 @@ func hasClass(node *html.Node, className string) bool {
 	if !ok {
 		return false
 	}
-	for _, class := range strings.Fields(classes) {
-		if class == className {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(strings.Fields(classes), className)
 }
 
 func textContent(node *html.Node) string {

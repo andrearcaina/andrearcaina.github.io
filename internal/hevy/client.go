@@ -139,10 +139,10 @@ func (c *Client) CurrentMonthSummary(ctx context.Context, _ time.Time) (WorkoutS
 	lastErr := c.lastErr
 	c.refreshMu.Unlock()
 	if lastErr != nil {
-		return WorkoutSummary{}, fmt.Errorf("Hevy summary refresh failed: %w", lastErr)
+		return WorkoutSummary{}, fmt.Errorf("hevy summary refresh failed: %w", lastErr)
 	}
 
-	return WorkoutSummary{}, fmt.Errorf("Hevy summary is not ready yet")
+	return WorkoutSummary{}, fmt.Errorf("hevy summary is not ready yet")
 }
 
 func (c *Client) refresh(ctx context.Context) {
@@ -169,7 +169,7 @@ func (c *Client) scrape(ctx context.Context, now time.Time) (WorkoutSummary, err
 	if err != nil {
 		return WorkoutSummary{}, err
 	}
-	defer pw.Stop()
+	defer func() { _ = pw.Stop() }()
 	launchOptions := playwright.BrowserTypeLaunchOptions{Headless: &c.headless}
 	if c.chromiumPath != "" {
 		launchOptions.ExecutablePath = &c.chromiumPath
@@ -178,7 +178,7 @@ func (c *Client) scrape(ctx context.Context, now time.Time) (WorkoutSummary, err
 	if err != nil {
 		return WorkoutSummary{}, err
 	}
-	defer browser.Close()
+	defer func() { _ = browser.Close() }()
 	page, err := browser.NewPage()
 	if err != nil {
 		return WorkoutSummary{}, err
@@ -186,11 +186,11 @@ func (c *Client) scrape(ctx context.Context, now time.Time) (WorkoutSummary, err
 	if _, err = page.Goto("https://hevy.com/login"); err != nil {
 		return WorkoutSummary{}, err
 	}
-	page.WaitForTimeout(2000)
+	page.WaitForTimeout(2000) //nolint:staticcheck // the login page needs time to render
 	if err = page.GetByText("Or with email").Click(); err != nil {
 		return WorkoutSummary{}, fmt.Errorf("could not open Hevy email login at %s (%s): %w", page.URL(), pageState(page), err)
 	}
-	page.WaitForTimeout(500)
+	page.WaitForTimeout(500) //nolint:staticcheck // the login form needs time to render
 	emailInput := page.Locator("input:not([type]), input[type='email'], input[name='email'], input[autocomplete='email'], input[placeholder*='email' i], input[type='text']").First()
 	if err = emailInput.Fill(c.email); err != nil {
 		return WorkoutSummary{}, fmt.Errorf("could not find Hevy email input at %s (%s): %w", page.URL(), pageState(page), err)
@@ -202,9 +202,9 @@ func (c *Client) scrape(ctx context.Context, now time.Time) (WorkoutSummary, err
 		return WorkoutSummary{}, fmt.Errorf("could not submit Hevy login at %s (%s): %w", page.URL(), pageState(page), err)
 	}
 
-	page.WaitForTimeout(1500)
+	page.WaitForTimeout(1500) //nolint:staticcheck // wait for the login redirect
 	if strings.Contains(page.URL(), "/login") {
-		return WorkoutSummary{}, fmt.Errorf("Hevy login did not complete at %s (%s)", page.URL(), pageState(page))
+		return WorkoutSummary{}, fmt.Errorf("hevy login did not complete at %s (%s)", page.URL(), pageState(page))
 	}
 	bodyCh := make(chan []byte, 32)
 	page.OnResponse(func(response playwright.Response) {
@@ -222,7 +222,7 @@ func (c *Client) scrape(ctx context.Context, now time.Time) (WorkoutSummary, err
 		return WorkoutSummary{}, err
 	}
 	if strings.Contains(page.URL(), "/login") {
-		return WorkoutSummary{}, fmt.Errorf("Hevy profile redirected to login at %s (%s)", page.URL(), pageState(page))
+		return WorkoutSummary{}, fmt.Errorf("hevy profile redirected to login at %s (%s)", page.URL(), pageState(page))
 	}
 
 	workouts := make(map[string]workout)
@@ -289,13 +289,13 @@ func (c *Client) scrape(ctx context.Context, now time.Time) (WorkoutSummary, err
 			const target = candidates[0] || document.scrollingElement;
 			if (target) target.scrollTop = target.scrollHeight;
 		}`)
-		page.WaitForTimeout(1000)
+		page.WaitForTimeout(1000) //nolint:staticcheck // allow workout data to load after scrolling
 	}
 	if err := collect(); err != nil {
 		return WorkoutSummary{}, err
 	}
 	if len(workouts) == 0 {
-		return WorkoutSummary{}, fmt.Errorf("Hevy profile returned no workouts")
+		return WorkoutSummary{}, fmt.Errorf("hevy profile returned no workouts")
 	}
 	items := make([]workout, 0, len(workouts))
 	for _, item := range workouts {
@@ -340,7 +340,7 @@ func pageState(page playwright.Page) string {
 
 	inputCount, _ := page.Locator("input").Count()
 	inputs := make([]string, 0, inputCount)
-	for index := 0; index < inputCount; index++ {
+	for index := range inputCount {
 		input := page.Locator("input").Nth(index)
 		inputType, _ := input.GetAttribute("type")
 		placeholder, _ := input.GetAttribute("placeholder")
