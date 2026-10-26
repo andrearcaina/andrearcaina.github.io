@@ -21,8 +21,8 @@ type PullRequest = {
   url: string;
   repository: string;
   occurredAt: string;
-  state: "OPEN" | "CLOSED";
-  merged: boolean;
+  state?: "OPEN" | "CLOSED";
+  merged?: boolean;
 };
 type Activity = {
   total: number;
@@ -39,7 +39,24 @@ export function GitHubActivity() {
       .then((response) =>
         response.ok ? response.json() : Promise.reject(response.status),
       )
-      .then(setActivity)
+      .then((data: unknown) => {
+        if (!data || typeof data !== "object") {
+          throw new Error("Invalid GitHub activity response");
+        }
+
+        const candidate = data as Partial<Activity>;
+        if (typeof candidate.total !== "number" || !Array.isArray(candidate.days)) {
+          throw new Error("Incomplete GitHub activity response");
+        }
+
+        setActivity({
+          total: candidate.total,
+          days: candidate.days,
+          pullRequests: Array.isArray(candidate.pullRequests)
+            ? candidate.pullRequests
+            : [],
+        });
+      })
       .catch(() => setActivity(null));
   }, []);
 
@@ -117,12 +134,12 @@ export function GitHubActivity() {
                   aria-label={
                     pullRequest.merged
                       ? "Merged pull request"
-                      : `${pullRequest.state.toLowerCase()} pull request`
+                      : `${pullRequest.state?.toLowerCase() ?? "closed"} pull request`
                   }
                   title={
                     pullRequest.merged
                       ? "Merged"
-                      : pullRequest.state.toLowerCase()
+                      : (pullRequest.state?.toLowerCase() ?? "closed")
                   }
                   className={`shrink-0 ${
                     pullRequest.merged
