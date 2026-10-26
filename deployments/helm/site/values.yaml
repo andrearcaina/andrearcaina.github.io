@@ -11,7 +11,7 @@ env:
     allowedOrigins: https://andrearcaina.ca,https://www.andrearcaina.ca,https://andrearcaina.vercel.app,http://localhost:3000,http://localhost:8080
     hevyUsername: andre331
     hevyHeadless: true
-    hevyRefreshInterval: 30m
+    hevyRefreshInterval: 1h
 
 resources:
     requests:
