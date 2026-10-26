@@ -10,6 +10,19 @@ type spotifyTokenResponse struct {
 	AccessToken string `json:"access_token"`
 }
 
+type spotifyNowPlaying struct {
+	IsPlaying     bool   `json:"isPlaying"`
+	Title         string `json:"title,omitempty"`
+	Artist        string `json:"artist,omitempty"`
+	Album         string `json:"album,omitempty"`
+	AlbumImageURL string `json:"albumImageUrl,omitempty"`
+	SongURL       string `json:"songUrl,omitempty"`
+	Duration      int    `json:"duration,omitempty"`
+	Progress      int    `json:"progress,omitempty"`
+	Explicit      bool   `json:"explicit,omitempty"`
+	Message       string `json:"message,omitempty"`
+}
+
 type spotifyCurrentlyPlaying struct {
 	IsPlaying bool `json:"is_playing"`
 	Progress  int  `json:"progress_ms"`

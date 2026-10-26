@@ -35,6 +35,8 @@ type Handler struct {
 	githubLimiter  *ratelimit.Limiter
 	spotifyLimiter *ratelimit.Limiter
 	states         sync.Map
+	spotifyMu      sync.RWMutex
+	spotifyCurrent spotifyNowPlaying
 }
 
 func NewHandler(cfg *config.Config, appLogger *logger.Logger) *Handler {
@@ -48,8 +50,12 @@ func NewHandler(cfg *config.Config, appLogger *logger.Logger) *Handler {
 		contactLimiter: ratelimit.New(5, time.Minute),
 		githubLimiter:  ratelimit.New(30, time.Minute),
 		spotifyLimiter: ratelimit.New(30, time.Minute),
+		spotifyCurrent: spotifyNowPlaying{Message: "Spotify is not configured"},
 	}
 	handler.hevy.Start(context.Background())
+	if cfg.SpotifyClientID != "" && cfg.SpotifySecret != "" && cfg.SpotifyRefresh != "" {
+		go handler.startSpotifyPolling()
+	}
 	return handler
 }
 
@@ -159,39 +165,55 @@ func (h *Handler) contact(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, map[string]bool{"success": true})
 }
 
-func (h *Handler) spotify(w http.ResponseWriter, r *http.Request) {
-	if h.config.SpotifyClientID == "" || h.config.SpotifySecret == "" || h.config.SpotifyRefresh == "" {
-		writeJSON(w, http.StatusOK, map[string]any{"isPlaying": false, "message": "Spotify is not configured"})
+func (h *Handler) spotify(w http.ResponseWriter, _ *http.Request) {
+	h.spotifyMu.RLock()
+	current := h.spotifyCurrent
+	h.spotifyMu.RUnlock()
+	writeJSON(w, http.StatusOK, current)
+}
+
+func (h *Handler) startSpotifyPolling() {
+	h.refreshSpotify()
+
+	ticker := time.NewTicker(15 * time.Second)
+	defer ticker.Stop()
+	for range ticker.C {
+		h.refreshSpotify()
+	}
+}
+
+func (h *Handler) refreshSpotify() {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	token, err := h.spotifyAccessToken(ctx)
+	if err != nil {
+		h.logger.Error(ctx, "Failed to get Spotify access token", "error", err)
+		h.setSpotifyCurrent(spotifyNowPlaying{Message: "Currently listening to nothing"})
 		return
 	}
 
-	token, err := h.spotifyAccessToken(r)
+	request, err := http.NewRequestWithContext(ctx, http.MethodGet, "https://api.spotify.com/v1/me/player/currently-playing", nil)
 	if err != nil {
-		h.logger.Error(r.Context(), "Failed to get Spotify access token", "error", err)
-		writeJSON(w, http.StatusOK, map[string]any{"isPlaying": false, "message": "Currently listening to nothing"})
-		return
-	}
-
-	request, err := http.NewRequestWithContext(r.Context(), http.MethodGet, "https://api.spotify.com/v1/me/player/currently-playing", nil)
-	if err != nil {
-		writeError(w, http.StatusInternalServerError, "failed to create Spotify request")
+		h.logger.Error(ctx, "Failed to create Spotify request", "error", err)
 		return
 	}
 	request.Header.Set("Authorization", "Bearer "+token)
 	response, err := h.client.Do(request)
 	if err != nil {
-		writeJSON(w, http.StatusOK, map[string]any{"isPlaying": false, "message": "Currently listening to nothing"})
+		h.logger.Error(ctx, "Failed to fetch Spotify now-playing state", "error", err)
+		h.setSpotifyCurrent(spotifyNowPlaying{Message: "Currently listening to nothing"})
 		return
 	}
 	defer response.Body.Close()
 	if response.StatusCode == http.StatusNoContent || response.StatusCode >= http.StatusBadRequest {
-		writeJSON(w, http.StatusOK, map[string]any{"isPlaying": false, "message": "Not currently listening to anything"})
+		h.setSpotifyCurrent(spotifyNowPlaying{Message: "Not currently listening to anything"})
 		return
 	}
 
 	var playing spotifyCurrentlyPlaying
 	if err := json.NewDecoder(response.Body).Decode(&playing); err != nil || playing.Item == nil {
-		writeJSON(w, http.StatusOK, map[string]any{"isPlaying": false, "message": "Not currently listening to anything"})
+		h.setSpotifyCurrent(spotifyNowPlaying{Message: "Not currently listening to anything"})
 		return
 	}
 
@@ -204,25 +226,31 @@ func (h *Handler) spotify(w http.ResponseWriter, r *http.Request) {
 		imageURL = playing.Item.Album.Images[0].URL
 	}
 
-	writeJSON(w, http.StatusOK, map[string]any{
-		"isPlaying":     playing.IsPlaying,
-		"title":         playing.Item.Name,
-		"artist":        strings.Join(artists, ", "),
-		"album":         playing.Item.Album.Name,
-		"albumImageUrl": imageURL,
-		"songUrl":       playing.Item.ExternalURLs.Spotify,
-		"duration":      playing.Item.Duration,
-		"progress":      playing.Progress,
-		"explicit":      playing.Item.Explicit,
+	h.setSpotifyCurrent(spotifyNowPlaying{
+		IsPlaying:     playing.IsPlaying,
+		Title:         playing.Item.Name,
+		Artist:        strings.Join(artists, ", "),
+		Album:         playing.Item.Album.Name,
+		AlbumImageURL: imageURL,
+		SongURL:       playing.Item.ExternalURLs.Spotify,
+		Duration:      playing.Item.Duration,
+		Progress:      playing.Progress,
+		Explicit:      playing.Item.Explicit,
 	})
 }
 
-func (h *Handler) spotifyAccessToken(r *http.Request) (string, error) {
+func (h *Handler) setSpotifyCurrent(current spotifyNowPlaying) {
+	h.spotifyMu.Lock()
+	h.spotifyCurrent = current
+	h.spotifyMu.Unlock()
+}
+
+func (h *Handler) spotifyAccessToken(ctx context.Context) (string, error) {
 	form := url.Values{
 		"grant_type":    {"refresh_token"},
 		"refresh_token": {h.config.SpotifyRefresh},
 	}
-	request, err := http.NewRequestWithContext(r.Context(), http.MethodPost, "https://accounts.spotify.com/api/token", strings.NewReader(form.Encode()))
+	request, err := http.NewRequestWithContext(ctx, http.MethodPost, "https://accounts.spotify.com/api/token", strings.NewReader(form.Encode()))
 	if err != nil {
 		return "", err
 	}
