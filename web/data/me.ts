@@ -12,7 +12,7 @@ export const profile = {
   name: "andre arcaina",
   links: {
     github: "https://github.com/andrearcaina",
-    linkedin: "https://www.linkedin.com/in/andre-arcaina/",
+    linkedin: "https://www.linkedin.com/in/andrearcaina/",
     contact: "/contact",
     resume: "/resume/resume.pdf",
   },

@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"os"
 	"sort"
 	"strings"
 	"sync"
@@ -18,6 +19,7 @@ const summaryCacheKey = "current-month"
 type Client struct {
 	username, email, password string
 	headless                  bool
+	chromiumPath              string
 	refreshInterval           time.Duration
 	cache                     *ttlcache.Cache[string, WorkoutSummary]
 	refreshMu                 sync.Mutex
@@ -98,6 +100,7 @@ func NewClient(username, email, password string, headless bool, refreshInterval 
 		email:           email,
 		password:        password,
 		headless:        headless,
+		chromiumPath:    os.Getenv("HEVY_CHROMIUM_PATH"),
 		refreshInterval: refreshInterval,
 		cache: ttlcache.New[string, WorkoutSummary](
 			ttlcache.WithTTL[string, WorkoutSummary](refreshInterval),
@@ -167,7 +170,11 @@ func (c *Client) scrape(ctx context.Context, now time.Time) (WorkoutSummary, err
 		return WorkoutSummary{}, err
 	}
 	defer pw.Stop()
-	browser, err := pw.Chromium.Launch(playwright.BrowserTypeLaunchOptions{Headless: &c.headless})
+	launchOptions := playwright.BrowserTypeLaunchOptions{Headless: &c.headless}
+	if c.chromiumPath != "" {
+		launchOptions.ExecutablePath = &c.chromiumPath
+	}
+	browser, err := pw.Chromium.Launch(launchOptions)
 	if err != nil {
 		return WorkoutSummary{}, err
 	}
