@@ -168,8 +168,14 @@ func (c *Client) fetchActivity(ctx context.Context) (Activity, error) {
 			SetBody(body).
 			SetResult(&result).
 			Post("https://api.github.com/graphql")
-		if err != nil || response.StatusCode() >= 400 || len(result.Errors) > 0 {
-			return calendar, nil
+		if err != nil {
+			return Activity{}, err
+		}
+		if response.StatusCode() >= 400 {
+			return Activity{}, fmt.Errorf("GitHub GraphQL returned status %d: %s", response.StatusCode(), response.String())
+		}
+		if len(result.Errors) > 0 {
+			return Activity{}, fmt.Errorf("GitHub GraphQL query failed: %s", result.Errors[0].Message)
 		}
 
 		for _, pullRequest := range result.Data.User.PullRequests.Nodes {
