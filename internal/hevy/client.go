@@ -1,6 +1,7 @@
 package hevy
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -20,8 +21,8 @@ type Client struct {
 	username, email, password string
 	headless                  bool
 	chromiumPath              string
-	refreshInterval           time.Duration
 	cache                     *ttlcache.Cache[string, WorkoutSummary]
+	scrapeFn                  func(context.Context, time.Time) (WorkoutSummary, error)
 	refreshMu                 sync.Mutex
 	lastErr                   error
 }
@@ -91,19 +92,15 @@ func (t *flexibleTime) UnmarshalJSON(value []byte) error {
 	return nil
 }
 
-func NewClient(username, email, password string, headless bool, refreshInterval time.Duration) *Client {
-	if refreshInterval <= 0 {
-		refreshInterval = 30 * time.Minute
-	}
+func NewClient(username, email, password string, headless bool) *Client {
 	return &Client{
-		username:        username,
-		email:           email,
-		password:        password,
-		headless:        headless,
-		chromiumPath:    os.Getenv("HEVY_CHROMIUM_PATH"),
-		refreshInterval: refreshInterval,
+		username:     username,
+		email:        email,
+		password:     password,
+		headless:     headless,
+		chromiumPath: os.Getenv("HEVY_CHROMIUM_PATH"),
 		cache: ttlcache.New[string, WorkoutSummary](
-			ttlcache.WithTTL[string, WorkoutSummary](refreshInterval),
+			ttlcache.WithTTL[string, WorkoutSummary](ttlcache.NoTTL),
 			ttlcache.WithCapacity[string, WorkoutSummary](1),
 		),
 	}
@@ -111,18 +108,52 @@ func NewClient(username, email, password string, headless bool, refreshInterval 
 
 func (c *Client) Start(ctx context.Context) {
 	go func() {
-		c.refresh(ctx)
-		ticker := time.NewTicker(c.refreshInterval)
-		defer ticker.Stop()
+		var nextRun time.Time
 		for {
+			if nextRun.IsZero() {
+				nextRun = nextRefreshTime(time.Now().In(torontoLocation()))
+			}
+			timer := time.NewTimer(time.Until(nextRun))
+
 			select {
 			case <-ctx.Done():
+				timer.Stop()
 				return
-			case <-ticker.C:
-				c.refresh(ctx)
+			case <-timer.C:
+				changed := c.refresh(ctx)
+				if changed {
+					now := time.Now().In(torontoLocation())
+					nextDay := now.AddDate(0, 0, 1)
+					nextRun = time.Date(nextDay.Year(), nextDay.Month(), nextDay.Day(), 10, 0, 0, 0, torontoLocation())
+				} else {
+					nextRun = nextRefreshTime(time.Now().In(torontoLocation()))
+				}
 			}
 		}
 	}()
+}
+
+var toronto, _ = time.LoadLocation("America/Toronto")
+
+func torontoLocation() *time.Location {
+	if toronto != nil {
+		return toronto
+	}
+	return time.UTC
+}
+
+func nextRefreshTime(now time.Time) time.Time {
+	now = now.In(torontoLocation())
+	date := time.Date(now.Year(), now.Month(), now.Day(), now.Hour()+1, 0, 0, 0, torontoLocation())
+	if now.Hour() < 10 {
+		return time.Date(now.Year(), now.Month(), now.Day(), 10, 0, 0, 0, torontoLocation())
+	}
+
+	if now.Hour() >= 21 {
+		date = date.AddDate(0, 0, 1)
+		return time.Date(date.Year(), date.Month(), date.Day(), 10, 0, 0, 0, torontoLocation())
+	}
+	return date
 }
 
 func (c *Client) CurrentMonthSummary(ctx context.Context, _ time.Time) (WorkoutSummary, error) {
@@ -145,23 +176,39 @@ func (c *Client) CurrentMonthSummary(ctx context.Context, _ time.Time) (WorkoutS
 	return WorkoutSummary{}, fmt.Errorf("hevy summary is not ready yet")
 }
 
-func (c *Client) refresh(ctx context.Context) {
+func (c *Client) refresh(ctx context.Context) bool {
 	c.refreshMu.Lock()
 	defer c.refreshMu.Unlock()
 
 	if c.email == "" || c.password == "" {
 		c.lastErr = fmt.Errorf("HEVY_EMAIL and HEVY_PASSWORD are not configured")
-		return
+		return false
 	}
 
-	summary, err := c.scrape(ctx, time.Now())
+	scrape := c.scrape
+	if c.scrapeFn != nil {
+		scrape = c.scrapeFn
+	}
+	summary, err := scrape(ctx, time.Now().In(torontoLocation()))
 	if err != nil {
-		c.lastErr = err
-		return
+		// A disconnected HTTP request must not make the shared cache client
+		// report a persistent refresh failure to the next request.
+		if ctx.Err() == nil {
+			c.lastErr = err
+		}
+		return false
 	}
 
 	c.lastErr = nil
+	if item := c.cache.Get(summaryCacheKey); item != nil {
+		oldJSON, _ := json.Marshal(item.Value())
+		newJSON, _ := json.Marshal(summary)
+		if bytes.Equal(oldJSON, newJSON) {
+			return false
+		}
+	}
 	c.cache.Set(summaryCacheKey, summary, ttlcache.DefaultTTL)
+	return true
 }
 
 func (c *Client) scrape(ctx context.Context, now time.Time) (WorkoutSummary, error) {

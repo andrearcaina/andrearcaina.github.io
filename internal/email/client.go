@@ -9,8 +9,9 @@ import (
 )
 
 type Client struct {
-	client *resty.Client
-	apiKey string
+	client   *resty.Client
+	apiKey   string
+	endpoint string
 }
 
 type Message struct {
@@ -22,8 +23,9 @@ type Message struct {
 
 func NewClient(apiKey string) *Client {
 	return &Client{
-		client: resty.New().SetTimeout(10 * time.Second),
-		apiKey: apiKey,
+		client:   resty.New().SetTimeout(10 * time.Second),
+		apiKey:   apiKey,
+		endpoint: "https://api.resend.com/emails",
 	}
 }
 
@@ -32,7 +34,7 @@ func (c *Client) Send(ctx context.Context, message Message) error {
 		SetContext(ctx).
 		SetHeader("Authorization", "Bearer "+c.apiKey).
 		SetBody(message).
-		Post("https://api.resend.com/emails")
+		Post(c.endpoint)
 	if err != nil {
 		return err
 	}

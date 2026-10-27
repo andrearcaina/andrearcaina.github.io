@@ -47,7 +47,7 @@ func NewHandler(cfg *config.Config, appLogger *logger.Logger) *Handler {
 		client:         &http.Client{Timeout: 10 * time.Second},
 		email:          email.NewClient(cfg.ResendAPIKey),
 		github:         github.NewClient("andrearcaina", cfg.GitHubToken),
-		hevy:           hevy.NewClient(cfg.HevyUsername, cfg.HevyEmail, cfg.HevyPassword, cfg.HevyHeadless, cfg.HevyRefreshInterval),
+		hevy:           hevy.NewClient(cfg.HevyUsername, cfg.HevyEmail, cfg.HevyPassword, cfg.HevyHeadless),
 		contactLimiter: ratelimit.New(5, time.Minute),
 		githubLimiter:  ratelimit.New(30, time.Minute),
 		spotifyLimiter: ratelimit.New(30, time.Minute),
@@ -66,7 +66,6 @@ func (h *Handler) ServeRoutes() chi.Router {
 
 	router.Get("/v1/docs", docs)
 	router.Get("/openapi.yaml", openapi)
-	router.Get("/healthz", h.health)
 	router.With(h.contactLimiter.Middleware).Post("/v1/contact", h.contact)
 	router.With(h.githubLimiter.Middleware).Get("/v1/github/repos", h.githubRepos)
 	router.With(h.githubLimiter.Middleware).Get("/v1/github/activity", h.githubActivity)
@@ -122,11 +121,6 @@ func (h *Handler) githubRepos(w http.ResponseWriter, r *http.Request) {
 	}
 
 	writeJSON(w, http.StatusOK, repos)
-}
-
-func (h *Handler) health(w http.ResponseWriter, _ *http.Request) {
-	w.WriteHeader(http.StatusOK)
-	_, _ = w.Write([]byte("ok\n"))
 }
 
 func (h *Handler) contact(w http.ResponseWriter, r *http.Request) {
