@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/url"
 	"os"
 	"sort"
 	"strings"
@@ -21,6 +22,107 @@ type scraper struct {
 	headless     bool
 	chromiumPath string
 	logger       *applogger.Logger
+}
+
+type workoutCollector struct {
+	mu             sync.Mutex
+	workouts       map[string]workout
+	totalCount     int
+	totalKnown     bool
+	historyBatches int
+	signal         chan struct{}
+	err            error
+}
+
+func newWorkoutCollector() *workoutCollector {
+	return &workoutCollector{
+		workouts: make(map[string]workout),
+		signal:   make(chan struct{}, 1),
+	}
+}
+
+func (c *workoutCollector) observe(response playwright.Response) {
+	parsed, err := url.Parse(response.URL())
+	if err != nil || response.Status() != 200 || parsed.Host != "api.hevyapp.com" {
+		return
+	}
+
+	path := parsed.Path
+	if path != "/workout_count" && path != "/user_workouts_paged" {
+		return
+	}
+
+	body, err := response.Body()
+	if err != nil {
+		return
+	}
+
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	switch path {
+	case "/workout_count":
+		var data struct {
+			Count int `json:"workout_count"`
+		}
+		if err := json.Unmarshal(body, &data); err != nil || data.Count < 0 {
+			return
+		}
+		c.totalCount = data.Count
+		c.totalKnown = true
+	case "/user_workouts_paged":
+		var data workoutPage
+		if err := json.Unmarshal(body, &data); err != nil {
+			c.err = fmt.Errorf("invalid Hevy workout history response")
+			break
+		}
+		for _, item := range data.Workouts {
+			key := item.ID
+			if key == "" {
+				key = item.ShortID
+			}
+			if key != "" {
+				c.workouts[key] = item
+			}
+		}
+		c.historyBatches++
+	default:
+		return
+	}
+	select {
+	case c.signal <- struct{}{}:
+	default:
+	}
+}
+
+func (c *workoutCollector) snapshot() (items []workout, totalCount, batches int, totalKnown bool, err error) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	items = make([]workout, 0, len(c.workouts))
+	for _, item := range c.workouts {
+		items = append(items, item)
+	}
+	return items, c.totalCount, c.historyBatches, c.totalKnown, c.err
+}
+
+func (c *workoutCollector) waitForBatch(ctx context.Context, previous int) error {
+	deadline := time.NewTimer(15 * time.Second)
+	defer deadline.Stop()
+	for {
+		_, _, batches, _, err := c.snapshot()
+		if err != nil {
+			return err
+		}
+		if batches > previous {
+			return nil
+		}
+		select {
+		case <-ctx.Done():
+			return ctx.Err()
+		case <-deadline.C:
+			return fmt.Errorf("hevy workout history stopped loading")
+		case <-c.signal:
+		}
+	}
 }
 
 func newScraper(username, email, password string, headless bool, appLogger *applogger.Logger) *scraper {
@@ -99,29 +201,8 @@ func (s *scraper) scrape(ctx context.Context, now time.Time) (WorkoutSummary, er
 	if strings.Contains(page.URL(), "/login") {
 		return WorkoutSummary{}, fmt.Errorf("hevy login did not complete at %s (%s)", page.URL(), pageState(page))
 	}
-	workouts := make(map[string]workout)
-	var workoutsMu sync.Mutex
-	page.OnResponse(func(response playwright.Response) {
-		url := strings.ToLower(response.URL())
-		if response.Status() == 200 && (strings.Contains(url, "workout") || strings.Contains(url, "api.hevy")) {
-			if body, bodyErr := response.Body(); bodyErr == nil {
-				var data workoutPage
-				if json.Unmarshal(body, &data) == nil {
-					workoutsMu.Lock()
-					for _, item := range data.Workouts {
-						key := item.ID
-						if key == "" {
-							key = item.ShortID
-						}
-						if key != "" {
-							workouts[key] = item
-						}
-					}
-					workoutsMu.Unlock()
-				}
-			}
-		}
-	})
+	collector := newWorkoutCollector()
+	page.OnResponse(collector.observe)
 	if _, err = page.Goto("https://hevy.com/profile"); err != nil {
 		return WorkoutSummary{}, err
 	}
@@ -129,35 +210,29 @@ func (s *scraper) scrape(ctx context.Context, now time.Time) (WorkoutSummary, er
 		return WorkoutSummary{}, fmt.Errorf("hevy profile redirected to login at %s (%s)", page.URL(), pageState(page))
 	}
 
-	workoutCount := func() int {
-		workoutsMu.Lock()
-		defer workoutsMu.Unlock()
-		return len(workouts)
-	}
+	startOfMonth := time.Date(now.Year(), now.Month(), 1, 0, 0, 0, 0, now.Location())
+	stalePages := 0
+	for range 500 {
+		items, totalCount, batches, totalKnown, err := collector.snapshot()
+		if err != nil {
+			return WorkoutSummary{}, err
+		}
+		if len(items) == 0 && totalKnown && totalCount == 0 {
+			return summarize(items, now), nil
+		}
 
-	deadline := time.NewTimer(30 * time.Second)
-	defer deadline.Stop()
-	for attempt, unchanged := 0, 0; attempt < 20; attempt++ {
-		select {
-		case <-ctx.Done():
-			return WorkoutSummary{}, ctx.Err()
-		case <-deadline.C:
-			if workoutCount() == 0 {
-				return WorkoutSummary{}, fmt.Errorf("timed out waiting for Hevy workout data")
+		oldest := time.Time{}
+		for _, item := range items {
+			started := item.StartTime.In(now.Location())
+			if oldest.IsZero() || started.Before(oldest) {
+				oldest = started
 			}
-			attempt = 20
-		default:
 		}
-
-		before := workoutCount()
-		if workoutCount() == before {
-			unchanged++
-		} else {
-			unchanged = 0
-		}
-		if workoutCount() > 0 && unchanged >= 5 {
+		if (totalKnown && len(items) >= totalCount) || (!oldest.IsZero() && oldest.Before(startOfMonth)) {
+			s.logger.Debug(ctx, "Hevy workout history collection complete", "workouts", len(items), "total", totalCount, "total_known", totalKnown, "batches", batches)
 			break
 		}
+		s.logger.Debug(ctx, "Hevy workout history progress", "workouts", len(items), "total", totalCount, "total_known", totalKnown, "batches", batches)
 
 		_, _ = page.Evaluate(`() => {
 			const candidates = [...document.querySelectorAll('div')]
@@ -172,17 +247,29 @@ func (s *scraper) scrape(ctx context.Context, now time.Time) (WorkoutSummary, er
 			const target = candidates[0] || document.scrollingElement;
 			if (target) target.scrollTop = target.scrollHeight;
 		}`)
-		page.WaitForTimeout(250) //nolint:staticcheck // allow workout data to load after scrolling
+		if err := collector.waitForBatch(ctx, batches); err != nil {
+			return WorkoutSummary{}, err
+		}
+		nextItems, _, _, _, err := collector.snapshot()
+		if err != nil {
+			return WorkoutSummary{}, err
+		}
+		if len(nextItems) == len(items) {
+			stalePages++
+			if stalePages >= 3 {
+				return WorkoutSummary{}, fmt.Errorf("hevy workout history pagination did not advance")
+			}
+		} else {
+			stalePages = 0
+		}
 	}
-	if workoutCount() == 0 {
+	items, _, _, _, err := collector.snapshot()
+	if err != nil {
+		return WorkoutSummary{}, err
+	}
+	if len(items) == 0 {
 		return WorkoutSummary{}, fmt.Errorf("hevy profile returned no workouts")
 	}
-	workoutsMu.Lock()
-	items := make([]workout, 0, len(workouts))
-	for _, item := range workouts {
-		items = append(items, item)
-	}
-	workoutsMu.Unlock()
 	sort.Slice(items, func(i, j int) bool {
 		return items[i].StartTime.After(items[j].StartTime.Time)
 	})
