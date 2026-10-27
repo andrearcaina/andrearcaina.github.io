@@ -14,13 +14,6 @@ type Client struct {
 	endpoint string
 }
 
-type Message struct {
-	From    string   `json:"from"`
-	To      []string `json:"to"`
-	Subject string   `json:"subject"`
-	HTML    string   `json:"html"`
-}
-
 func NewClient(apiKey string) *Client {
 	return &Client{
 		client:   resty.New().SetTimeout(10 * time.Second),

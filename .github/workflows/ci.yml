@@ -38,7 +38,7 @@ jobs:
                   version: v2.15.0
                   install-only: true
 
-            - name: Run fix, format, vet, lint, test
+            - name: Run fix, fmt, vet, lint, test
               run: make check
 
             - name: Build binary file and web assets

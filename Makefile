@@ -1,4 +1,4 @@
-.PHONY: build build-go install-web build-web playwright clean-web run dev fmt fmt-check tidy test vet lint check clean
+.PHONY: build build-go install-web build-web playwright clean-web run dev fmt tidy test vet lint check clean
 
 build: build-web build-go
 
@@ -24,9 +24,6 @@ fix:
 fmt:
 	gofmt -w cmd internal
 
-fmt-check:
-	test -z "$$(gofmt -l cmd internal)"
-
 tidy:
 	go mod tidy
 
@@ -34,15 +31,20 @@ lint:
 	golangci-lint run ./cmd/... ./internal/...
 
 test:
-	go test ./...
+	mkdir -p coverage
+	go test ./... -race -coverprofile=coverage/coverage.out -covermode=atomic
 
 vet:
 	go vet ./...
 
-check: fix fmt-check vet lint test
+view-coverage:
+	go tool cover -html=coverage/coverage.out -o=coverage/coverage.html
+
+check: fix fmt vet lint test view-coverage
 
 clean-web:
 	rm -rf web/out web/.next
 
 clean: clean-web
+	rm -rf coverage/*
 	rm -rf bin/*
