@@ -46,7 +46,7 @@ func NewHandler(cfg *config.Config, appLogger *logger.Logger) *Handler {
 		logger:         appLogger,
 		client:         &http.Client{Timeout: 10 * time.Second},
 		email:          email.NewClient(cfg.ResendAPIKey),
-		github:         github.NewClient("andrearcaina", cfg.GitHubToken),
+		github:         github.NewClient("andrearcaina", cfg.GitHubToken, appLogger),
 		hevy:           hevy.NewClient(cfg.HevyUsername, cfg.HevyEmail, cfg.HevyPassword, cfg.HevyHeadless, appLogger),
 		contactLimiter: ratelimit.New(5, time.Minute),
 		githubLimiter:  ratelimit.New(30, time.Minute),

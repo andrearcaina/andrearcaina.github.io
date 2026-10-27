@@ -9,8 +9,6 @@ import (
 	applogger "github.com/andrearcaina/andrearcaina.github.io/internal/logger"
 )
 
-const summaryCacheKey = "current-month"
-
 const scrapeTimeout = 2 * time.Minute
 
 type Client struct {

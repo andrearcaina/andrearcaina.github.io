@@ -4,29 +4,21 @@ import (
 	"bytes"
 	"encoding/json"
 
-	"github.com/jellydator/ttlcache/v3"
+	"github.com/andrearcaina/andrearcaina.github.io/internal/cache"
 )
 
 type summaryCache struct {
-	cache *ttlcache.Cache[string, WorkoutSummary]
+	store cache.Store[WorkoutSummary]
 }
 
 func newSummaryCache() *summaryCache {
 	return &summaryCache{
-		cache: ttlcache.New[string, WorkoutSummary](
-			ttlcache.WithTTL[string, WorkoutSummary](ttlcache.NoTTL),
-			ttlcache.WithCapacity[string, WorkoutSummary](1),
-		),
+		store: cache.New[WorkoutSummary](cache.NoTTL, 1),
 	}
 }
 
 func (c *summaryCache) Get() (WorkoutSummary, bool) {
-	item := c.cache.Get(summaryCacheKey)
-	if item == nil {
-		return WorkoutSummary{}, false
-	}
-
-	return item.Value(), true
+	return c.store.Get()
 }
 
 func (c *summaryCache) SetIfChanged(summary WorkoutSummary) bool {
@@ -38,6 +30,6 @@ func (c *summaryCache) SetIfChanged(summary WorkoutSummary) bool {
 			return false
 		}
 	}
-	c.cache.Set(summaryCacheKey, summary, ttlcache.DefaultTTL)
+	c.store.Set(summary)
 	return true
 }

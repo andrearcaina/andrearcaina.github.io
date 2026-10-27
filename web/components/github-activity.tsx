@@ -9,6 +9,12 @@ import {
   GoGitPullRequestClosed,
   GoGitPullRequestDraft,
 } from "react-icons/go";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL ||
@@ -98,15 +104,25 @@ export function GitHubActivity() {
         </span>
       </div>
       <div ref={calendarRef} className="overflow-x-auto pb-1">
-        <div className="grid min-w-[360px] grid-flow-col grid-rows-7 gap-[2px] sm:min-w-[430px] sm:gap-[3px]">
-          {activity.days.slice(-371).map((day) => (
-            <span
-              key={day.date}
-              title={`${day.count} contribution${day.count === 1 ? "" : "s"} on ${day.date}`}
-              className={`h-[5px] w-[5px] rounded-[1px] activity-level-${day.level} sm:h-2.5 sm:w-2.5 sm:rounded-[2px]`}
-            />
-          ))}
-        </div>
+        <TooltipProvider delayDuration={100}>
+          <div className="grid min-w-[360px] grid-flow-col grid-rows-7 gap-[2px] sm:min-w-[430px] sm:gap-[3px]">
+            {activity.days.slice(-371).map((day) => (
+              <Tooltip key={day.date}>
+                <TooltipTrigger asChild>
+                  <span
+                    aria-label={`${day.count} contribution${day.count === 1 ? "" : "s"} on ${day.date}`}
+                    role="img"
+                    className={`h-[5px] w-[5px] cursor-help rounded-[1px] outline-none ring-primary focus:ring-2 activity-level-${day.level} sm:h-2.5 sm:w-2.5 sm:rounded-[2px]`}
+                  />
+                </TooltipTrigger>
+                <TooltipContent>
+                  {day.count} contribution
+                  {day.count === 1 ? "" : "s"} on {day.date}
+                </TooltipContent>
+              </Tooltip>
+            ))}
+          </div>
+        </TooltipProvider>
       </div>
       <div className="mt-2 flex items-center justify-end gap-1 text-[10px] text-muted-foreground">
         <span>Less</span>

@@ -44,8 +44,8 @@ type PullRequest struct {
 }
 
 type graphqlRequest struct {
-	Query     string            `json:"query"`
-	Variables map[string]string `json:"variables"`
+	Query     string         `json:"query"`
+	Variables map[string]any `json:"variables"`
 }
 
 type graphqlResponse struct {
@@ -64,6 +64,10 @@ type graphqlResponse struct {
 						IsPrivate     bool   `json:"isPrivate"`
 					} `json:"repository"`
 				} `json:"nodes"`
+				PageInfo struct {
+					HasNextPage bool   `json:"hasNextPage"`
+					EndCursor   string `json:"endCursor"`
+				} `json:"pageInfo"`
 			} `json:"pullRequests"`
 		} `json:"user"`
 	} `json:"data"`

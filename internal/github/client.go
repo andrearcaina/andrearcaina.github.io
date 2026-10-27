@@ -7,23 +7,38 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
+	applogger "github.com/andrearcaina/andrearcaina.github.io/internal/logger"
 	"golang.org/x/net/html"
 	"resty.dev/v3"
 )
 
 type Client struct {
-	client   *resty.Client
-	username string
-	token    string
+	client     *resty.Client
+	username   string
+	token      string
+	cache      *activityCache
+	activityMu sync.Mutex
+	logger     *applogger.Logger
 }
 
-func NewClient(username, token string) *Client {
+const activityCacheTTL = 10 * time.Minute
+
+const maxPublicPullRequests = 3
+
+func NewClient(username, token string, appLogger *applogger.Logger) *Client {
+	if appLogger == nil {
+		appLogger = applogger.New()
+	}
+
 	return &Client{
 		client:   resty.New().SetTimeout(10 * time.Second),
 		username: username,
 		token:    token,
+		cache:    newActivityCache(),
+		logger:   appLogger,
 	}
 }
 
@@ -82,14 +97,39 @@ func (c *Client) RecentRepositories(ctx context.Context, perPage, initialFetch i
 }
 
 func (c *Client) Activity(ctx context.Context) (Activity, error) {
+	c.activityMu.Lock()
+	defer c.activityMu.Unlock()
+
+	if activity, ok := c.cache.Get(); ok {
+		c.logger.Info(ctx, "GitHub activity cache hit", "source", "memory")
+
+		return activity, nil
+	}
+	c.logger.Info(ctx, "GitHub activity cache miss", "status", "refreshing")
+
+	started := time.Now()
+	activity, err := c.fetchActivity(ctx)
+	if err != nil {
+		c.logger.Error(ctx, "Failed to fetch GitHub activity", "error", err)
+
+		return Activity{}, err
+	}
+
+	c.cache.Set(activity)
+	c.logger.Info(ctx, "GitHub activity refreshed", "duration", time.Since(started), "pull_requests", len(activity.PullRequests))
+
+	return activity, nil
+}
+
+func (c *Client) fetchActivity(ctx context.Context) (Activity, error) {
 	calendar, err := c.contributionCalendar(ctx)
 	if err != nil {
 		return Activity{}, err
 	}
 
-	query := `query($login: String!) {
+	query := `query($login: String!, $after: String) {
   user(login: $login) {
-    pullRequests(first: 10, orderBy: {field: CREATED_AT, direction: DESC}) {
+			pullRequests(first: 50, after: $after, orderBy: {field: CREATED_AT, direction: DESC}) {
       nodes {
         title
         url
@@ -102,47 +142,59 @@ func (c *Client) Activity(ctx context.Context) (Activity, error) {
           isPrivate
         }
       }
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
     }
   }
 }`
-	body := graphqlRequest{
-		Query: query,
-		Variables: map[string]string{
-			"login": c.username,
-		},
-	}
-	var result graphqlResponse
-	response, err := c.client.R().
-		SetContext(ctx).
-		SetHeader("Accept", "application/vnd.github+json").
-		SetHeader("Authorization", "Bearer "+c.token).
-		SetBody(body).
-		SetResult(&result).
-		Post("https://api.github.com/graphql")
-	if err != nil {
-		return calendar, nil
-	}
-	if response.StatusCode() >= 400 {
-		return calendar, nil
-	}
-	if len(result.Errors) > 0 {
-		return calendar, nil
-	}
 
-	pullRequests := make([]PullRequest, 0, len(result.Data.User.PullRequests.Nodes))
-	for _, pullRequest := range result.Data.User.PullRequests.Nodes {
-		if pullRequest.Repository.IsPrivate {
-			continue
+	pullRequests := make([]PullRequest, 0, maxPublicPullRequests)
+	var cursor *string
+	for len(pullRequests) < maxPublicPullRequests {
+		body := graphqlRequest{
+			Query: query,
+			Variables: map[string]any{
+				"login": c.username,
+				"after": cursor,
+			},
 		}
-		pullRequests = append(pullRequests, PullRequest{
-			Title:      pullRequest.Title,
-			URL:        pullRequest.URL,
-			Repository: pullRequest.Repository.NameWithOwner,
-			OccurredAt: pullRequest.CreatedAt,
-			State:      pullRequest.State,
-			Merged:     pullRequest.Merged,
-			IsDraft:    pullRequest.IsDraft,
-		})
+		var result graphqlResponse
+		response, err := c.client.R().
+			SetContext(ctx).
+			SetHeader("Accept", "application/vnd.github+json").
+			SetHeader("Authorization", "Bearer "+c.token).
+			SetBody(body).
+			SetResult(&result).
+			Post("https://api.github.com/graphql")
+		if err != nil || response.StatusCode() >= 400 || len(result.Errors) > 0 {
+			return calendar, nil
+		}
+
+		for _, pullRequest := range result.Data.User.PullRequests.Nodes {
+			if pullRequest.Repository.IsPrivate {
+				continue
+			}
+			pullRequests = append(pullRequests, PullRequest{
+				Title:      pullRequest.Title,
+				URL:        pullRequest.URL,
+				Repository: pullRequest.Repository.NameWithOwner,
+				OccurredAt: pullRequest.CreatedAt,
+				State:      pullRequest.State,
+				Merged:     pullRequest.Merged,
+				IsDraft:    pullRequest.IsDraft,
+			})
+			if len(pullRequests) == maxPublicPullRequests {
+				break
+			}
+		}
+
+		if !result.Data.User.PullRequests.PageInfo.HasNextPage {
+			break
+		}
+		nextCursor := result.Data.User.PullRequests.PageInfo.EndCursor
+		cursor = &nextCursor
 	}
 	return Activity{Total: calendar.Total, Days: calendar.Days, PullRequests: pullRequests}, nil
 }
