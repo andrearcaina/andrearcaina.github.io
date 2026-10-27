@@ -35,6 +35,9 @@ spec:
                       - name: http
                         containerPort: 8080
                         protocol: TCP
+                      - name: metrics
+                        containerPort: 9090
+                        protocol: TCP
                   env:
                       - name: API_HOST
                         value: {{ .Values.env.apiHost | quote }}

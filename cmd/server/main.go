@@ -13,6 +13,7 @@ import (
 	"github.com/andrearcaina/andrearcaina.github.io/internal/config"
 	"github.com/andrearcaina/andrearcaina.github.io/internal/logger"
 	"github.com/andrearcaina/andrearcaina.github.io/internal/web"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -29,6 +30,11 @@ func main() {
 		Handler:           web.NewHandler(cfg).ServeRoutes(appLogger, apiHandler),
 		ReadHeaderTimeout: 5 * time.Second,
 	}
+	metricsServer := &http.Server{
+		Addr:              ":9090",
+		Handler:           promhttp.Handler(),
+		ReadHeaderTimeout: 5 * time.Second,
+	}
 
 	g, ctx := errgroup.WithContext(ctx)
 	g.Go(func() error {
@@ -41,11 +47,24 @@ func main() {
 	})
 
 	g.Go(func() error {
+		appLogger.Info(ctx, "metrics server listening", "port", ":9090")
+		if err := metricsServer.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+			return err
+		}
+
+		return nil
+	})
+
+	g.Go(func() error {
 		<-ctx.Done()
 		shutdown, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 		defer cancel()
 
-		return server.Shutdown(shutdown)
+		if err := server.Shutdown(shutdown); err != nil {
+			return err
+		}
+
+		return metricsServer.Shutdown(shutdown)
 	})
 
 	if err := g.Wait(); err != nil {

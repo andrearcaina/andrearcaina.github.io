@@ -31,6 +31,7 @@ func (h *Handler) ServeRoutes(appLogger *logger.Logger, apiHandler *api.Handler)
 	)
 
 	router.Get("/healthz", h.health)
+	router.Head("/healthz", h.health)
 	apiRoutes := apiHandler.ServeRoutes()
 	serve := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if h.isAPIHost(r.Host) {
