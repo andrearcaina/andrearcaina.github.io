@@ -59,7 +59,7 @@ export default async function HomePage() {
                     <ButtonMotion>
                       <Button
                         asChild
-                        variant="secondary"
+                        variant="outline"
                         className="button-hover-fix"
                       >
                         <Link

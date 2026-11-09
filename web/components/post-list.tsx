@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { Separator } from "@/components/ui/separator";
 import type { Post } from "@/lib/posts";
+import { formatDate } from "@/lib/utils";
 
 export function PostList({ posts }: { posts: Post[] }) {
   if (!posts.length) {
@@ -25,14 +26,12 @@ export function PostList({ posts }: { posts: Post[] }) {
           )}
           <p className="text-xs text-muted-foreground">
             Published:{" "}
-            {p.meta.publishedAt
-              ? new Date(p.meta.publishedAt).toLocaleDateString()
-              : ""}
+            {p.meta.publishedAt ? formatDate(p.meta.publishedAt) : ""}
           </p>
           {p.meta.lastUpdatedAt && (
             <p className="text-xs text-muted-foreground">
               Last Updated:{" "}
-              {new Date(p.meta.lastUpdatedAt).toLocaleDateString()}
+              {formatDate(p.meta.lastUpdatedAt)}
             </p>
           )}
           {i < posts.length - 1 && <Separator className="mt-3" />}

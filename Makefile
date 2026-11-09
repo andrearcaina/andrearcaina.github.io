@@ -1,5 +1,7 @@
 .PHONY: build build-go install-web build-web playwright clean-web run dev fmt tidy test vet lint check clean
 
+default: run
+
 build: build-web build-go
 
 install-web:

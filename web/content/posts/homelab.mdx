@@ -1,0 +1,120 @@
+---
+title: "falling down the homelab rabbit hole"
+summary: "how building a personal homelab changed the way i see engineering"
+publishedAt: "2026-11-08"
+lastUpdatedAt: "2026-11-08"
+---
+
+It's been a while since I made a blog post (if anyone even reads this), but ever since then
+I've been working on a numerous amount of projects.
+
+I created [**Hyperion**](https://github.com/andrearcaina/hyperion), a distributed key-value
+database using the `hashicorp-raft` SDK for consensus, **Go cuz I like it** (although maybe 
+I could've done it in C++ or Rust), as well as Docker and Kubernetes (kind) for different 
+deployment options. I even implemented *chaos testing*, but enough about that. If you want 
+to go check it out, feel free to check my [**GitHub**](https://github.com/andrearcaina)!
+
+Anyways, back to the point of this blog post. Something I've recently built was my own personal
+**homelab server**. It started around the beginning/middle of July, I think, when I got a
+bright idea to try and make my own homelab. I had a friend who has his own NAS and his own
+homelab where he hosts a bunch of cool stuff, so I thought it would be cool to make my own too.
+
+## Falling... or Ascending?
+
+Suddenly, I fell down a rabbit hole... and I think for the next month or so I got Instagram reels,
+YouTube shorts, and I even started reading Reddit threads (you know it's cooked when you do this),
+to the point where I went from "hmm..." to researching *"diff between NAS and homelab"*
+
+I learnt a whole lotta sh\*t from July-August. Technically, I knew these tools and software
+before; I just never used them. And that's the great thing about **building**, IMO: you
+actually learn by doing. Things like **Tailscale**, **Cloudflare Tunnel**, **Proxmox VE**,
+**LXC containers**, and **VMs**—I never really worked in "creating" with these tools before,
+and finally was piecing everything together.
+
+### Kubernetes, because why not?
+
+This is probably one of the weird points of the project. Kubernetes is probably overkill for
+what I'm doing, especially since I'm technically only using one physical machine. There isn't
+really any fault tolerance or high availability for my services, because the entire cluster
+still depends on that one physical host. But what stops me from learning because I want to?
+
+Anyways, going into this project, I had experience with Kubernetes before, but only for local
+development. I wanted to understand the complexity better and basically remove that *"oh, it's
+hard to learn"* factor. So, I decided to use Kubernetes (more specifically, **k3s**) to
+orchestrate all my services, including this website and private services like **Immich**,
+**Prometheus**, and **Grafana**. I learnt a lot of things, and honestly, it was an eye-opening
+experience, to say the least.
+
+I could've just used 15+ Linux Containers (LXC) on Proxmox instead, or one of the other
+orchestration tools I considered, such as Podman, Compose, Swarm, or Nomad. But, Kubernetes
+felt like the best fit for what I wanted to learn and build.
+
+## Buying the hardware
+
+Fast-forward to around the midpoint of the third week of August: I said, **_"f\*ck it, I'm
+buying a mini PC, idc."_** So, I bought a BOSGAME P5 Pro mini PC (~$900 LOL). It's
+okay, gotta use my internship money somewhere 😭. Looking back to this moment, I'm grateful for
+my past self for actually taking the step. This has been the greatest engineering learning
+experience that changed my whole outlook of my career, and I don't even think I'm
+exaggerating.
+
+Once I got the mini PC, I realized the easy part was done. It might've been the most expensive
+part, but the hardware was there. It was actually the software that was the hardest part.
+For 2–3 weeks (end of August to mid-September), I realized the full, sheer fundamentals of
+computer science and how it all came into play. This ranges from **networking, operating
+systems, computer architecture,** to **security**, and it all finally started to make sense.
+
+I know this sounds like I've been living under a rock—and yes, I've worked with servers and
+hardware (I made my own PC) before—but maybe it's because I had the intent of creating my
+**OWN server**. With my money, my hardware, and this time, taking something I learnt from
+school to the real world.
+
+## How this changed my journey
+
+It made me appreciate university, and maybe the past 5 years actually accumulated to
+something. It only felt like yesterday when I went to my first hackathon (shoutout
+[**UofTHacks**](https://x.uofthacks.com/) **2023**), where all I knew was Python and Java. Just the languages, not even
+frameworks (I didn't even know what CSS was LOL).
+
+More than anything, this project made a lot of things feel less abstract. I wasn't just
+learning concepts anymore; I was making tradeoffs, debugging failures, and figuring out why
+something broke instead of just moving on to the next assignment. I had to take ownership of
+the entire system, from the hardware and networking to the applications running on top of it.
+
+This rewired my brain to think more like a systems and infrastructure engineer, rather than
+some guy that writes code. Or I guess nowadays, prompting fifteen Claude subagents on a single terminal 😭
+
+I still have a lot to learn, but building something that I actually use made the learning feel
+way more real. Maybe the next steps would be buying more mini PCs, a server rack, mount some GPUs... 
+Local LLMs go brr 👀👀 _The [rabbit hole](https://www.reddit.com/r/homelab/comments/1vyqtfh/i_went_down_the_homelab_rabbit_hole/) has just begun..._
+
+Besides that, I hope this inspires you to improve your craft, no matter what it is, or how long it takes. 
+If you made it this far, thanks for the read :)
+
+<figure className="mx-auto max-w-2xl text-center">
+  <img className="mx-auto w-full rounded-lg" src="/images/homelab.png" alt="My homelab" />
+  <figcaption className="mt-2 text-center text-sm italic text-muted-foreground">
+    The homelab, first being worked on.
+  </figcaption>
+</figure>
+
+## Under the hood
+
+As for the technical details and the nerds out there, it's a **single physical-node Proxmox VE server** 
+running three VMs that make up the k3s cluster: one control-plane VM and two worker VMs. It also has a fourth
+VM for game servers, which runs outside Kubernetes.
+
+The k3s cluster runs services like **Grafana, Prometheus, Loki, Immich, Gitea, Headlamp**, this
+website and its API, as well as other side projects. I even had a **2-week modded Minecraft
+phase** shortly after creating the homelab with my friends, hosted on the separate game-server
+VM with Docker.
+
+There isn't a VLAN or anything (I don't have a managed Ethernet switch), but there is a
+private Proxmox network for K3s node traffic, while Flannel handles pod-to-pod traffic inside
+the cluster. The Proxmox firewall allows only the required ports from the appropriate networks
+and blocks other incoming traffic. I also don't forward Proxmox, SSH, Kubernetes, database, or
+private-service ports through my router.
+
+Instead, I use Tailscale for private access to the homelab, while Cloudflare Tunnel exposes public 
+services (like this website) without exposing a port on my router. The Minecraft server uses
+[playit.gg](https://playit.gg/) for public game-server access.
