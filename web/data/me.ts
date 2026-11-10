@@ -4,8 +4,8 @@ export type ExperienceItem = {
   location?: string;
   date: string;
   description: string;
-  bullets: string[];
-  tech?: string[];
+  bullets?: string[];
+  tech: string[];
 };
 
 export const profile = {
@@ -43,19 +43,21 @@ export const education = {
 export const experiences: ExperienceItem[] = [
   {
     role: "Open Source Contributor",
-    company: "Cloud Native Computing Foundation (CNCF)",
+    company: "Linux Foundation (CNCF and LF AI & Data)",
     location: "Markham, ON (Remote)",
     date: "Aug 2026 — Present",
     description:
-      "Contributing to cloud-native infrastructure projects including Kepler, Flux CD, and gRPC by improving Helm charts, test coverage, CI workflows, and reliability.",
-    bullets: [],
+      "Contributing to cloud-native infrastructure projects including Flux CD, OpenTelemetry, gRPC-Go, Flyte, Kepler, and Trickster by improving Helm charts, unit and end-to-end test coverage, CI workflows, and overall software and system reliability.",
     tech: [
       "Go",
+      "Rust",
+      "Python",
       "Kubernetes",
       "Helm",
       "Prometheus",
-      "Flux CD",
+      "CI/CD",
       "GitHub Actions",
+      "Flux CD",
       "gRPC",
     ],
   },
@@ -66,12 +68,6 @@ export const experiences: ExperienceItem[] = [
     date: "Jun 2025 — Aug 2026",
     description:
       "Modernized mission-critical weather, maritime, and Coast Guard systems by upgrading Java services, building Go test automation, and troubleshooting C++ decoders and production workflows.",
-    bullets: [
-      "Reduced workflow triage and debugging time by developing a Go-based control plane with an SSE observability stream, eliminating manual log searches and providing real-time file state tracking.",
-      "Led a 3-person team to reverse-engineer a legacy C++ system, producing UML and architectural diagrams to document system design.",
-      "Modernized internal R\&D tooling by replacing a legacy VB6 application with a structured Python/PyQt GUI, implementing Graylog compatible structured logging and secure psycopg SQL queries to process 50,000+ row product datasets.",
-      "Standardized 8 legacy enterprise Java components to Java 17 and Jakarta EE 10, resolving over 300 compiler warnings and replacing deprecated APIs during the migration.",
-    ],
     tech: [
       "Go",
       "C++",
@@ -94,12 +90,6 @@ export const experiences: ExperienceItem[] = [
     date: "Jan 2025 — Present",
     description:
       "Co-owned a contract-first Go REST API for a campus item-lending service, deployed on Amazon EC2 with Docker Compose and Caddy, with secure S3 uploads and asynchronous email delivery.",
-    bullets: [
-      "Engineered a contract-first backend API in Go powering platform services for the undergraduate science student body, leveraging SQLc for type safety and OpenAPI to enforce strict definitions across 32+ endpoints.",
-      "Built S3-based image storage with presigned URLs to support secure, horizontally scalable before and after item image uploads.",
-      "Implemented a Redis-backed Asynq worker to asynchronously process queued email jobs and deliver notifications via AWS SES.",
-      "Added 37+ unit, mock integration, and end-to-end tests to ensure reliability and correctness of business logic.",
-    ],
     tech: [
       "Go",
       "AWS",
@@ -119,11 +109,6 @@ export const experiences: ExperienceItem[] = [
     date: "May 2024 — Aug 2024",
     description:
       "Led development of a Spring Boot REST API and dashboard that converted COBOL copybooks to JSON and helped engineers edit Db2 records and troubleshoot mainframe data.",
-    bullets: [
-      "Developed a Spring Boot middleware service and jQuery dashboard, utilizing an external Java library to automate COBOL-to-JSON parsing and eliminate manual data inspection for the R&D team.",
-      "Presented the finalized tool to 12 R&D stakeholders, successfully demonstrating the new automated data-inspection workflow.",
-      "Designed and executed 72 comprehensive Postman test cases for a core mainframe REST API, rigorously validating JSON responses, edge cases, and data integrity across 3 distinct IBM Db2 database tables.",
-    ],
     tech: [
       "Java",
       "Spring Boot",
