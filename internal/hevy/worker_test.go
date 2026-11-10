@@ -16,6 +16,7 @@ func TestNextRefreshTimeUsesTorontoWindow(t *testing.T) {
 		{name: "before window", now: time.Date(2026, 10, 27, 9, 15, 0, 0, location), want: time.Date(2026, 10, 27, 10, 0, 2, 0, location)},
 		{name: "between hourly runs", now: time.Date(2026, 10, 27, 13, 46, 0, 0, location), want: time.Date(2026, 10, 27, 14, 0, 2, 0, location)},
 		{name: "after window", now: time.Date(2026, 10, 27, 21, 30, 0, 0, location), want: time.Date(2026, 10, 28, 10, 0, 2, 0, location)},
+		{name: "late night startup", now: time.Date(2026, 10, 27, 23, 30, 0, 0, location), want: time.Date(2026, 10, 28, 10, 0, 2, 0, location)},
 	}
 
 	for _, test := range tests {

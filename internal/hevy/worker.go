@@ -61,7 +61,7 @@ func nextRefreshTime(now time.Time) time.Time {
 		return time.Date(now.Year(), now.Month(), now.Day(), 10, 0, 2, 0, torontoLocation())
 	}
 	if now.Hour() >= 21 {
-		date = date.AddDate(0, 0, 1)
+		date = now.AddDate(0, 0, 1)
 		return time.Date(date.Year(), date.Month(), date.Day(), 10, 0, 2, 0, torontoLocation())
 	}
 	return date
