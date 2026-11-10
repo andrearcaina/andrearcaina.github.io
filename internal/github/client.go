@@ -20,7 +20,9 @@ type Client struct {
 	username   string
 	token      string
 	cache      *activityCache
+	repoCache  *repositoryCache
 	activityMu sync.Mutex
+	repoMu     sync.Mutex
 	logger     *applogger.Logger
 }
 
@@ -34,15 +36,25 @@ func NewClient(username, token string, appLogger *applogger.Logger) *Client {
 	}
 
 	return &Client{
-		client:   resty.New().SetTimeout(10 * time.Second),
-		username: username,
-		token:    token,
-		cache:    newActivityCache(),
-		logger:   appLogger,
+		client:    resty.New().SetTimeout(10 * time.Second),
+		username:  username,
+		token:     token,
+		cache:     newActivityCache(),
+		repoCache: newRepositoryCache(),
+		logger:    appLogger,
 	}
 }
 
 func (c *Client) RecentRepositories(ctx context.Context, perPage, initialFetch int) ([]Repo, error) {
+	c.repoMu.Lock()
+	defer c.repoMu.Unlock()
+
+	if repos, ok := c.repoCache.Get(); ok {
+		c.logger.Info(ctx, "GitHub repositories cache hit", "source", "memory")
+		return limitRepositories(repos, perPage), nil
+	}
+	c.logger.Info(ctx, "GitHub repositories cache miss", "status", "refreshing")
+
 	var repos []Repo
 	response, err := c.client.R().
 		SetContext(ctx).
@@ -69,7 +81,7 @@ func (c *Client) RecentRepositories(ctx context.Context, perPage, initialFetch i
 		}
 	}
 
-	priorityNames := []string{"hyperion", "fafnir", "pathfinder", "goforge", "shopecho", "whisp", "vivid", "pyggle"}
+	priorityNames := []string{"hyperion", "fafnir", "pathfinder", "goforge", "shopecho", "whisp"}
 	priority := make([]Repo, 0, len(filtered))
 	others := make([]Repo, 0, len(filtered))
 
@@ -89,11 +101,17 @@ func (c *Client) RecentRepositories(ctx context.Context, perPage, initialFetch i
 	})
 
 	result := append(priority, others...)
-	if perPage < len(result) {
-		result = result[:perPage]
-	}
+	c.repoCache.Set(result)
+	c.logger.Info(ctx, "GitHub repositories refreshed", "repositories", len(result))
 
-	return result, nil
+	return limitRepositories(result, perPage), nil
+}
+
+func limitRepositories(repos []Repo, perPage int) []Repo {
+	if perPage >= len(repos) {
+		return repos
+	}
+	return repos[:perPage]
 }
 
 func (c *Client) Activity(ctx context.Context) (Activity, error) {

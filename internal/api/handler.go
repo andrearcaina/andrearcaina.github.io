@@ -113,7 +113,7 @@ func (h *Handler) githubRepos(w http.ResponseWriter, r *http.Request) {
 		limit = 20
 	}
 
-	repos, err := h.github.RecentRepositories(r.Context(), limit, 20)
+	repos, err := h.github.RecentRepositories(r.Context(), limit, 50)
 	if err != nil {
 		h.logger.Error(r.Context(), "Failed to fetch GitHub repositories", "error", err)
 		writeError(w, http.StatusBadGateway, "failed to fetch GitHub repositories")
