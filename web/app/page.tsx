@@ -10,9 +10,11 @@ import { HevySummary } from "@/components/hevy-summary";
 import { PostList } from "@/components/post-list";
 import { SpotifyNowPlaying } from "@/components/spotify-now-playing";
 import { TechStackScroll } from "@/components/tech-stack-scroll";
-import { experiences, profile } from "@/data/me";
-import { galleryPhotos } from "@/data/gallery";
+import me from "@/data/me.json";
+import galleryPhotos from "@/data/gallery.json";
 import { getAllPosts } from "@/lib/posts";
+
+const { experiences, profile } = me;
 
 export default async function HomePage() {
   const posts = (await getAllPosts()).slice(0, 3);

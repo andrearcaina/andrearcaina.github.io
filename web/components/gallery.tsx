@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { FiChevronLeft, FiChevronRight, FiX } from "react-icons/fi";
-import type { GalleryPhoto } from "@/data/gallery";
+import type { GalleryPhoto } from "@/data/types";
 
 export function Gallery({ photos }: { photos: GalleryPhoto[] }) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);

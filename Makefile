@@ -2,7 +2,7 @@
 
 default: run
 
-build: build-web build-go
+build: build-go build-web
 
 install-web:
 	npm --prefix web ci
@@ -21,12 +21,10 @@ build-go:
 	go build -o bin/site ./cmd/server
 
 run: build run-playwright
-	./bin/site
+	PORT=localhost:8080 METRICS_PORT=localhost:9090 API_HOST=api.localhost ./bin/site
 
-dev: dev-mock
-
-dev-mock: build
-	HEVY_MOCK=true ./bin/site
+dev: build
+	PORT=localhost:8080 METRICS_PORT=localhost:9090 API_HOST=api.localhost HEVY_MOCK=true ./bin/site
 
 fix:
 	go fix ./...

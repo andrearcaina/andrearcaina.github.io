@@ -794,7 +794,7 @@
   position: relative;
   min-height: 22rem;
   overflow: hidden;
-  background: var(--secondary);
+  background: var(--background);
 }
 
 button.gallery-card { width: 100%; padding: 0; border: 0; text-align: left; cursor: zoom-in; }

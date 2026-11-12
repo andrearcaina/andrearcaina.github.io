@@ -1,4 +1,4 @@
-import type { ExperienceItem } from "@/data/me";
+import type { ExperienceItem } from "@/data/types";
 import { cn } from "@/lib/utils";
 
 export function ExperienceTimeline({

@@ -1,14 +1,12 @@
 import "server-only";
 import { promises as fs } from "fs";
 import path from "path";
-import { mdToHtml, parseFrontmatter, type MDMeta } from "./markdown";
-import type { MDXRemoteSerializeResult } from "next-mdx-remote";
+import { parseFrontmatter, type MDMeta } from "./markdown";
 
 export type Post = {
   slug: string;
-  meta: MDMeta & { dateISO?: string };
+  meta: MDMeta;
   content: string;
-  contentHtml: MDXRemoteSerializeResult;
 };
 
 const POSTS_DIR = path.join(process.cwd(), "content", "posts");
@@ -29,10 +27,7 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
     const fullPath = path.join(POSTS_DIR, `${slug}.mdx`);
     const raw = await fs.readFile(fullPath, "utf8");
     const { data, content } = parseFrontmatter(raw);
-    const contentHtml = await mdToHtml(content);
-    const dateField = data.publishedAt;
-    const dateISO = dateField ? new Date(dateField).toISOString() : undefined;
-    return { slug, meta: { ...data, dateISO }, content, contentHtml };
+    return { slug, meta: data, content };
   } catch {
     return null;
   }

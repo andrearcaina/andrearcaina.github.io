@@ -46,6 +46,17 @@ func TestContactValidation(t *testing.T) {
 	}
 }
 
+func TestContactRejectsInvalidEmail(t *testing.T) {
+	handler := &Handler{config: &config.Config{}}
+	recording := httptest.NewRecorder()
+	request := httptest.NewRequest(http.MethodPost, "/v1/contact", strings.NewReader(`{"name":"Andre","email":"andre@","message":"hello"}`))
+	handler.contact(recording, request)
+
+	if recording.Code != http.StatusBadRequest || !strings.Contains(recording.Body.String(), "invalid") {
+		t.Fatalf("contact response = %d %q", recording.Code, recording.Body.String())
+	}
+}
+
 func TestSpotifyReturnsCurrentState(t *testing.T) {
 	handler := &Handler{spotifyCurrent: spotifyNowPlaying{Message: "Not currently listening to anything"}}
 	recording := httptest.NewRecorder()

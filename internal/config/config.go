@@ -11,6 +11,7 @@ import (
 
 type Config struct {
 	Port            string
+	MetricsPort     string
 	StaticDir       string
 	APIHost         string
 	SiteHost        string
@@ -43,7 +44,8 @@ func New() *Config {
 	}
 
 	return &Config{
-		Port:            ":" + getEnv("PORT", "8080"),
+		Port:            listenAddress(getEnv("PORT", "8080")),
+		MetricsPort:     listenAddress(getEnv("METRICS_PORT", "9090")),
 		StaticDir:       getEnv("STATIC_DIR", "./web/out"),
 		APIHost:         getEnv("API_HOST", "api.andrearcaina.ca"),
 		SiteHost:        siteHost,
@@ -61,6 +63,13 @@ func New() *Config {
 		SpotifyRedirect: os.Getenv("SPOTIFY_REDIRECT_URI"),
 		AllowedOrigins:  allowedOrigins,
 	}
+}
+
+func listenAddress(value string) string {
+	if strings.Contains(value, ":") {
+		return value
+	}
+	return ":" + value
 }
 
 func contains(values []string, target string) bool {

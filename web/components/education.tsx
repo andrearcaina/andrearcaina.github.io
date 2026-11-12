@@ -1,4 +1,6 @@
-import { education } from "@/data/me";
+import me from "@/data/me.json";
+
+const { education } = me;
 
 export function Education() {
   return (

@@ -50,11 +50,11 @@ func (h *Handler) isAPIHost(host string) bool {
 	if name, _, err := net.SplitHostPort(host); err == nil {
 		host = name
 	}
-	if host == h.config.APIHost {
-		return true
+	configuredHost := h.config.APIHost
+	if name, _, err := net.SplitHostPort(configuredHost); err == nil {
+		configuredHost = name
 	}
-
-	return h.config.APIHost == "api.localhost" && host == "127.0.0.1"
+	return strings.EqualFold(host, configuredHost)
 }
 
 func (h *Handler) health(w http.ResponseWriter, _ *http.Request) {
@@ -78,7 +78,13 @@ func (h *Handler) static(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	http.ServeFile(w, r, filepath.Join(h.config.StaticDir, "404.html"))
+	notFoundPath := filepath.Join(h.config.StaticDir, "404.html")
+	if _, err := os.Stat(notFoundPath); err == nil {
+		w.WriteHeader(http.StatusNotFound)
+		http.ServeFile(w, r, notFoundPath)
+		return
+	}
+	http.NotFound(w, r)
 }
 
 func headers(next http.Handler) http.Handler {

@@ -4,7 +4,7 @@ import "testing"
 
 func TestNewUsesDefaults(t *testing.T) {
 	for _, key := range []string{
-		"PORT", "STATIC_DIR", "API_HOST", "SITE_HOST", "HEVY_USERNAME", "HEVY_HEADLESS", "HEVY_MOCK",
+		"PORT", "METRICS_PORT", "STATIC_DIR", "API_HOST", "SITE_HOST", "HEVY_USERNAME", "HEVY_HEADLESS", "HEVY_MOCK",
 		"ALLOWED_ORIGINS", "RESEND_API_KEY", "EMAIL", "GITHUB_TOKEN", "HEVY_EMAIL",
 		"HEVY_PASSWORD", "SPOTIFY_CLIENT_ID", "SPOTIFY_CLIENT_SECRET", "SPOTIFY_REFRESH_TOKEN",
 		"SPOTIFY_REDIRECT_URI",
@@ -13,7 +13,7 @@ func TestNewUsesDefaults(t *testing.T) {
 	}
 
 	cfg := New()
-	if cfg.Port != ":8080" || cfg.StaticDir != "./web/out" || cfg.APIHost != "api.andrearcaina.ca" {
+	if cfg.Port != ":8080" || cfg.MetricsPort != ":9090" || cfg.StaticDir != "./web/out" || cfg.APIHost != "api.andrearcaina.ca" {
 		t.Fatalf("unexpected defaults: %#v", cfg)
 	}
 	if cfg.HevyUsername != "andre331" || !cfg.HevyHeadless || cfg.HevyMock {
@@ -43,6 +43,14 @@ func TestNewReadsEnvironmentOverrides(t *testing.T) {
 	}
 	if len(cfg.AllowedOrigins) != 4 || cfg.AllowedOrigins[0] != "https://one.test" || cfg.AllowedOrigins[1] != "https://two.test" {
 		t.Fatalf("allowed origins = %#v", cfg.AllowedOrigins)
+	}
+}
+
+func TestNewAcceptsFullListenAddress(t *testing.T) {
+	t.Setenv("PORT", "127.0.0.1:8080")
+
+	if got := New().Port; got != "127.0.0.1:8080" {
+		t.Fatalf("Port = %q, want 127.0.0.1:8080", got)
 	}
 }
 

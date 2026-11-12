@@ -13,7 +13,7 @@ const links = [
   { href: "/contact", label: "contact" },
 ];
 
-export function Nav({ className = "" }: { className?: string }) {
+export function Nav() {
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -25,11 +25,7 @@ export function Nav({ className = "" }: { className?: string }) {
 
   return (
     <header
-      className={cn(
-        "site-nav",
-        isScrolled && "site-nav-scrolled",
-        className,
-      )}
+      className={cn("site-nav", isScrolled && "site-nav-scrolled")}
     >
       <div className="flex min-h-16 items-center justify-between gap-4 py-3">
         <Link className="site-home-mark" href="/" aria-label="home">
@@ -44,9 +40,7 @@ export function Nav({ className = "" }: { className?: string }) {
               key={l.href}
               href={l.href}
               prefetch
-              className={cn(
-                "site-nav-link",
-              )}
+              className="site-nav-link"
             >
               {l.label}
             </Link>

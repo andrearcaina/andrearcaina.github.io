@@ -4,7 +4,8 @@ import { useRef, useState, useTransition } from "react";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL ||
-  (typeof window !== "undefined" && window.location.hostname === "localhost"
+  (typeof window !== "undefined" &&
+  ["localhost", "127.0.0.1", "::1"].includes(window.location.hostname)
     ? "http://api.localhost:8080"
     : "https://api.andrearcaina.ca");
 
@@ -77,7 +78,7 @@ export default function ContactPage() {
         <form ref={formRef} className="contact-form" onSubmit={sendEmail}>
           <div className="contact-field">
             <label htmlFor="name">name</label>
-            <input id="name" name="name" autoComplete="name" placeholder="your name" />
+            <input id="name" name="name" autoComplete="name" placeholder="your name" maxLength={100} required />
           </div>
           <div className="contact-field">
             <label htmlFor="email">email</label>
@@ -87,11 +88,19 @@ export default function ContactPage() {
               name="email"
               autoComplete="email"
               placeholder="you@example.com"
+              maxLength={320}
+              required
             />
           </div>
           <div className="contact-field">
             <label htmlFor="message">message</label>
-            <textarea id="message" name="message" placeholder="what&apos;s up?" />
+            <textarea
+              id="message"
+              name="message"
+              placeholder="what&apos;s up?"
+              maxLength={10000}
+              required
+            />
           </div>
           <button className="contact-submit" type="submit" disabled={isPending}>
             {isPending ? (

@@ -2,15 +2,15 @@ import Link from "next/link";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { MdMail, MdDescription } from "react-icons/md";
 import { cn } from "@/lib/utils";
-import { profile } from "@/data/me";
+import me from "@/data/me.json";
 
 type Size = "sm" | "md";
 
+const { profile } = me;
+
 export function SocialIcons({
-  className = "",
   size = "md",
 }: {
-  className?: string;
   size?: Size;
 }) {
   const iconClass = cn(
@@ -19,7 +19,7 @@ export function SocialIcons({
   );
 
   return (
-    <div className={cn("flex items-center gap-3", className)}>
+    <div className="flex items-center gap-3">
       <Link
         href={profile.links.github}
         aria-label="GitHub"

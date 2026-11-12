@@ -1,21 +1,20 @@
 "use client";
 
-import * as React from "react";
 import { FiSun, FiMoon } from "react-icons/fi";
 import { useTheme } from "next-themes";
 
-export function ModeToggle({ className = "" }: { className?: string }) {
+export function ModeToggle() {
   const { theme, setTheme } = useTheme();
 
-  const toggle = React.useCallback(() => {
+  const toggle = () => {
     setTheme(theme === "dark" ? "light" : "dark");
-  }, [theme, setTheme]);
+  };
 
   return (
     <div className="relative isolate">
       <button
         type="button"
-        className={`${className} site-theme-toggle`}
+        className="site-theme-toggle"
         aria-label="Toggle theme"
         onClick={toggle}
       >

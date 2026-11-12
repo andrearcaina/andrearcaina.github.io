@@ -22,6 +22,16 @@ func TestIsAPIHost(t *testing.T) {
 			t.Errorf("isAPIHost(%q) = %v, want %v", host, got, want)
 		}
 	}
+
+	localHandler := NewHandler(&config.Config{APIHost: "api.localhost"})
+	if !localHandler.isAPIHost("api.localhost:8080") {
+		t.Error("isAPIHost(api.localhost:8080) = false, want true")
+	}
+	for _, host := range []string{"localhost:8080", "127.0.0.1:8080"} {
+		if localHandler.isAPIHost(host) {
+			t.Errorf("isAPIHost(%q) = true, want false", host)
+		}
+	}
 }
 
 func TestStaticServesFileAndFallback(t *testing.T) {
@@ -34,11 +44,17 @@ func TestStaticServesFileAndFallback(t *testing.T) {
 	}
 	handler := NewHandler(&config.Config{StaticDir: directory})
 
-	for path, want := range map[string]string{"/": "home", "/missing": "missing"} {
+	for path, want := range map[string]struct {
+		body string
+		code int
+	}{
+		"/":        {body: "home", code: http.StatusOK},
+		"/missing": {body: "missing", code: http.StatusNotFound},
+	} {
 		recording := httptest.NewRecorder()
 		handler.static(recording, httptest.NewRequest(http.MethodGet, path, nil))
-		if recording.Code != http.StatusOK || recording.Body.String() != want {
-			t.Errorf("static(%q) = %d %q, want %q", path, recording.Code, recording.Body.String(), want)
+		if recording.Code != want.code || recording.Body.String() != want.body {
+			t.Errorf("static(%q) = %d %q, want %d %q", path, recording.Code, recording.Body.String(), want.code, want.body)
 		}
 	}
 }

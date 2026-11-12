@@ -31,7 +31,7 @@ func main() {
 		ReadHeaderTimeout: 5 * time.Second,
 	}
 	metricsServer := &http.Server{
-		Addr:              ":9090",
+		Addr:              cfg.MetricsPort,
 		Handler:           promhttp.Handler(),
 		ReadHeaderTimeout: 5 * time.Second,
 	}
@@ -47,7 +47,7 @@ func main() {
 	})
 
 	g.Go(func() error {
-		appLogger.Info(ctx, "metrics server listening", "port", ":9090")
+		appLogger.Info(ctx, "metrics server listening", "port", cfg.MetricsPort)
 		if err := metricsServer.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			return err
 		}

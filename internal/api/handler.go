@@ -9,6 +9,7 @@ import (
 	"html"
 	"io"
 	"net/http"
+	"net/mail"
 	"net/url"
 	"slices"
 	"strconv"
@@ -131,8 +132,15 @@ func (h *Handler) githubRepos(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) contact(w http.ResponseWriter, r *http.Request) {
+	r.Body = http.MaxBytesReader(w, r.Body, 64<<10)
 	var request contactRequest
-	if err := json.NewDecoder(io.LimitReader(r.Body, 64<<10)).Decode(&request); err != nil {
+	decoder := json.NewDecoder(r.Body)
+	if err := decoder.Decode(&request); err != nil {
+		writeError(w, http.StatusBadRequest, "invalid request body")
+		return
+	}
+	var extra any
+	if err := decoder.Decode(&extra); err != io.EOF {
 		writeError(w, http.StatusBadRequest, "invalid request body")
 		return
 	}
@@ -144,7 +152,8 @@ func (h *Handler) contact(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusBadRequest, "name, email, and message are required")
 		return
 	}
-	if len(request.Name) > 100 || len(request.Email) > 320 || len(request.Message) > 10000 || !strings.Contains(request.Email, "@") {
+	parsedEmail, emailErr := mail.ParseAddress(request.Email)
+	if len(request.Name) > 100 || len(request.Email) > 320 || len(request.Message) > 10000 || emailErr != nil || parsedEmail.Address != request.Email {
 		writeError(w, http.StatusBadRequest, "invalid contact details")
 		return
 	}
@@ -282,6 +291,10 @@ func (h *Handler) spotifyAccessToken(ctx context.Context) (string, error) {
 }
 
 func (h *Handler) spotifyLogin(w http.ResponseWriter, r *http.Request) {
+	if h.config.SpotifyClientID == "" || h.config.SpotifySecret == "" || h.config.SpotifyRedirect == "" {
+		writeError(w, http.StatusServiceUnavailable, "Spotify authorization is not configured")
+		return
+	}
 	state, err := randomState()
 	if err != nil {
 		writeError(w, http.StatusInternalServerError, "failed to create OAuth state")
@@ -303,7 +316,8 @@ func (h *Handler) spotifyLogin(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) spotifyCallback(w http.ResponseWriter, r *http.Request) {
 	state := r.URL.Query().Get("state")
 	value, ok := h.states.LoadAndDelete(state)
-	if !ok || time.Now().After(value.(time.Time)) {
+	expiresAt, validState := value.(time.Time)
+	if !ok || !validState || time.Now().After(expiresAt) {
 		writeError(w, http.StatusBadRequest, "invalid OAuth state")
 		return
 	}

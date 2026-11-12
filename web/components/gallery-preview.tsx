@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import type { GalleryPhoto } from "@/data/gallery";
+import type { GalleryPhoto } from "@/data/types";
 
 function randomPhotos(photos: GalleryPhoto[]) {
   const pool = photos.filter((photo) => photo.src !== "/gallery/profile.webp");
