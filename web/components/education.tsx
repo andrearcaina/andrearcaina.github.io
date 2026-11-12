@@ -1,23 +1,19 @@
 import { education } from "@/data/me";
-import { TextShimmer } from "@/components/motion-components";
 
 export function Education() {
   return (
-    <section id="education" className="space-y-4">
-      <h2 className="text-lg font-medium">
-        my <TextShimmer>education</TextShimmer> journey
-      </h2>
-      <div className="text-sm leading-relaxed text-muted-foreground">
-        <p>
-          {education.institution} — {education.degree}
-        </p>
-        <p>
+    <section className="education-note" aria-labelledby="education-heading">
+      <p className="section-label">on paper</p>
+      <div className="education-copy">
+        <h3 id="education-heading">
+          <strong>{education.degree}</strong> at {education.institution}
+        </h3>
+        <p className="mt-2">
           {education.date} · {education.location}
         </p>
-        <p className="pt-2">
-          Involvements: {education.involvements.join(" · ")}
+        <p className="mt-4">
+          Outside class: {education.involvements.join(" · ")}
         </p>
-        <p className="pt-2">Coursework: {education.courses.join(", ")}</p>
       </div>
     </section>
   );

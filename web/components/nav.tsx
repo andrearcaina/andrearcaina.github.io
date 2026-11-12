@@ -6,9 +6,9 @@ import { ModeToggle } from "./mode-toggle";
 import { cn } from "@/lib/utils";
 
 const links = [
-  { href: "/", label: "home" },
   { href: "/projects", label: "projects" },
-  { href: "/blog", label: "blog" },
+  { href: "/blog", label: "notes" },
+  { href: "/gallery", label: "gallery" },
   { href: "/contact", label: "contact" },
 ];
 
@@ -18,40 +18,42 @@ export function Nav({ className = "" }: { className?: string }) {
   return (
     <header
       className={cn(
-        "sticky top-0 z-30 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60",
+        "site-nav",
         className,
       )}
     >
-      <div className="flex h-16 items-center justify-between">
-        <div className="w-14" aria-hidden="true" />
+      <div className="flex min-h-16 items-center justify-between gap-4 py-3">
+        <Link
+          href="/"
+          className="site-wordmark shrink-0"
+          aria-label="andre arcaina — home"
+        >
+          <span className="hidden sm:inline">andre arcaina</span>
+          <span className="sm:hidden">aa.</span>
+        </Link>
         <nav
           aria-label="Primary"
-          className="flex items-center gap-3 text-sm text-muted-foreground"
+          className="flex items-center gap-1 overflow-x-auto text-xs text-muted-foreground sm:gap-2 sm:text-sm"
         >
-          {links.map((l, i) => (
-            <span key={l.href} className="inline-flex items-center">
-              <Link
-                href={l.href}
-                prefetch
-                className={cn(
-                  "px-2 py-1 transition-colors hover:text-foreground",
-                  pathname === l.href && "text-foreground",
-                )}
-                aria-current={pathname === l.href ? "page" : undefined}
-              >
-                {l.label}
-              </Link>
-              {i < links.length - 1 && (
-                <span className="text-muted-foreground/50">·</span>
+          {links.map((l) => (
+            <Link
+              key={l.href}
+              href={l.href}
+              prefetch
+              className={cn(
+                "site-nav-link",
+                pathname === l.href && "site-nav-link-active",
               )}
-            </span>
+              aria-current={pathname === l.href ? "page" : undefined}
+            >
+              {l.label}
+            </Link>
           ))}
         </nav>
-        <div className="flex w-14 items-center justify-end gap-2">
+        <div className="flex shrink-0 items-center justify-end">
           <ModeToggle />
         </div>
       </div>
-      <div className="h-px w-full bg-border" />
     </header>
   );
 }

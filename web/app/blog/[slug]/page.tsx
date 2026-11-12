@@ -1,15 +1,15 @@
-import { getAllPosts, getPostBySlug } from "@/lib/posts";
-import { formatDate } from "@/lib/utils";
-import { LinkWithIcon } from "@/components/link-with-icon";
 import type { Metadata } from "next";
 import Image from "next/image";
-import { notFound } from "next/navigation";
+import Link from "next/link";
 import { FiArrowLeft } from "react-icons/fi";
 import MDXContent from "@/components/mdx-content";
+import { getAllPosts, getPostBySlug } from "@/lib/posts";
+import { formatDate } from "@/lib/utils";
+import { notFound } from "next/navigation";
 
 export async function generateStaticParams() {
   const posts = await getAllPosts();
-  return posts.map((p) => ({ slug: p.slug }));
+  return posts.map((post) => ({ slug: post.slug }));
 }
 
 export async function generateMetadata({
@@ -19,8 +19,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const post = await getPostBySlug(slug);
+
   return {
-    title: post?.meta.title ?? "post",
+    title: post?.meta.title ?? "note",
     description: post?.meta.description || post?.meta.summary,
   };
 }
@@ -38,42 +39,33 @@ export default async function PostPage({
   }
 
   const { meta, content } = post;
-  const { title, image, publishedAt } = meta;
-  const publishedDate = publishedAt;
-  const lastUpdatedAt = meta.lastUpdatedAt;
 
   return (
-    <article className="mt-8 flex flex-col gap-8 pb-16">
-      <LinkWithIcon
-        href="/blog"
-        position="left"
-        icon={<FiArrowLeft className="h-4 w-4" />}
-        text="back to blog"
-      />
+    <article className="article-layout">
+      <Link className="quiet-link article-back" href="/blog">
+        <FiArrowLeft aria-hidden="true" /> back to notes
+      </Link>
 
-      {image && (
-        <div className="relative mb-6 h-96 w-full overflow-hidden rounded-lg">
-          <Image src={image} alt={title || ""} className="object-cover" fill />
+      <header>
+        <p className="page-label">note</p>
+        <h1 className="article-title mt-3">{meta.title}</h1>
+        <div className="article-meta">
+          {meta.publishedAt && <span>{formatDate(meta.publishedAt)}</span>}
+          {meta.lastUpdatedAt && (
+            <span>updated {formatDate(meta.lastUpdatedAt)}</span>
+          )}
+        </div>
+      </header>
+
+      {meta.image && (
+        <div className="article-cover">
+          <Image src={meta.image} alt={meta.title || ""} fill className="object-cover" />
         </div>
       )}
 
-      <header>
-        <h1 className="text-3xl font-bold tracking-tight">{title}</h1>
-        {publishedDate && (
-          <p className="mt-2 text-sm text-muted-foreground">
-            Published: {formatDate(publishedDate)}
-          </p>
-        )}
-        {lastUpdatedAt && (
-          <p className="mt-1 text-sm text-muted-foreground">
-            Last Updated: {formatDate(lastUpdatedAt)}
-          </p>
-        )}
-      </header>
-
-      <main className="prose prose-slate dark:prose-invert max-w-none">
+      <div className="mdx-content">
         <MDXContent source={content} />
-      </main>
+      </div>
     </article>
   );
 }

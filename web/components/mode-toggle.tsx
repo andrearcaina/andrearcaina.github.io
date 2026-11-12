@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { FiSun, FiMoon } from "react-icons/fi";
-import { Button } from "@/components/ui/button";
 import { useTheme } from "next-themes";
 
 export function ModeToggle({ className = "" }: { className?: string }) {
@@ -14,18 +13,17 @@ export function ModeToggle({ className = "" }: { className?: string }) {
 
   return (
     <div className="relative isolate">
-      <Button
-        variant="ghost"
-        size="icon"
-        className={`${className} relative overflow-hidden cursor-pointer`}
+      <button
+        type="button"
+        className={`${className} site-theme-toggle`}
         aria-label="Toggle theme"
         onClick={toggle}
       >
-        <div className="relative z-10 flex items-center justify-center">
-          <FiSun className="h-4 w-4 absolute dark:opacity-0 opacity-100 transition-opacity duration-300" />
-          <FiMoon className="h-4 w-4 absolute dark:opacity-100 opacity-0 transition-opacity duration-300" />
+        <div className="relative flex h-4 w-4 items-center justify-center">
+          <FiSun className="absolute h-3.5 w-3.5 dark:opacity-0 opacity-100" />
+          <FiMoon className="absolute h-3.5 w-3.5 dark:opacity-100 opacity-0" />
         </div>
-      </Button>
+      </button>
     </div>
   );
 }

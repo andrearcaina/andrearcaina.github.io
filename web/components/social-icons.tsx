@@ -14,12 +14,12 @@ export function SocialIcons({
   size?: Size;
 }) {
   const iconClass = cn(
-    "text-muted-foreground transition-colors hover:text-foreground",
-    size === "sm" ? "h-4 w-4" : "h-5 w-5",
+    "site-social-icon",
+    size === "sm" ? "h-3.5 w-3.5" : "h-4 w-4",
   );
 
   return (
-    <div className={cn("flex items-center gap-4", className)}>
+    <div className={cn("flex items-center gap-3", className)}>
       <Link
         href={profile.links.github}
         aria-label="GitHub"
@@ -39,7 +39,12 @@ export function SocialIcons({
       <Link href={profile.links.contact} aria-label="Email">
         <MdMail className={iconClass} />
       </Link>
-      <Link href={profile.links.resume} aria-label="Resume" target="_blank">
+      <Link
+        href={profile.links.resume}
+        aria-label="Resume"
+        target="_blank"
+        rel="noreferrer"
+      >
         <MdDescription className={iconClass} />
       </Link>
     </div>

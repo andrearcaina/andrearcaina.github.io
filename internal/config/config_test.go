@@ -4,7 +4,7 @@ import "testing"
 
 func TestNewUsesDefaults(t *testing.T) {
 	for _, key := range []string{
-		"PORT", "STATIC_DIR", "API_HOST", "SITE_HOST", "HEVY_USERNAME", "HEVY_HEADLESS",
+		"PORT", "STATIC_DIR", "API_HOST", "SITE_HOST", "HEVY_USERNAME", "HEVY_HEADLESS", "HEVY_MOCK",
 		"ALLOWED_ORIGINS", "RESEND_API_KEY", "EMAIL", "GITHUB_TOKEN", "HEVY_EMAIL",
 		"HEVY_PASSWORD", "SPOTIFY_CLIENT_ID", "SPOTIFY_CLIENT_SECRET", "SPOTIFY_REFRESH_TOKEN",
 		"SPOTIFY_REDIRECT_URI",
@@ -16,8 +16,8 @@ func TestNewUsesDefaults(t *testing.T) {
 	if cfg.Port != ":8080" || cfg.StaticDir != "./web/out" || cfg.APIHost != "api.andrearcaina.ca" {
 		t.Fatalf("unexpected defaults: %#v", cfg)
 	}
-	if cfg.HevyUsername != "andre331" || !cfg.HevyHeadless {
-		t.Fatalf("unexpected Hevy defaults: username=%q headless=%v", cfg.HevyUsername, cfg.HevyHeadless)
+	if cfg.HevyUsername != "andre331" || !cfg.HevyHeadless || cfg.HevyMock {
+		t.Fatalf("unexpected Hevy defaults: username=%q headless=%v mock=%v", cfg.HevyUsername, cfg.HevyHeadless, cfg.HevyMock)
 	}
 	if len(cfg.AllowedOrigins) == 0 {
 		t.Fatal("expected default allowed origins")
@@ -31,13 +31,14 @@ func TestNewReadsEnvironmentOverrides(t *testing.T) {
 	t.Setenv("SITE_HOST", "www.example.test")
 	t.Setenv("HEVY_USERNAME", "tester")
 	t.Setenv("HEVY_HEADLESS", "false")
+	t.Setenv("HEVY_MOCK", "true")
 	t.Setenv("ALLOWED_ORIGINS", "https://one.test, https://two.test")
 
 	cfg := New()
 	if cfg.Port != ":9090" || cfg.StaticDir != "/srv/site" || cfg.APIHost != "api.example.test" {
 		t.Fatalf("environment overrides not applied: %#v", cfg)
 	}
-	if cfg.SiteHost != "www.example.test" || cfg.HevyUsername != "tester" || cfg.HevyHeadless {
+	if cfg.SiteHost != "www.example.test" || cfg.HevyUsername != "tester" || cfg.HevyHeadless || !cfg.HevyMock {
 		t.Fatalf("environment overrides not applied: %#v", cfg)
 	}
 	if len(cfg.AllowedOrigins) != 4 || cfg.AllowedOrigins[0] != "https://one.test" || cfg.AllowedOrigins[1] != "https://two.test" {

@@ -47,7 +47,7 @@ export function HevySummary() {
   }, []);
 
   return (
-    <div className="flex min-w-0 min-h-[220px] flex-col rounded-lg border border-border bg-card p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-md md:h-full">
+    <div className="activity-hevy flex min-w-0 min-h-[220px] flex-col">
       <div className="flex items-start justify-between gap-4">
         <span className="text-lg font-semibold">
           {summary ? `${summary.month} ${summary.year}` : "Hevy"}
@@ -128,7 +128,7 @@ export function HevySummary() {
             </div>
           </div>
           {summary.recentWorkout && (
-            <div className="mt-auto border-t border-border pt-4">
+            <div className="mt-auto pt-5">
               <div className="mb-3 flex items-center justify-between gap-3">
                 <div className="min-w-0">
                   <p className="text-[10px] text-muted-foreground">

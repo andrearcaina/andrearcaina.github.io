@@ -1,33 +1,25 @@
-import { getAllPosts } from "@/lib/posts";
 import { PostList } from "@/components/post-list";
-import {
-  FadeInUp,
-  TextShimmer,
-  PageTransition,
-} from "@/components/motion-components";
+import { getAllPosts } from "@/lib/posts";
 
 export const metadata = {
-  title: "andre arcaina's blog",
-  description:
-    "writings on life, engineering, systems, and software development.",
+  title: "notes · andre arcaina",
+  description: "Notes on engineering, homelabs, and things Andre Arcaina is working on.",
 };
 
 export default async function BlogPage() {
   const posts = await getAllPosts();
+
   return (
-    <PageTransition>
-      <div className="py-8 md:py-12 space-y-6">
-        <FadeInUp>
-          <h1 className="mb-2 text-xl font-semibold">blog</h1>
-          <p className="text-sm text-muted-foreground mb-6">
-            My thoughts on <TextShimmer>life</TextShimmer>, engineering,
-            systems, and software development.
-          </p>
-        </FadeInUp>
-        <FadeInUp delay={0.2}>
-          <PostList posts={posts} />
-        </FadeInUp>
-      </div>
-    </PageTransition>
+    <div className="site-page">
+      <header className="page-intro notes-intro">
+        <p className="page-label">writing notes</p>
+        <h1 className="page-title">whenever i feel like it</h1>
+        <p className="page-summary">
+          Mostly engineering, occasionally whatever else has been taking up
+          space in my head.
+        </p>
+      </header>
+      <PostList posts={posts} />
+    </div>
   );
 }

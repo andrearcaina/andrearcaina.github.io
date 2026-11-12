@@ -28,7 +28,7 @@ type Client struct {
 
 const activityCacheTTL = 10 * time.Minute
 
-const maxPublicPullRequests = 3
+const maxPublicPullRequests = 4
 
 func NewClient(username, token string, appLogger *applogger.Logger) *Client {
 	if appLogger == nil {

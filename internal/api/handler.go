@@ -53,7 +53,9 @@ func NewHandler(cfg *config.Config, appLogger *logger.Logger) *Handler {
 		spotifyLimiter: ratelimit.New(30, time.Minute),
 		spotifyCurrent: spotifyNowPlaying{Message: "Spotify is not configured"},
 	}
-	handler.hevy.Start(context.Background())
+	if !cfg.HevyMock {
+		handler.hevy.Start(context.Background())
+	}
 	if cfg.SpotifyClientID != "" && cfg.SpotifySecret != "" && cfg.SpotifyRefresh != "" {
 		go handler.startSpotifyPolling()
 	}
@@ -89,6 +91,11 @@ func (h *Handler) githubActivity(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) hevySummary(w http.ResponseWriter, r *http.Request) {
+	if h.config.HevyMock {
+		writeJSON(w, http.StatusOK, hevy.MockSummary(time.Now()))
+		return
+	}
+
 	summary, err := h.hevy.CurrentMonthSummary(r.Context(), time.Now())
 	if err != nil {
 		h.logger.Error(r.Context(), "Failed to fetch Hevy summary", "error", err)

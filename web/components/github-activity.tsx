@@ -77,7 +77,7 @@ export function GitHubActivity() {
   if (!activity) {
     return (
       <div
-        className="flex h-[108px] items-center justify-center rounded-lg border border-border bg-card"
+        className="activity-github flex h-[108px] items-center justify-center"
         role="status"
         aria-label="Fetching GitHub contributions"
       >
@@ -89,7 +89,7 @@ export function GitHubActivity() {
   }
 
   return (
-    <div className="rounded-lg border border-border bg-card p-3 transition-all duration-300 hover:scale-[1.02] hover:shadow-md sm:p-4">
+    <div className="activity-github">
       <div className="mb-3 flex items-center justify-between gap-3">
         <Link
           href="https://github.com/andrearcaina"
@@ -135,12 +135,12 @@ export function GitHubActivity() {
         <span>More</span>
       </div>
       {activity.pullRequests.length > 0 && (
-        <div className="mt-4 border-t border-border pt-3">
+        <div className="mt-5 pt-1">
           <p className="mb-2 text-xs font-medium text-foreground">
             recent OSS pull requests
           </p>
           <div className="space-y-1.5">
-            {activity.pullRequests.slice(0, 3).map((pullRequest) => (
+            {activity.pullRequests.slice(0, 4).map((pullRequest) => (
               <Link
                 key={pullRequest.url}
                 href={pullRequest.url}

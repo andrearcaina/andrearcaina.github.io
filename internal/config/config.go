@@ -21,6 +21,7 @@ type Config struct {
 	HevyEmail       string
 	HevyPassword    string
 	HevyHeadless    bool
+	HevyMock        bool
 	SpotifyClientID string
 	SpotifySecret   string
 	SpotifyRefresh  string
@@ -53,6 +54,7 @@ func New() *Config {
 		HevyEmail:       os.Getenv("HEVY_EMAIL"),
 		HevyPassword:    os.Getenv("HEVY_PASSWORD"),
 		HevyHeadless:    getBool("HEVY_HEADLESS", true),
+		HevyMock:        getBool("HEVY_MOCK", false),
 		SpotifyClientID: os.Getenv("SPOTIFY_CLIENT_ID"),
 		SpotifySecret:   os.Getenv("SPOTIFY_CLIENT_SECRET"),
 		SpotifyRefresh:  os.Getenv("SPOTIFY_REFRESH_TOKEN"),

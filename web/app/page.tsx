@@ -1,216 +1,164 @@
+import Image from "next/image";
 import Link from "next/link";
-import { Separator } from "@/components/ui/separator";
-import { profile, experiences } from "@/data/me";
-import { ExperienceTimeline } from "@/components/experience-timeline";
+import { FiArrowUpRight } from "react-icons/fi";
 import { Education } from "@/components/education";
-import { getAllPosts } from "@/lib/posts";
-import { GitHubRepoCards } from "@/components/github-repo-cards";
-import { PostList } from "@/components/post-list";
-import { TechStackScroll } from "@/components/tech-stack-scroll";
-import { SpotifyNowPlaying } from "@/components/spotify-now-playing";
+import { ExperienceTimeline } from "@/components/experience-timeline";
 import { GitHubActivity } from "@/components/github-activity";
+import { GitHubRepoCards } from "@/components/github-repo-cards";
+import { GalleryPreview } from "@/components/gallery-preview";
 import { HevySummary } from "@/components/hevy-summary";
-import { Button } from "@/components/ui/button";
-import { FaLinkedin, FaGithub } from "react-icons/fa";
-import { MdMail, MdDescription } from "react-icons/md";
-import { ProfileImageWithEasterEgg } from "@/components/profile-image-easter-egg";
-import {
-  FadeInUp,
-  StaggerContainer,
-  StaggerItem,
-  TextShimmer,
-  NameHover,
-  ButtonMotion,
-  PageTransition,
-} from "@/components/motion-components";
+import { PostList } from "@/components/post-list";
+import { SpotifyNowPlaying } from "@/components/spotify-now-playing";
+import { TechStackScroll } from "@/components/tech-stack-scroll";
+import { experiences, profile } from "@/data/me";
+import { galleryPhotos } from "@/data/gallery";
+import { getAllPosts } from "@/lib/posts";
 
 export default async function HomePage() {
   const posts = (await getAllPosts()).slice(0, 3);
 
   return (
-    <PageTransition>
-      <div className="space-y-12 py-8 md:py-12">
-        <FadeInUp>
-          <section className="grid items-center gap-8 md:grid-cols-5">
-            <div className="md:col-span-3 space-y-6">
-              <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-                <NameHover>{profile.name}</NameHover>{" "}
-                <span className="italic text-muted-foreground">
-                  , a systems, infrastructure, and cloud engineer
-                </span>
-              </h1>
-              <FadeInUp delay={0.2}>
-                <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">
-                  Focused on <TextShimmer>distributed systems</TextShimmer>,
-                  cloud infrastructure, and backend development. Contributing to
-                  CNCF projects including{" "}
-                  <span className="font-medium">
-                    Kepler, Flux CD, and gRPC-Go
-                  </span>{" "}
-                  while building systems at{" "}
-                  <span className="font-medium">USSTM</span>.
-                  {" "}Currently looking for new grad opportunities.
-                </p>
-              </FadeInUp>
+    <div>
+      <section className="hero" aria-labelledby="intro-title">
+        <div>
+          <p className="hero-kicker">hello, i&apos;m</p>
+          <h1 id="intro-title" className="hero-title">
+            andre
+            <br />
+            arcaina
+          </h1>
+          <p className="hero-copy">
+            computer science student in toronto. i work on systems, cloud
+            infrastructure, and backend software. lately that has meant
+            open-source contributions, Go, and a mini PC running more than it
+            probably should.
+          </p>
+          <div className="hero-links" aria-label="Quick links">
+            <Link
+              className="text-link"
+              href={profile.links.resume}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span className="link-text">résumé</span>
+              <FiArrowUpRight aria-hidden="true" />
+            </Link>
+            <Link
+              className="quiet-link"
+              href={profile.links.github}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span className="link-text">github</span>
+              <FiArrowUpRight aria-hidden="true" />
+            </Link>
+            <Link
+              className="quiet-link"
+              href={profile.links.linkedin}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span className="link-text">linkedin</span>
+              <FiArrowUpRight aria-hidden="true" />
+            </Link>
+            <Link className="quiet-link" href="/contact">
+              <span className="link-text">say hello</span>
+              <span aria-hidden="true">→</span>
+            </Link>
+          </div>
+        </div>
 
-              <StaggerContainer>
-                <div className="flex flex-wrap gap-3">
-                  <StaggerItem>
-                    <ButtonMotion>
-                      <Button
-                        asChild
-                        variant="outline"
-                        className="button-hover-fix"
-                      >
-                        <Link
-                          href={profile.links.resume}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          <MdDescription className="mr-2 h-4 w-4" /> resume
-                        </Link>
-                      </Button>
-                    </ButtonMotion>
-                  </StaggerItem>
-                  <StaggerItem>
-                    <ButtonMotion>
-                      <Button
-                        asChild
-                        variant="outline"
-                        className="button-hover-fix"
-                      >
-                        <Link
-                          href={profile.links.linkedin}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          <FaLinkedin className="mr-2 h-4 w-4" /> linkedin
-                        </Link>
-                      </Button>
-                    </ButtonMotion>
-                  </StaggerItem>
-                  <StaggerItem>
-                    <ButtonMotion>
-                      <Button
-                        asChild
-                        variant="outline"
-                        className="button-hover-fix"
-                      >
-                        <Link
-                          href={profile.links.github}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          <FaGithub className="mr-2 h-4 w-4" /> github
-                        </Link>
-                      </Button>
-                    </ButtonMotion>
-                  </StaggerItem>
-                  <StaggerItem>
-                    <ButtonMotion>
-                      <Button
-                        asChild
-                        variant="outline"
-                        className="button-hover-fix"
-                      >
-                        <Link href={profile.links.contact}>
-                          <MdMail className="mr-2 h-4 w-4" /> contact
-                        </Link>
-                      </Button>
-                    </ButtonMotion>
-                  </StaggerItem>
-                </div>
-              </StaggerContainer>
-            </div>
+        <div className="hero-photo-wrap">
+          <Image
+            src="/gallery/profile.webp"
+            alt="Andre scuba diving underwater"
+            fill
+            priority
+            sizes="(max-width: 700px) calc(100vw - 1.25rem), 34rem"
+            className="hero-photo"
+          />
+        </div>
+      </section>
 
-            <FadeInUp delay={0.4}>
-              <ProfileImageWithEasterEgg />
-            </FadeInUp>
-          </section>
-        </FadeInUp>
-
-        <Separator />
-
-        <FadeInUp delay={0.6}>
-          <section id="activity" className="min-w-0 space-y-4">
-            <h2 className="text-lg font-medium">
-              recent <TextShimmer>activity</TextShimmer> in my life
+      <section className="section section-divider" aria-labelledby="experience-heading">
+        <div className="section-heading">
+          <div>
+            <p className="section-label">00 / experience</p>
+            <h2 id="experience-heading" className="section-title mt-3">
+              journey so far in my career
             </h2>
-            <div className="grid min-w-0 gap-3 md:grid-cols-2 md:items-stretch">
-              <div className="min-w-0 space-y-3">
-                <GitHubActivity />
-                <SpotifyNowPlaying />
-              </div>
-              <HevySummary />
-            </div>
-          </section>
-        </FadeInUp>
+          </div>
+        </div>
+        <ExperienceTimeline items={experiences} />
+        <div className="mt-10">
+          <Education />
+        </div>
+      </section>
 
-        <Separator />
+      <TechStackScroll />
 
-        <FadeInUp delay={0.6}>
-          <section>
-            <h2 className="text-lg font-medium mb-5">
-              current <TextShimmer>tech</TextShimmer> i work with
+      <section className="section" aria-labelledby="project-heading">
+        <div className="section-heading">
+          <div>
+            <p className="section-label">01 / projects</p>
+            <h2 id="project-heading" className="section-title mt-3">
+              things made throughout it
             </h2>
-            <TechStackScroll />
-          </section>
-        </FadeInUp>
+          </div>
+          <Link className="quiet-link" href="/projects">
+            everything else →
+          </Link>
+        </div>
+        <GitHubRepoCards limit={4} />
+      </section>
 
-        <Separator />
+      <section className="section activity-section" aria-labelledby="activity-heading">
+        <div className="section-heading">
+          <div>
+            <p className="section-label">02 / activity</p>
+            <h2 id="activity-heading" className="section-title mt-3">
+              what i&apos;ve been up to
+            </h2>
+          </div>
+        </div>
+        <div className="activity-grid">
+          <div className="activity-column">
+            <GitHubActivity />
+            <SpotifyNowPlaying />
+          </div>
+          <HevySummary />
+        </div>
+      </section>
 
-        <FadeInUp delay={0.8}>
-          <section>
-            <Education />
-          </section>
-        </FadeInUp>
+      <section className="section" aria-labelledby="notes-heading">
+        <div className="section-heading">
+          <div>
+            <p className="section-label">03 / notes</p>
+            <h2 id="notes-heading" className="section-title mt-3">
+              notes from along the way
+            </h2>
+          </div>
+          <Link className="quiet-link" href="/blog">
+            all notes →
+          </Link>
+        </div>
+        <PostList posts={posts} />
+      </section>
 
-        <Separator />
-
-        <FadeInUp delay={1.0}>
-          <section>
-            <ExperienceTimeline items={experiences} />
-          </section>
-        </FadeInUp>
-
-        <Separator />
-
-        <FadeInUp delay={1.2}>
-          <section>
-            <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-medium">
-                some <TextShimmer>side projects</TextShimmer> i like to work on
-              </h2>
-              <Link
-                href="/projects"
-                className="text-sm text-muted-foreground underline underline-offset-4 transition-all duration-300 hover:shadow-md hover:scale-[1.02] hover:text-foreground"
-              >
-                all projects →
-              </Link>
-            </div>
-            <GitHubRepoCards limit={4} />
-          </section>
-        </FadeInUp>
-
-        <Separator />
-
-        <FadeInUp delay={1.4}>
-          <section>
-            <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-medium">
-                some <TextShimmer>thoughts</TextShimmer> on random stuff
-              </h2>
-              <Link
-                href="/blog"
-                className="text-sm text-muted-foreground underline underline-offset-4 transition-all duration-300 hover:shadow-md hover:scale-[1.02] hover:text-foreground"
-              >
-                all posts →
-              </Link>
-            </div>
-            <PostList posts={posts} />
-          </section>
-        </FadeInUp>
-      </div>
-    </PageTransition>
+      <section className="section" aria-labelledby="elsewhere-heading">
+        <div className="section-heading">
+          <div>
+            <p className="section-label">04 / gallery</p>
+            <h2 id="elsewhere-heading" className="section-title mt-3">
+              outside the editor
+            </h2>
+          </div>
+          <Link className="quiet-link" href="/gallery">
+            see more →
+          </Link>
+        </div>
+        <GalleryPreview photos={galleryPhotos} />
+      </section>
+    </div>
   );
 }

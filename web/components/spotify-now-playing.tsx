@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { FaSpotify } from "react-icons/fa";
-import { motion, AnimatePresence } from "framer-motion";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL ||
@@ -80,28 +79,20 @@ export function SpotifyNowPlaying() {
 
   if (loading) {
     return (
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="flex h-24 items-center gap-3 rounded-lg border bg-card p-3 transition-all duration-300 hover:scale-[1.02] hover:shadow-md"
-      >
+      <div className="activity-spotify flex h-24 items-center gap-3 p-3">
         <div className="h-12 w-12 animate-pulse rounded-md bg-muted" />
         <div className="flex-1 space-y-2">
           <div className="h-4 bg-muted rounded animate-pulse" />
           <div className="h-3 bg-muted rounded animate-pulse w-3/4" />
         </div>
         <FaSpotify className="text-[#1DB954] text-xl" />
-      </motion.div>
+      </div>
     );
   }
 
   if (!track || !track.isPlaying) {
     return (
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="flex h-24 items-center gap-3 rounded-lg border bg-card p-3 opacity-60 transition-all duration-300 hover:scale-[1.02] hover:shadow-md"
-      >
+      <div className="activity-spotify flex h-24 items-center gap-3 p-3 opacity-60">
         <div className="flex h-12 w-12 items-center justify-center rounded-md bg-muted">
           <FaSpotify className="text-muted-foreground text-2xl" />
         </div>
@@ -111,21 +102,14 @@ export function SpotifyNowPlaying() {
           </p>
         </div>
         <FaSpotify className="text-muted-foreground text-xl" />
-      </motion.div>
+      </div>
     );
   }
 
   const progressPercentage = (clientProgress / track.duration) * 100;
 
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={track.title}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -20 }}
-        className="relative min-w-0 h-24 overflow-hidden rounded-lg border border-[#1DB954]/20 bg-gradient-to-br from-[#1DB954]/20 to-card p-2 transition-all duration-300 hover:scale-[1.02] hover:shadow-md dark:from-[#1DB954]/30 dark:to-background dark:bg-transparent"
-      >
+    <div className="activity-spotify activity-spotify-playing relative h-24 min-w-0 overflow-hidden p-2">
         <div className="mb-1 flex items-center gap-2">
           <div className="flex items-center gap-2">
             <div className="h-2 w-2 animate-pulse rounded-full bg-[#1DB954]" />
@@ -179,17 +163,14 @@ export function SpotifyNowPlaying() {
                 <span>{formatTime(track.duration)}</span>
               </div>
               <div className="h-1 w-full overflow-hidden rounded-full bg-muted">
-                <motion.div
-                  className="h-full bg-[#1DB954] rounded-full"
-                  initial={{ width: 0 }}
-                  animate={{ width: `${progressPercentage}%` }}
-                  transition={{ duration: 0.5, ease: "easeOut" }}
+                <div
+                  className="h-full rounded-full bg-[#1DB954] transition-[width] duration-500 ease-out"
+                  style={{ width: `${progressPercentage}%` }}
                 />
               </div>
             </div>
           </div>
         </div>
-      </motion.div>
-    </AnimatePresence>
+    </div>
   );
 }
