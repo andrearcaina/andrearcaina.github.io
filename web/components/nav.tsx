@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import { ModeToggle } from "./mode-toggle";
 import { cn } from "@/lib/utils";
 
 const links = [
+  { href: "/", label: "home" },
   { href: "/projects", label: "projects" },
   { href: "/blog", label: "notes" },
   { href: "/gallery", label: "gallery" },
@@ -13,23 +14,26 @@ const links = [
 ];
 
 export function Nav({ className = "" }: { className?: string }) {
-  const pathname = usePathname() || "/";
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setIsScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
     <header
       className={cn(
         "site-nav",
+        isScrolled && "site-nav-scrolled",
         className,
       )}
     >
       <div className="flex min-h-16 items-center justify-between gap-4 py-3">
-        <Link
-          href="/"
-          className="site-wordmark shrink-0"
-          aria-label="andre arcaina — home"
-        >
-          <span className="hidden sm:inline">andre arcaina</span>
-          <span className="sm:hidden">aa.</span>
+        <Link className="site-home-mark" href="/" aria-label="home">
+          🐟
         </Link>
         <nav
           aria-label="Primary"
@@ -42,9 +46,7 @@ export function Nav({ className = "" }: { className?: string }) {
               prefetch
               className={cn(
                 "site-nav-link",
-                pathname === l.href && "site-nav-link-active",
               )}
-              aria-current={pathname === l.href ? "page" : undefined}
             >
               {l.label}
             </Link>

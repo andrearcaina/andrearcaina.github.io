@@ -197,7 +197,7 @@ func (c *Client) fetchActivity(ctx context.Context) (Activity, error) {
 		}
 
 		for _, pullRequest := range result.Data.User.PullRequests.Nodes {
-			if pullRequest.Repository.IsPrivate {
+			if pullRequest.Repository.IsPrivate || !isExternalRepository(pullRequest.Repository.NameWithOwner, c.username) {
 				continue
 			}
 			pullRequests = append(pullRequests, PullRequest{
@@ -221,6 +221,11 @@ func (c *Client) fetchActivity(ctx context.Context) (Activity, error) {
 		cursor = &nextCursor
 	}
 	return Activity{Total: calendar.Total, Days: calendar.Days, PullRequests: pullRequests}, nil
+}
+
+func isExternalRepository(nameWithOwner, username string) bool {
+	owner, _, ok := strings.Cut(nameWithOwner, "/")
+	return ok && !strings.EqualFold(owner, username)
 }
 
 func (c *Client) contributionCalendar(ctx context.Context) (Activity, error) {
