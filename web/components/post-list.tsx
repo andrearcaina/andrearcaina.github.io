@@ -1,40 +1,31 @@
 import Link from "next/link";
-
-import { Separator } from "@/components/ui/separator";
 import type { Post } from "@/lib/posts";
 import { formatDate } from "@/lib/utils";
 
 export function PostList({ posts }: { posts: Post[] }) {
   if (!posts.length) {
-    return <p className="text-sm text-muted-foreground">No posts yet.</p>;
+    return <p className="text-sm text-muted-foreground">nothing here yet.</p>;
   }
 
   return (
-    <div className="space-y-4">
-      {posts.map((p, i) => (
-        <article key={p.slug} className="space-y-1">
-          <h3 className="text-base font-semibold">
-            <Link
-              className="underline underline-offset-4 transition-all duration-300 hover:shadow-md hover:scale-[1.02] hover:text-foreground text-muted-foreground"
-              href={`/blog/${p.slug}`}
-            >
-              {p.meta.title}
-            </Link>
-          </h3>
-          {p.meta.summary && (
-            <p className="text-sm text-muted-foreground">{p.meta.summary}</p>
-          )}
-          <p className="text-xs text-muted-foreground">
-            Published:{" "}
-            {p.meta.publishedAt ? formatDate(p.meta.publishedAt) : ""}
+    <div className="post-list">
+      {posts.map((post) => (
+        <article className="post-row" key={post.slug}>
+          <p className="article-date">
+            {post.meta.publishedAt
+              ? formatDate(post.meta.publishedAt)
+              : "undated"}
           </p>
-          {p.meta.lastUpdatedAt && (
-            <p className="text-xs text-muted-foreground">
-              Last Updated:{" "}
-              {formatDate(p.meta.lastUpdatedAt)}
-            </p>
-          )}
-          {i < posts.length - 1 && <Separator className="mt-3" />}
+          <div>
+            <h3>
+              <Link className="post-title" href={`/blog/${post.slug}`}>
+                {post.meta.title}
+              </Link>
+            </h3>
+            {post.meta.summary && (
+              <p className="post-summary">{post.meta.summary}</p>
+            )}
+          </div>
         </article>
       ))}
     </div>

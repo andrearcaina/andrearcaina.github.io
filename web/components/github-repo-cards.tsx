@@ -1,21 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { FiStar, FiGitBranch, FiEye, FiExternalLink } from "react-icons/fi";
-import { TbBrowserShare } from "react-icons/tb";
-import Link from "next/link";
+import { FiEye, FiGitBranch, FiStar } from "react-icons/fi";
+
 type GitHubRepo = {
   id: number;
   name: string;
   html_url: string;
-  homepage: string | null;
   description: string | null;
+  language: string | null;
   stargazers_count: number;
   forks_count: number;
   watchers_count: number;
-  language: string | null;
   topics?: string[];
 };
 
@@ -25,7 +21,7 @@ const API_BASE_URL =
     ? "http://api.localhost:8080"
     : "https://api.andrearcaina.ca");
 
-export function GitHubRepoCards({ limit = 10 }: { limit?: number }) {
+export function GitHubRepoCards({ limit = 20 }: { limit?: number }) {
   const [repos, setRepos] = useState<GitHubRepo[] | null>(null);
 
   useEffect(() => {
@@ -38,95 +34,61 @@ export function GitHubRepoCards({ limit = 10 }: { limit?: number }) {
   }, [limit]);
 
   if (repos === null) {
-    return (
-      <p className="text-sm text-muted-foreground">Loading repositories...</p>
-    );
+    return <p className="text-sm text-muted-foreground">loading projects…</p>;
   }
 
   if (!repos.length) {
     return (
       <p className="text-sm text-muted-foreground">
-        Couldn{"'"}t load repositories right now. Try again later.
+        projects are taking a minute. GitHub is probably fine.
       </p>
     );
   }
 
   return (
-    <div className="grid gap-4 md:grid-cols-2">
-      {repos.map((r) => (
-        <Card
-          key={r.id}
-          className="group border border-border bg-card transition-all duration-300 hover:shadow-md hover:scale-[1.02]"
+    <div className="repo-grid">
+      {repos.map((repo, index) => (
+        <a
+          key={repo.id}
+          href={repo.html_url}
+          target="_blank"
+          rel="noreferrer"
+          className="repo-card"
+          aria-label={`Open ${repo.name} on GitHub`}
         >
-          <CardHeader className="pb-2">
-            <CardTitle className="flex items-center gap-2 text-base">
-              <Link
-                href={r.html_url}
-                target="_blank"
-                rel="noreferrer"
-                className="text-muted-foreground transition-colors hover:text-foreground"
-                aria-label={`Open ${r.name} on GitHub`}
-              >
-                <span className="font-semibold">{r.name}</span>
-              </Link>
-              <Link
-                href={r.html_url}
-                target="_blank"
-                rel="noreferrer"
-                className="text-muted-foreground transition-colors hover:text-foreground"
-                aria-label={`Open ${r.name} on GitHub`}
-              >
-                <FiExternalLink className="h-4 w-4" />
-              </Link>
-              {r.homepage && (
-                <Link
-                  href={r.homepage}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-muted-foreground transition-colors hover:text-foreground"
-                  aria-label={`Open ${r.name} homepage`}
-                >
-                  <TbBrowserShare className="h-4 w-4" />
-                </Link>
-              )}
-            </CardTitle>
-            {r.description && (
-              <p className="mt-1 text-sm text-muted-foreground line-clamp-2">
-                {r.description}
-              </p>
+          <div>
+            <p className="repo-index">{String(index).padStart(2, "0")}</p>
+            <h3 className="repo-name mt-6">{repo.name}</h3>
+            {repo.description && (
+              <p className="repo-description">{repo.description}</p>
             )}
-          </CardHeader>
-          <CardContent className="flex flex-wrap items-center justify-between gap-3">
-            <div className="flex items-center gap-3 text-xs text-muted-foreground">
-              <span className="inline-flex items-center gap-1">
-                <FiStar className="h-3.5 w-3.5" /> {r.stargazers_count}
-              </span>
-              <span className="inline-flex items-center gap-1">
-                <FiGitBranch className="h-3.5 w-3.5" /> {r.forks_count}
-              </span>
-              <span className="inline-flex items-center gap-1">
-                <FiEye className="h-3.5 w-3.5" /> {r.watchers_count}
-              </span>
-            </div>
-            {r.language && (!r.topics || r.topics.length < 1) && (
-              <Badge variant="secondary">{r.language}</Badge>
-            )}
-
-            {r.topics && r.topics.length > 0 && (
-              <div className="flex flex-wrap gap-1">
-                {r.topics.map((topic, index) => (
-                  <Badge
-                    key={index}
-                    variant="secondary"
-                    className="px-2 py-0 text-[10px]"
-                  >
-                    {topic}
-                  </Badge>
+          </div>
+          <div className="repo-details">
+            {repo.topics && repo.topics.length > 0 && (
+              <div className="repo-topics" aria-label="Repository topics">
+                {repo.topics.map((topic) => (
+                  <span key={topic}>#{topic}</span>
                 ))}
               </div>
             )}
-          </CardContent>
-        </Card>
+            <div className="repo-footer">
+              <span className="repo-language">
+                {repo.language || "repository"}
+              </span>
+              <span className="repo-stats" aria-label="Repository statistics">
+                <span title="Stars">
+                  <FiStar aria-hidden="true" /> {repo.stargazers_count}
+                </span>
+                <span title="Forks">
+                  <FiGitBranch aria-hidden="true" /> {repo.forks_count}
+                </span>
+                <span title="Watchers">
+                  <FiEye aria-hidden="true" /> {repo.watchers_count}
+                </span>
+              </span>
+            </div>
+          </div>
+        </a>
       ))}
     </div>
   );

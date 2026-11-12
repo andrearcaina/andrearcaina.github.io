@@ -8,7 +8,8 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "andre arcaina",
-  description: "My own portfolio website!",
+  description:
+    "andre arcaina — computer science student, open-source contributor, and systems person in Toronto.",
   icons: {
     other: [{ rel: "icon", url: "/images/icon.svg", type: "image/svg+xml" }],
   },
@@ -20,24 +21,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        <style>{`
-html {
-  font-family: ${GeistSans.style.fontFamily};
-  --font-sans: ${GeistSans.variable};
-  --font-mono: ${GeistMono.variable};
-}
-        `}</style>
-      </head>
-      <body className="theme-transition">
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${GeistSans.variable} ${GeistMono.variable}`}
+    >
+      <body>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange={false}
+          defaultTheme="dark"
+          enableSystem={false}
+          disableTransitionOnChange
         >
-          <div className="mx-auto max-w-5xl px-4 sm:px-6">
+          <div className="site-shell">
             <Nav />
             <main>{children}</main>
             <Footer />

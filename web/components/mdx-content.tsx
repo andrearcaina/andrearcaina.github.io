@@ -25,7 +25,7 @@ const components: MDXComponents = {
 
     return (
       <code
-        className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono font-semibold"
+        className="bg-secondary px-1 py-px font-mono text-[0.82em] font-normal"
         {...props}
       >
         {children}
@@ -36,7 +36,7 @@ const components: MDXComponents = {
   pre: ({ children, ...props }: any) => {
     return (
       <pre
-        className="overflow-x-auto rounded-lg border bg-muted p-4 font-mono text-sm"
+        className="overflow-x-auto border border-border bg-card p-4 font-mono text-[0.8em]"
         {...props}
       >
         {children}
@@ -44,39 +44,17 @@ const components: MDXComponents = {
     );
   },
 
-  h1: (props: any) => (
-    <h1 className="text-3xl font-bold tracking-tight mb-4" {...props} />
-  ),
-  h2: (props: any) => (
-    <h2
-      className="text-2xl font-semibold tracking-tight mb-3 mt-8"
-      {...props}
-    />
-  ),
-  h3: (props: any) => (
-    <h3 className="text-xl font-semibold tracking-tight mb-2 mt-6" {...props} />
-  ),
-  h4: (props: any) => (
-    <h4 className="text-lg font-semibold tracking-tight mb-2 mt-4" {...props} />
-  ),
-  h5: (props: any) => (
-    <h5
-      className="text-base font-semibold tracking-tight mb-2 mt-3"
-      {...props}
-    />
-  ),
-  h6: (props: any) => (
-    <h6 className="text-sm font-semibold tracking-tight mb-2 mt-3" {...props} />
-  ),
-  hr: (props: any) => <hr className="my-8 border-border" {...props} />,
+  h1: (props: any) => <h1 {...props} />,
+  h2: (props: any) => <h2 {...props} />,
+  h3: (props: any) => <h3 {...props} />,
+  h4: (props: any) => <h4 {...props} />,
+  h5: (props: any) => <h5 {...props} />,
+  h6: (props: any) => <h6 {...props} />,
+  hr: (props: any) => <hr className="my-10 border-border" {...props} />,
 
-  p: (props: any) => <p className="mb-4 leading-7" {...props} />,
-  ul: (props: any) => (
-    <ul className="mb-4 ml-6 list-disc space-y-1" {...props} />
-  ),
-  ol: (props: any) => (
-    <ol className="mb-4 ml-6 list-decimal space-y-1" {...props} />
-  ),
+  p: (props: any) => <p {...props} />,
+  ul: (props: any) => <ul className="ml-5 list-disc" {...props} />,
+  ol: (props: any) => <ol className="ml-5 list-decimal" {...props} />,
   li: ({ children, ...props }: any) => {
     if (typeof children === "string") {
       const match = children.match(/^\[([ xX])\] (.*)/);
@@ -85,7 +63,7 @@ const components: MDXComponents = {
         const checked = match[1].toLowerCase() === "x";
         const text = match[2];
         return (
-          <li className="flex items-center leading-7 mb-2" {...props}>
+          <li className="mb-2 flex items-center" {...props}>
             <input
               type="checkbox"
               checked={checked}
@@ -99,25 +77,20 @@ const components: MDXComponents = {
     }
 
     return (
-      <li className="leading-7 mb-2" {...props}>
+      <li className="mb-2" {...props}>
         {children}
       </li>
     );
   },
 
-  blockquote: (props: any) => (
-    <blockquote
-      className="mb-4 border-l-4 border-border bg-muted/50 pl-4 py-2 italic"
-      {...props}
-    />
-  ),
+  blockquote: (props: any) => <blockquote {...props} />,
 
-  strong: (props: any) => <strong className="font-semibold" {...props} />,
+  strong: (props: any) => <strong className="font-medium" {...props} />,
   em: (props: any) => <em className="italic" {...props} />,
 
   a: (props: any) => (
     <a
-      className="text-primary underline underline-offset-4 hover:text-primary/80"
+      className="text-primary underline underline-offset-4"
       target="_blank"
       rel="noopener noreferrer"
       {...props}
@@ -125,17 +98,14 @@ const components: MDXComponents = {
   ),
 
   table: (props: any) => (
-    <div className="overflow-x-auto mb-4">
-      <table
-        className="w-full border-collapse border border-border rounded-lg"
-        {...props}
-      />
+    <div className="mb-6 overflow-x-auto">
+      <table className="w-full border-collapse border border-border" {...props} />
     </div>
   ),
 
   th: (props: any) => (
     <th
-      className="border border-border bg-muted px-4 py-2 text-left font-semibold"
+      className="border border-border bg-secondary px-4 py-2 text-left font-medium"
       {...props}
     />
   ),
@@ -144,9 +114,9 @@ const components: MDXComponents = {
     <td className="border border-border px-4 py-2" {...props} />
   ),
 
-  thead: (props: any) => <thead className="bg-muted" {...props} />,
+  thead: (props: any) => <thead {...props} />,
   tbody: (props: any) => <tbody {...props} />,
-  tr: (props: any) => <tr className="border-b border-border" {...props} />,
+  tr: (props: any) => <tr {...props} />,
 };
 
 export default function MDXContent(

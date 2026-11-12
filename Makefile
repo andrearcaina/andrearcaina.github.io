@@ -1,4 +1,4 @@
-.PHONY: build build-go install-web build-web playwright clean-web run dev fmt tidy test vet lint check clean
+.PHONY: build build-go install-web build-web typecheck-web playwright clean-web run dev dev-mock fmt tidy test vet lint check clean
 
 default: run
 
@@ -10,6 +10,9 @@ install-web:
 build-web: clean-web
 	npm --prefix web run build
 
+typecheck-web:
+	npm --prefix web run typecheck
+
 run-playwright:
 	go run github.com/mxschmitt/playwright-go/cmd/playwright@v0.6201.1 install chromium
 
@@ -19,6 +22,11 @@ build-go:
 
 run: build run-playwright
 	./bin/site
+
+dev: dev-mock
+
+dev-mock: build
+	HEVY_MOCK=true ./bin/site
 
 fix:
 	go fix ./...
@@ -42,7 +50,7 @@ vet:
 view-coverage:
 	go tool cover -html=coverage/coverage.out -o=coverage/coverage.html
 
-check: fix fmt vet lint test view-coverage
+check: fix fmt vet lint test typecheck-web view-coverage
 
 clean-web:
 	rm -rf web/out web/.next

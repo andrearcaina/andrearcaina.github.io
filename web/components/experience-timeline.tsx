@@ -1,7 +1,5 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { ExperienceItem } from "@/data/me";
 import { cn } from "@/lib/utils";
-import { TextShimmer } from "@/components/motion-components";
 
 export function ExperienceTimeline({
   items = [],
@@ -11,37 +9,29 @@ export function ExperienceTimeline({
   className?: string;
 }) {
   return (
-    <section id="experience" className={cn("space-y-6", className)}>
-      <h2 className="text-lg font-medium">
-        cool <TextShimmer>experiences</TextShimmer> i've gained
-      </h2>
-      <div className="space-y-4">
-        {items.map((exp, i) => (
-          <Card
-            key={i}
-            className="border border-border bg-card transition-all duration-300 hover:shadow-md hover:scale-[1.01]"
-          >
-            <CardHeader className="pb-2">
-              <CardTitle className="flex flex-wrap items-baseline gap-x-2 text-base">
-                <span className="font-semibold">{exp.role}</span>
-                <span className="text-muted-foreground">·</span>
-                <span className="text-muted-foreground">{exp.company}</span>
-              </CardTitle>
-              <p className="text-xs text-muted-foreground">
-                {exp.date} {exp.location ? `· ${exp.location}` : ""}
-              </p>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <p className="text-sm leading-relaxed text-muted-foreground">
-                {exp.description}
-              </p>
-              <p className="pt-2 text-xs text-muted-foreground">
-                tech: <span className="italic">{exp.tech?.join(", ")}</span>
-              </p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-    </section>
+    <div className={cn("experience-list", className)}>
+      {items.map((experience) => (
+        <article
+          className="experience-row"
+          key={`${experience.role}-${experience.company}`}
+        >
+          <p className="experience-date">
+            {experience.date}
+            {experience.location && (
+              <>
+                <br />
+                {experience.location}
+              </>
+            )}
+          </p>
+          <div>
+            <h3 className="experience-role">{experience.role}</h3>
+            <span className="experience-company">{experience.company}</span>
+            <p className="experience-description">{experience.description}</p>
+            <p className="experience-tech">{experience.tech.join(" · ")}</p>
+          </div>
+        </article>
+      ))}
+    </div>
   );
 }
