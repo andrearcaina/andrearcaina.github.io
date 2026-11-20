@@ -42,14 +42,21 @@ func TestStaticServesFileAndFallback(t *testing.T) {
 	if err := os.WriteFile(filepath.Join(directory, "404.html"), []byte("missing"), 0o600); err != nil {
 		t.Fatal(err)
 	}
+	if err := os.MkdirAll(filepath.Join(directory, "blog", "not-found"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(directory, "blog", "not-found", "index.html"), []byte("note missing"), 0o600); err != nil {
+		t.Fatal(err)
+	}
 	handler := NewHandler(&config.Config{StaticDir: directory})
 
 	for path, want := range map[string]struct {
 		body string
 		code int
 	}{
-		"/":        {body: "home", code: http.StatusOK},
-		"/missing": {body: "missing", code: http.StatusNotFound},
+		"/":             {body: "home", code: http.StatusOK},
+		"/missing":      {body: "missing", code: http.StatusNotFound},
+		"/blog/missing": {body: "note missing", code: http.StatusNotFound},
 	} {
 		recording := httptest.NewRecorder()
 		handler.static(recording, httptest.NewRequest(http.MethodGet, path, nil))

@@ -79,6 +79,12 @@ func (h *Handler) static(w http.ResponseWriter, r *http.Request) {
 	}
 
 	notFoundPath := filepath.Join(h.config.StaticDir, "404.html")
+	if strings.HasPrefix(r.URL.Path, "/blog/") {
+		blogNotFoundPath := filepath.Join(h.config.StaticDir, "blog", "not-found", "index.html")
+		if _, err := os.Stat(blogNotFoundPath); err == nil {
+			notFoundPath = blogNotFoundPath
+		}
+	}
 	if _, err := os.Stat(notFoundPath); err == nil {
 		w.WriteHeader(http.StatusNotFound)
 		http.ServeFile(w, r, notFoundPath)
